@@ -2,6 +2,8 @@ package me.Visionexe.ZombieArena.Listener;
 
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.ZombieArena;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -58,28 +60,18 @@ public class MobListener implements Listener {
         if (event.getEntity().getKiller() != null) {
             Player player = event.getEntity().getKiller();
             PlayerWrapper playerWrapper = PlayerWrapper.get(player);
-            if (event.getEntity() instanceof Zombie) {
-                // Get zombie-coins and zombie-xp from settings
-                // TODO: Get the game difficulty type and multiply by this value
-                playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("zombie-xp"));
-            } else if (event.getEntity() instanceof Skeleton) {
-                playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("skeleton-xp"));
-            } else if (event.getEntity() instanceof Spider) {
-                playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("spider-xp"));
-            } else if (event.getEntity() instanceof Creeper) {
-                playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("creeper-xp"));
-            } else if (event.getEntity() instanceof PiglinBrute) {
-                playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("piglinbrute-xp"));
-            } else if (event.getEntity() instanceof Zoglin) {
-                playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("zoglin-xp"));
-            } else if (event.getEntity() instanceof Blaze) {
-                playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("blaze-xp"));
-            } else if (event.getEntity() instanceof WitherSkeleton) {
-                playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("witherskeleton-xp"));
-            } else if (event.getEntity() instanceof Wither) {
-                playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("wither-xp"));
-            } else if (event.getEntity() instanceof Warden) {
-                playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("warden-xp"));
+
+            // Get the list of mobtypes in the config, allows easy editing so mob types are not hard coded
+            ConfigurationSection mobTypes = ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getConfigurationSection("mob-xp");
+            // Check if mob type is valid, if not return nothing
+            for (String entity : mobTypes.getKeys(false)) {
+                try {
+                    if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
+                        playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("mob-xp." + entity.toLowerCase()));
+                    }
+                } catch (Exception exception) {
+                    Bukkit.getConsoleSender().sendMessage("Invalid ENTITY TYPE entered in config. Please review link in config to obtain proper ENTITY TYPE.");
+                }
             }
         }
     }

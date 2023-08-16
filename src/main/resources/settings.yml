@@ -5,20 +5,38 @@ database: "data.db"
 max-level: 100
 
 # Configure how much xp and coins a mob will give
-# <mob type>: <integer value>
-zombie-xp: 100
-skeleton-xp: 100
-spider-xp: 100
-creeper-xp: 100
-piglinbrute-xp: 100
-zoglin-xp: 100
-blaze-xp: 100
-witherskeleton-xp: 100
-wither: 100
-warden: 100
+# <entity type>: <integer value>
+# Entity listed here must be valid from: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
+# Not having the proper entity listed WILL cause errors
+# Types should not be case-sensitive
+mob-xp:
+  zombie: 100
+  skeleton: 200
+  spider: 300
+  creeper: 400
+  piglin_brute: 500
+  zoglin: 600
+  blaze: 700
+  wither_skeleton: 800
+  wither: 900
+  warden: 1000
+
+mob-coins:
+  zombie: 100
+  skeleton: 200
+  spider: 300
+  creeper: 400
+  piglin_brute: 500
+  zoglin: 600
+  blaze: 700
+  wither_skeleton: 800
+  wither: 900
+  warden: 1000
 
 # Multiplier for each difficulty type
 # Difficulty: <integer value>
+# To disable set all values to one
+# This is a multiplier, meaning all values above for xp and coins will be MULTIPLIED; setting to 0 means players get nothing
 EASY: 1
 MEDIUM: 2
 HARD: 3
