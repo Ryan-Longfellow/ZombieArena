@@ -54,10 +54,11 @@ public class MobListener implements Listener {
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-        // TODO: Figure out how to store these in a list with values of xp and coins
-        // TODO: onDeath, check list, if mobtype is listed, give player appropriate amount of coins
-        // TODO: if not listed, do nothing
         if (event.getEntity().getKiller() != null) {
+            // Cancel normal mob dropping before performing anything else
+            event.getDrops().clear();
+            event.setDroppedExp(0);
+
             Player player = event.getEntity().getKiller();
             PlayerWrapper playerWrapper = PlayerWrapper.get(player);
 
@@ -68,6 +69,7 @@ public class MobListener implements Listener {
                 try {
                     if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
                         playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("mob-xp." + entity.toLowerCase()));
+
                     }
                 } catch (Exception exception) {
                     Bukkit.getConsoleSender().sendMessage("Invalid ENTITY TYPE entered in config. Please review link in config to obtain proper ENTITY TYPE.");
