@@ -1,0 +1,28 @@
+# This lets you choose a database to use.
+database: "data.db"
+
+# Configure the max levels for PLAYERS here.
+max-level: 100
+
+# Configure how much xp and coins a mob will give
+# <mob type>: <integer value>
+zombie-xp: 100
+skeleton-xp: 100
+spider-xp: 100
+creeper-xp: 100
+piglinbrute-xp: 100
+zoglin-xp: 100
+blaze-xp: 100
+witherskeleton-xp: 100
+wither: 100
+warden: 100
+
+# Multiplier for each difficulty type
+# Difficulty: <integer value>
+EASY: 1
+MEDIUM: 2
+HARD: 3
+INSANE: 4
+
+# Unless you have a valid reason to change this, leave it to false.
+debug: false
