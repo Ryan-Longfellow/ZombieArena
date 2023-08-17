@@ -3,6 +3,7 @@ package me.Visionexe.ZombieArena.Listener;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -65,15 +66,16 @@ public class MobListener implements Listener {
             // Get the list of mobtypes in the config, allows easy editing so mob types are not hard coded
             ConfigurationSection mobTypes = ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getConfigurationSection("mob-xp");
             // Check if mob type is valid, if not return nothing
-            for (String entity : mobTypes.getKeys(false)) {
-                try {
-                    if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
-                        playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("mob-xp." + entity.toLowerCase()));
-
-                    }
-                } catch (Exception exception) {
-                    Bukkit.getConsoleSender().sendMessage("Invalid ENTITY TYPE entered in config. Please review link in config to obtain proper ENTITY TYPE.");
+            try {
+                for (String entity : mobTypes.getKeys(false)) {
+                        if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
+                            playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("mob-xp." + entity.toLowerCase()));
+                            ZombieArena.getInstance().getEconomy().depositPlayer(player, ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("mob-coins." + entity.toLowerCase()));
+                        }
                 }
+            } catch (Exception exception) {
+//                Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "Invalid ENTITY TYPE entered in config. Please review link in config to obtain proper ENTITY TYPE.");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + exception.getMessage());
             }
         }
     }

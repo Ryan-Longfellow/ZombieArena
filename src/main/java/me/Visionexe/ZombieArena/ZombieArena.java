@@ -1,5 +1,6 @@
 package me.Visionexe.ZombieArena;
 
+import com.sk89q.worldedit.WorldEdit;
 import me.Visionexe.ZombieArena.Command.CommandHandler;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.Listener.MobListener;
@@ -10,7 +11,6 @@ import me.Visionexe.ZombieArena.Storage.Flatfile.FlatfileAPI;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.PreparedStatement;
@@ -32,6 +32,7 @@ public class ZombieArena extends JavaPlugin {
         getLogger().info("Enabling " + this.getDescription().getName() + " " + this.getDescription().getVersion());
         registerConfigs();
         prepareDatabase();
+        registerEconomy();
         registerEvents();
         registerCommands();
     }
@@ -50,11 +51,6 @@ public class ZombieArena extends JavaPlugin {
         this.flatfile = new FlatfileAPI(this);
         this.flatfile.add(new Config(FILE_SETTINGS, "", "settings.yml", "", "settings.conf"));
         this.flatfile.add(new Config(FILE_MESSAGES, "", "messages.yml", "", "messages.lang"));
-
-//        this.flatfile.add(new Config(FarmingSkill.FILE_SETTINGS, "skills/farming", "settings.yml", "skills/farming", "settings.conf"));
-//        this.flatfile.add(new Config(FishingSkill.FILE_SETTINGS, "skills/fishing", "settings.yml", "skills/fishing", "settings.conf"));
-//        this.flatfile.add(new Config(MiningSkill.FILE_SETTINGS, "skills/mining", "settings.yml", "skills/mining", "settings.conf"));
-//        this.flatfile.add(new Config(WoodcuttingSkill.FILE_SETTINGS, "skills/woodcutting", "settings.yml", "skills/woodcutting", "settings.conf"));
         Bukkit.getConsoleSender().sendMessage("Config(s) registered!");
     }
 
@@ -94,7 +90,6 @@ public class ZombieArena extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("Setting up event(s)...");
         this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         this.getServer().getPluginManager().registerEvents(new MobListener(), this);
-//        this.getServer().getPluginManager().registerEvents(new BlockListener(), this);
         Bukkit.getConsoleSender().sendMessage("Event(s) set up!");
     }
 

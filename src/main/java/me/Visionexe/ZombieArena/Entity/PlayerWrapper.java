@@ -19,8 +19,6 @@ public class PlayerWrapper {
     private UUID uuid;
     // Obviously to store players' statistics to track
     private HashMap<String, Integer> playerStats;
-    Economy economy = ZombieArena.getInstance().getEconomy();
-    private EconomyResponse coins;
 
     /*
     Constructor to initialize a new player
