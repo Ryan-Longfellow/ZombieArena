@@ -3,6 +3,7 @@ package me.Visionexe.ZombieArena.Command.SubCommands;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.SessionManager;
@@ -38,13 +39,11 @@ public class CreateArenaCommand extends SubCommand {
     public void perform(Player player, String[] args) {
         /*
         Using Arena class, create a new arena based off the selection given a name
-
-        TODO: CURRENTLY THROWING EXCEPTION DUE TO BEING UNABLE TO CAST PLAYER TO ACTOR
-        TODO: NEED TO FIGURE OUT A WAY TO CREATE AND ACTOR OR SESSIONMANAGER FROM BUKKIT PLAYER CLASS
          */
+
         if (args.length == 2) {
             SessionManager manager = WorldEdit.getInstance().getSessionManager();
-            LocalSession localSession = manager.get((Actor) player);
+            LocalSession localSession = manager.get(BukkitAdapter.adapt(player));
             CuboidRegion region;
             World selectionWorld = localSession.getSelectionWorld();
             try {
@@ -54,7 +53,11 @@ public class CreateArenaCommand extends SubCommand {
                 player.sendMessage(ChatColor.DARK_RED + "Please make a region selection first.");
                 return;
             }
+            // TODO: Get all file names in arenas/ folder and compare to args[1], if matches, deny arena creation and prompt to specify different name
             new Arena(args[1], region.getPos1(), region.getPos2());
+            player.sendMessage(ChatColor.GREEN + "Arena " + ChatColor.YELLOW + args[1] + ChatColor.GREEN + "successfully created.");
+
+            // TODO: Possibly get the center of the square and set the default player spawn to the center
         } else {
             player.sendMessage(ChatColor.DARK_RED + "Please provide an arena name.");
         }

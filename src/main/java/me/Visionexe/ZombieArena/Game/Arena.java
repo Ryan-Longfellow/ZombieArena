@@ -5,7 +5,6 @@ import me.Visionexe.ZombieArena.Storage.Flatfile.Config;
 import me.Visionexe.ZombieArena.Storage.Flatfile.FlatfileAPI;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.Location;
-import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +35,27 @@ public class Arena {
         this.pos1 = pos1;
         this.pos2 = pos2;
 
-        this.flatfile = new FlatfileAPI(ZombieArena.getInstance());
-        this.flatfile.add(new Config("arena", "arenas", arenaName + ".yml", "", arenaName + ".yml"));
-        flatfile.get("arena").set("Arena Name", arenaName);
-        flatfile.get("arena").set("Position 1", pos1);
-        flatfile.get("arena").set("Position 2", pos2);
+        this.flatfile = ZombieArena.getInstance().getFlatfile();
+//        if (!(this.flatfile.get("arena." + arenaName).contains(arenaName))) {
+            this.flatfile.add(new Config("arena." + arenaName, "", "genericarena.yml", "arenas/", arenaName + ".yml"));
+            this.flatfile.get("arena." + arenaName).set("ArenaName", arenaName);
+
+            this.flatfile.get("arena." + arenaName).set("Position1.x", pos1.getX());
+            this.flatfile.get("arena." + arenaName).set("Position1.y", pos1.getY());
+            this.flatfile.get("arena." + arenaName).set("Position1.z", pos1.getZ());
+
+            this.flatfile.get("arena." + arenaName).set("Position2.x", pos2.getX());
+            this.flatfile.get("arena." + arenaName).set("Position2.y", pos2.getY());
+            this.flatfile.get("arena." + arenaName).set("Position2.z", pos2.getZ());
+
+            this.flatfile.get("arena." + arenaName).set("PlayerSpawn.x", 0);
+            this.flatfile.get("arena." + arenaName).set("PlayerSpawn.y", 0);
+            this.flatfile.get("arena." + arenaName).set("PlayerSpawn.z", 0);
+
+            this.flatfile.get("arena." + arenaName).set("MobSpawns", mobSpawnPoints);
+
+            this.flatfile.save();
+//        }
     }
 
     /*
@@ -77,7 +92,7 @@ public class Arena {
     public void setPlayerSpawnPoint(Location playerSpawnPoint) {
         this.playerSpawnPoint = playerSpawnPoint;
     }
-    public void setMobSpawnPoint(List<Location> mobSpawnPoints) {
+    public void setMobSpawnPoints(List<Location> mobSpawnPoints) {
         this.mobSpawnPoints = mobSpawnPoints;
     }
 
