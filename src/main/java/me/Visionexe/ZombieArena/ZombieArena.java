@@ -1,6 +1,5 @@
 package me.Visionexe.ZombieArena;
 
-import com.sk89q.worldedit.WorldEdit;
 import me.Visionexe.ZombieArena.Command.CommandHandler;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.Listener.MobListener;
@@ -12,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
