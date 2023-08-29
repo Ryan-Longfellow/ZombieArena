@@ -1,12 +1,14 @@
 package me.Visionexe.ZombieArena.Command.SubCommands;
 
 import me.Visionexe.ZombieArena.Command.SubCommand;
-import me.Visionexe.ZombieArena.Storage.Flatfile.FlatfileAPI;
+import me.Visionexe.ZombieArena.Storage.Flatfile.FileManager;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.io.IOException;
 
 public class ArenaSetPlayerSpawnCommand extends SubCommand {
     @Override
@@ -36,11 +38,13 @@ public class ArenaSetPlayerSpawnCommand extends SubCommand {
          */
         // Get position of player
         Location playerLocation = player.getLocation();
+
+        FileManager fileManager = ZombieArena.getInstance().getFileManager();
+        FileConfiguration arenas = fileManager.get("arenas").get().getConfiguration();
+
         // Get pos1 and pos2 of Arena from the Arena File
-        FlatfileAPI flatfile = ZombieArena.getInstance().getFlatfile();
-        FileConfiguration fileConfig = flatfile.get("arena." + args[1]);
-        Location pos1 = new Location(player.getWorld(), fileConfig.getDouble("Position1.x"), fileConfig.getDouble("Position1.y"), fileConfig.getDouble("Position1.z"));
-        Location pos2 = new Location(player.getWorld(), fileConfig.getDouble("Position2.x"), fileConfig.getDouble("Position2.y"), fileConfig.getDouble("Position2.z"));
+        Location pos1 = new Location(player.getWorld(), arenas.getDouble(args[1] + ".Position1.x"), arenas.getDouble(args[1] + ".Position1.y"), arenas.getDouble(args[1] + ".Position1.z"));
+        Location pos2 = new Location(player.getWorld(), arenas.getDouble(args[1] + ".Position2.x"), arenas.getDouble(args[1] + ".Position2.y"), arenas.getDouble(args[1] + ".Position2.z"));
         if (args.length == 2) {
             // Perform a check to see if position of player is inside pos1 and pos2
             // If so, set spawn; If not, prompt player to stand inside Arena
@@ -49,15 +53,19 @@ public class ArenaSetPlayerSpawnCommand extends SubCommand {
             double pos2X = pos2.getX();
             double pos2Z = pos2.getZ();
             double pX = playerLocation.getX();
-            if((pos1X < pX && pX < pos2X || pos1X > pX && pX > pos2X && (pos1Z < pX && pX < pos2Z) || pos1Z > pX && pX > pos2Z)) {
-                fileConfig.set("PlayerSpawn.x", playerLocation.getX());
-                fileConfig.set("PlayerSpawn.y", playerLocation.getY());
-                fileConfig.set("PlayerSpawn.z", playerLocation.getZ());
-                flatfile.save();
-                player.sendMessage(ChatColor.GREEN + "Player Spawn Successfully Set, " +
-                        "X: " + playerLocation.getX() +
-                        "Y: " + playerLocation.getY() +
-                        "Z: " + playerLocation.getZ());
+            if ((pos1X < pX && pX < pos2X || pos1X > pX && pX > pos2X && (pos1Z < pX && pX < pos2Z) || pos1Z > pX && pX > pos2Z)) {
+                arenas.set(args[1] + ".PlayerSpawn.x", playerLocation.getX());
+                arenas.set(args[1] + ".PlayerSpawn.y", playerLocation.getY());
+                arenas.set(args[1] + ".PlayerSpawn.z", playerLocation.getZ());
+                try {
+                    fileManager.save("arenas");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                player.sendMessage(ChatColor.GREEN + "Player Spawn Successfully Set," +
+                        " X: " + playerLocation.getX() +
+                        " Y: " + playerLocation.getY() +
+                        " Z: " + playerLocation.getZ());
             } else {
                 player.sendMessage(ChatColor.DARK_RED + "Please stand inside the Arena zone");
                 player.sendMessage(ChatColor.DARK_RED + "Current arena coords: " + pos1 + pos2);

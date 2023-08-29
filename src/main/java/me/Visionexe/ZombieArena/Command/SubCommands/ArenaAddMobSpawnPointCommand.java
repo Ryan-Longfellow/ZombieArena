@@ -1,0 +1,62 @@
+package me.Visionexe.ZombieArena.Command.SubCommands;
+
+import me.Visionexe.ZombieArena.Command.SubCommand;
+import me.Visionexe.ZombieArena.Storage.Flatfile.FileManager;
+import me.Visionexe.ZombieArena.ZombieArena;
+import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ArenaAddMobSpawnPointCommand extends SubCommand {
+    @Override
+    public String getName() {
+        return "addmobspawn";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Will add a mob spawn to the arena";
+    }
+
+    @Override
+    public String getSyntax() {
+        return "/zombiearena addmobspawn <arena name>";
+    }
+
+    @Override
+    public String getPermission() {
+        return "zombiearena.admin";
+    }
+
+    @Override
+    public void perform(Player player, String[] args) {
+        // Get player location
+        Location playerLocation = player.getLocation();
+
+        if (args.length == 2) {
+            // Get arena name from argument
+            String arenaName = args[1];
+
+            FileManager fileManager = ZombieArena.getInstance().getFileManager();
+            FileConfiguration arenas = fileManager.get("arenas").get().getConfiguration();
+
+            // Get mob location list
+            List<String> mobSpawns = (List<String>) arenas.getList(arenaName + ".MobSpawns", new ArrayList<String>());
+            mobSpawns.add(playerLocation.toString());
+            player.sendMessage("Location added!");
+            arenas.set(arenaName + ".MobSpawns", mobSpawns);
+            try {
+                fileManager.save("arenas");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            player.sendMessage("Please specify an Arena Name!");
+        }
+
+    }
+}

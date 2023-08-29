@@ -3,6 +3,7 @@ package me.Visionexe.ZombieArena;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 
 import java.util.UUID;
 
@@ -59,7 +60,7 @@ public class Log {
      * @since 1.0.0
      */
     public static boolean isDebug() {
-        return ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getBoolean("debug", false);
+        return ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getBoolean("debug");
     }
 
     /**

@@ -6,28 +6,24 @@ import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.Listener.MobListener;
 import me.Visionexe.ZombieArena.Listener.PlayerListener;
 import me.Visionexe.ZombieArena.Storage.DatabaseConnection;
-import me.Visionexe.ZombieArena.Storage.Flatfile.Config;
-import me.Visionexe.ZombieArena.Storage.Flatfile.FlatfileAPI;
+import me.Visionexe.ZombieArena.Storage.Flatfile.FileManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class ZombieArena extends JavaPlugin {
-    public static final String FILE_SETTINGS = "settings";
-    public static final String FILE_MESSAGES = "messages";
-
     private static ZombieArena instance;
-
-    private FlatfileAPI flatfile;
+    private FileManager fileManager;
     private Economy economy;
     @Override
     public void onEnable() {
-        super.onEnable();
         instance = this;
         getLogger().info("Enabling " + this.getDescription().getName() + " " + this.getDescription().getVersion());
         registerConfigs();
@@ -38,8 +34,14 @@ public class ZombieArena extends JavaPlugin {
     }
     @Override
     public void onDisable() {
-        super.onDisable();
         PlayerWrapper.saveAll();
+        this.fileManager = new FileManager(this);
+        try {
+            fileManager.save("config");
+            fileManager.save("arenas");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         getLogger().info("Disabling " + this.getDescription().getName() + " " + this.getDescription().getVersion());
     }
 
@@ -48,9 +50,21 @@ public class ZombieArena extends JavaPlugin {
      */
     private void registerConfigs() {
         Bukkit.getConsoleSender().sendMessage("Registering config(s)...");
-        this.flatfile = new FlatfileAPI(this);
-        this.flatfile.add(new Config(FILE_SETTINGS, "", "settings.yml", "", "settings.conf"));
-        this.flatfile.add(new Config(FILE_MESSAGES, "", "messages.yml", "", "messages.lang"));
+
+        this.fileManager = new FileManager(this);
+        try {
+            fileManager.register("config");
+            fileManager.register("arenas");
+
+            fileManager.reload("config");
+            fileManager.reload("arenas");
+
+            fileManager.save("config");
+            fileManager.save("arenas");
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
         Bukkit.getConsoleSender().sendMessage("Config(s) registered!");
     }
 
@@ -130,8 +144,8 @@ public class ZombieArena extends JavaPlugin {
         return economy;
     }
 
-    public FlatfileAPI getFlatfile() {
-        return flatfile;
+    public FileManager getFileManager() {
+        return fileManager;
     }
 
     public static ZombieArena getInstance() {

@@ -353,10 +353,10 @@ public class PlayerWrapper {
     If no value is found, use 100 as default
      */
     public int getMaxLevel() {
-        return ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("max-level", 100);
+        return ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("max-level", 100);
     }
     public int getMaxPrestige() {
-        return ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("max-prestige", 100);
+        return ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("max-prestige", 100);
     }
 
     /*

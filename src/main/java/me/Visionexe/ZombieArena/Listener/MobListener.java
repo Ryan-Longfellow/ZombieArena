@@ -64,17 +64,16 @@ public class MobListener implements Listener {
             PlayerWrapper playerWrapper = PlayerWrapper.get(player);
 
             // Get the list of mobtypes in the config, allows easy editing so mob types are not hard coded
-            ConfigurationSection mobTypes = ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getConfigurationSection("mob-xp");
+            ConfigurationSection mobTypes = ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getConfigurationSection("mob-xp");
             // Check if mob type is valid, if not return nothing
             try {
                 for (String entity : mobTypes.getKeys(false)) {
                         if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
-                            playerWrapper.addExperience(ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("mob-xp." + entity.toLowerCase()));
-                            ZombieArena.getInstance().getEconomy().depositPlayer(player, ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getInt("mob-coins." + entity.toLowerCase()));
+                            playerWrapper.addExperience(ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("mob-xp." + entity.toLowerCase()));
+                            ZombieArena.getInstance().getEconomy().depositPlayer(player, ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("mob-coins." + entity.toLowerCase()));
                         }
                 }
             } catch (Exception exception) {
-//                Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "Invalid ENTITY TYPE entered in config. Please review link in config to obtain proper ENTITY TYPE.");
                 Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + exception.getMessage());
             }
         }

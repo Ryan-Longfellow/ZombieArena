@@ -23,6 +23,7 @@ public class CommandHandler implements CommandExecutor {
         subcommands.add(new SetTotalKillsCommand());
         subcommands.add(new CreateArenaCommand());
         subcommands.add(new ArenaSetPlayerSpawnCommand());
+        subcommands.add(new ArenaAddMobSpawnPointCommand());
     }
 
     @Override

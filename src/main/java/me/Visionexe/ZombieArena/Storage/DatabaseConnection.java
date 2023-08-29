@@ -18,7 +18,7 @@ public class DatabaseConnection {
      */
     public void connect() {
         try {
-            String database = ZombieArena.getInstance().getFlatfile().get(ZombieArena.FILE_SETTINGS).getString("database", "data.db");
+            String database = ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getString("database", "data.db");
             Class.forName("org.sqlite.JDBC");
             this.connection = DriverManager.getConnection("jdbc:sqlite:" + ZombieArena.getInstance().getDataFolder().getPath() + File.separator + database);
         } catch (SQLException exception) {
