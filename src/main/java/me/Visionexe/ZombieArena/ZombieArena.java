@@ -2,6 +2,7 @@ package me.Visionexe.ZombieArena;
 
 import me.Visionexe.ZombieArena.Command.CommandHandler;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
+import me.Visionexe.ZombieArena.Game.GameHandler;
 import me.Visionexe.ZombieArena.Listener.MobListener;
 import me.Visionexe.ZombieArena.Listener.PlayerListener;
 import me.Visionexe.ZombieArena.Storage.DatabaseConnection;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class ZombieArena extends JavaPlugin {
     private static ZombieArena instance;
     private FileManager fileManager;
+    private GameHandler gameHandler;
     private Economy economy;
     @Override
     public void onEnable() {
@@ -26,13 +28,27 @@ public class ZombieArena extends JavaPlugin {
         getLogger().info("Enabling " + this.getDescription().getName() + " " + this.getDescription().getVersion());
         registerConfigs();
         prepareDatabase();
+
+        gameHandler = new GameHandler();
+
         registerEconomy();
         registerEvents();
         registerCommands();
+
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                onTick();
+            }
+        }, 1L, 1L);
     }
+
     @Override
     public void onDisable() {
         PlayerWrapper.saveAll();
+        gameHandler.stop();
         this.fileManager = new FileManager(this);
         try {
             fileManager.save("config");
@@ -145,8 +161,12 @@ public class ZombieArena extends JavaPlugin {
     public FileManager getFileManager() {
         return fileManager;
     }
+    public GameHandler getGameHandler() { return gameHandler; }
 
     public static ZombieArena getInstance() {
         return instance;
     }
+
+    private int tick;
+    private void onTick() { tick++; }
 }

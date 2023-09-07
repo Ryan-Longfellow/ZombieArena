@@ -1,5 +1,8 @@
 package me.Visionexe.ZombieArena.Game;
 
+import me.Visionexe.ZombieArena.Event.PlayerRespawnCause;
+import me.Visionexe.ZombieArena.Event.PlayerRespawnInGameEvent;
+import me.Visionexe.ZombieArena.Log;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -33,22 +36,35 @@ public class GameHandler {
         playerStats = new HashMap<String, PlayerStats>();
     }
 
-    public void addPlayer(Player player) {
-        if (players.contains(player.getName())) return;
+    public void addPlayer(Player player, String arenaName) {
+        if (players.contains(player.getName())) {
+            Log.debug("Player already found in game.");
+            return;
+        };
         players.add(player.getName());
+        Log.debug("Added player to game list");
         PlayerStats stats = new PlayerStats(player);
+        stats.setArenaName(arenaName);
         playerStats.put(player.getName(), stats);
+        Log.debug("Added player stats to game list");
 
         player.setGameMode(GameMode.ADVENTURE);
+        Log.debug("Player set to adventure mode");
         int wave = waveHandler.getWave();
+        Log.debug("Current wave: " + wave);
         if (isRunning) {
             if (wave == 1) {
-                addToGame(stats);
+                PlayerRespawnInGameEvent event = new PlayerRespawnInGameEvent(stats.getPlayer(), PlayerRespawnCause.GAME_START);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    addToGame(stats);
+                }
             } else {
                 // Create a function to put player into spectator mode and teleport to arena spawn.
                 // Have player wait 5 seconds then spawn in adventure back at arena spawn again.
             }
-        } else if (isWaiting) {
+        } else {
+            Log.debug("Game is waiting. Starting game...");
             start();
         }
     }
@@ -60,6 +76,7 @@ public class GameHandler {
         Player player = stats.getPlayer();
         if (player == null) return;
         // Teleport player to arena spawn
+        player.teleport(arenaHandler.getPlayerSpawn(stats.getArenaName()));
 
         // Set player to max health, food and saturation
         player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
@@ -94,12 +111,18 @@ public class GameHandler {
 
     public synchronized PlayerStats getPlayerStats(Player player) { return playerStats.get(player.getName()); }
 
-    public WaveHandler getWaveHandler() { return waveHandler; }
+    public WaveHandler getWaveHandler() { return this.waveHandler; }
+    public ArenaHandler getArenaHandler() { return this.arenaHandler; }
 
     public boolean isRunning() { return isRunning; }
     public boolean isWaiting() { return isWaiting; }
 
-    public void removePLayer(Player player) {
+    public void removePlayer(String playerName) {
+        players.remove(playerName);
+        playerStats.remove(playerName);
+    }
+
+    public void removePlayer(Player player) {
         if (players.contains(player.getName())) {
             players.remove(player.getName());
             playerStats.remove(player.getName());
@@ -112,6 +135,7 @@ public class GameHandler {
         if (!getPlayerStats(player).isAlive()) {
             getPlayerStats(player).setAlive(true);
             // Teleport to arena spawn
+            player.teleport(arenaHandler.getPlayerSpawn(getPlayerStats(player).getArenaName()));
 
             // Set player to max health, food and saturation
             player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
@@ -123,16 +147,27 @@ public class GameHandler {
     }
 
     public void start() {
-        if (isRunning) { return; }
+        Log.debug("Starting game...");
+        if (isRunning) {
+            Log.debug("Game is already running");
+            return;
+        }
         if (players.isEmpty()) {
             isWaiting = true;
+            Log.debug("No players are in the game");
             return;
         }
 
         for (PlayerStats stats : playerStats.values()) {
-            addToGame(stats);
+            Log.debug("Attempting to add " + stats.getPlayer().getName() + " to the game");
+            PlayerRespawnInGameEvent event = new PlayerRespawnInGameEvent(stats.getPlayer(), PlayerRespawnCause.GAME_START);
+            Bukkit.getPluginManager().callEvent(event);
+            if(!event.isCancelled()) {
+                addToGame(stats);
+            }
         }
         isRunning = true;
+        Log.debug("Starting waves...");
         waveHandler.start();
     }
 
