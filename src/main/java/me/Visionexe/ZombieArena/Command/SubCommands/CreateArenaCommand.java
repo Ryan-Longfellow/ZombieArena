@@ -54,7 +54,7 @@ public class CreateArenaCommand extends SubCommand {
                 return;
             }
             // TODO: Get all file names in arenas/ folder and compare to args[1], if matches, deny arena creation and prompt to specify different name
-            new Arena(args[1], region.getPos1(), region.getPos2());
+            new Arena(args[1], player.getLocation(), region.getPos1(), region.getPos2());
             player.sendMessage(ChatColor.GREEN + "Arena " + ChatColor.YELLOW + args[1] + " " + ChatColor.GREEN + "successfully created.");
 
             // TODO: Possibly get the center of the square and set the default player spawn to the center

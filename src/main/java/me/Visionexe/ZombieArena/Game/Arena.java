@@ -24,19 +24,23 @@ public class Arena {
         Need to find how to pull WorldEdit information in so arena can be created
         Will also need to make commands to create arena
     */
-    private String arenaName = "";
+    private String arenaName;
+    private String world;
     private BlockVector3 pos1;
     private BlockVector3 pos2;
     private Location playerSpawnPoint;
     private List<String> mobSpawnPoints = new ArrayList<>();
 
-    public Arena(String arenaName, BlockVector3 pos1, BlockVector3 pos2) {
+    public Arena(String arenaName, Location location, BlockVector3 pos1, BlockVector3 pos2) {
         this.arenaName = arenaName;
         this.pos1 = pos1;
         this.pos2 = pos2;
+        this.world = location.getWorld().getName();
 
         FileManager fileManager = ZombieArena.getInstance().getFileManager();
         YamlConfiguration arenas = fileManager.get("arenas").get().getConfiguration();
+
+        arenas.set(arenaName + ".World", world);
 
         arenas.set(arenaName + ".Position1.x", pos1.getX());
         arenas.set(arenaName + ".Position1.y", pos1.getY());
@@ -57,7 +61,6 @@ public class Arena {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-//        }
     }
 
     /*
@@ -66,6 +69,7 @@ public class Arena {
     public String getArenaName() {
         return arenaName;
     }
+    public String getWorld() { return world; }
     public BlockVector3 getPos1() {
         return pos1;
     }
@@ -85,6 +89,7 @@ public class Arena {
     public void setArenaName(String arenaName) {
         this.arenaName = arenaName;
     }
+    public void setWorld(String world) { this.world = world; }
     public void setPos1(BlockVector3 pos1) {
         this.pos1 = pos1;
     }
@@ -96,7 +101,7 @@ public class Arena {
     }
     public void setMobSpawnPoints(List<String> mobSpawnPoints) {
         this.mobSpawnPoints = mobSpawnPoints;
-    }
+    } // Will most likely never be used but implemented for consistency purposes
 
     // Since mobSpawnPoints is a List of Locations, specifically have a function to add to the list
     public void addMobSpawnPoint(String mobSpawnPoint) {

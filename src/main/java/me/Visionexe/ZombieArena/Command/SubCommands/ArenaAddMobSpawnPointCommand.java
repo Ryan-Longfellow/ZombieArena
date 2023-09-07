@@ -46,7 +46,9 @@ public class ArenaAddMobSpawnPointCommand extends SubCommand {
 
             // Get mob location list
             List<String> mobSpawns = (List<String>) arenas.getList(arenaName + ".MobSpawns", new ArrayList<String>());
-            mobSpawns.add(playerLocation.toString());
+            // Stores the value in the format "X,Y,Z" so it is easily obtained later when spawning mobs
+            String spawnToAdd = playerLocation.getX() + "," + playerLocation.getY() + "," + playerLocation.getZ();
+            mobSpawns.add(spawnToAdd);
             player.sendMessage("Location added!");
             arenas.set(arenaName + ".MobSpawns", mobSpawns);
             try {
