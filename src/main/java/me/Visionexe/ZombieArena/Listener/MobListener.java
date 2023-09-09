@@ -2,6 +2,10 @@ package me.Visionexe.ZombieArena.Listener;
 
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.ZombieArena;
+import me.jasperjh.animatedscoreboard.AnimatedScoreboard;
+import me.jasperjh.animatedscoreboard.AnimatedScoreboardAPI;
+import me.jasperjh.animatedscoreboard.objects.PlayerScoreboard;
+import me.jasperjh.animatedscoreboard.objects.ScoreboardPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -9,6 +13,8 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+
+import java.util.Optional;
 
 public class MobListener implements Listener {
     /*
@@ -71,6 +77,23 @@ public class MobListener implements Listener {
                         if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
                             playerWrapper.addExperience(ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("mob-xp." + entity.toLowerCase()));
                             ZombieArena.getInstance().getEconomy().depositPlayer(player, ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("mob-coins." + entity.toLowerCase()));
+
+                            /*
+                            Use the AnimatedScoreboardAPI to force an update of Level, EXP and Mob Kills whenever a player kills a relevant mob
+                             */
+                            AnimatedScoreboardAPI asAPI = AnimatedScoreboard.loadAPI(ZombieArena.getInstance());
+                            Optional<ScoreboardPlayer> sp = asAPI.getScoreboardPlayer(player.getUniqueId()).toJavaUtil();
+                            Optional<PlayerScoreboard> ps = asAPI.getPlayerScoreboard(player.getUniqueId()).toJavaUtil();
+                            if (sp.isPresent() && ps.isPresent()) {
+                                PlayerScoreboard scoreboard = ps.get();
+                                // Score 97 used to store level on scoreboard
+                                scoreboard.replace(97, "  &6Level: &f" + playerWrapper.getLevel(), 20, 20);
+                                // Score 96 used to store Exp / Exp to next level
+                                scoreboard.replace(96, "  &2Exp: &f" + playerWrapper.getExperience() +
+                                        "/" + playerWrapper.getExperienceForNextLevel(), 20, 20);
+                                // Score 93 used to store mob kills
+                                scoreboard.replace(93, "  &cMob Kills: &f" + playerWrapper.getTotalKills(), 20, 20);
+                            }
                         }
                 }
             } catch (Exception exception) {

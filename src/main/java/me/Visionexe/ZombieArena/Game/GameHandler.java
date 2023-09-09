@@ -4,6 +4,8 @@ import me.Visionexe.ZombieArena.Event.PlayerRespawnCause;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnInGameEvent;
 import me.Visionexe.ZombieArena.Log;
 import me.Visionexe.ZombieArena.ZombieArena;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
@@ -149,6 +151,7 @@ public class GameHandler {
                 player.removePotionEffect(potion.getType());
             }
         }
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("add text here"));
     }
 
     public void start() {

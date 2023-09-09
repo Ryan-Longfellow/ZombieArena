@@ -77,8 +77,7 @@ public class WaveHandler implements Runnable, Listener {
     public int getWave() { return wave; }
 
     @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
-    {
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         /*
         Resets timer for few entities if a player damages the entity or if the entity does damage
         Prevents entities from disappearing in the middle of fighting and a new wave randomly starting
@@ -129,8 +128,6 @@ public class WaveHandler implements Runnable, Listener {
                     Log.debug("Updating entity list...");
                     Log.debug("Current wave: " + wave);
                     updateEntityList();
-
-                    // TODO: Add update to scoreboard to change mobs remaining
                 }
                 Log.debug("Checking if next wave...");
                 Log.debug("Mobs To Spawn: " + mobsToSpawn + ". Entities Empty: " + entities.isEmpty() + ". " + "Time to next wave: " + timeUntilNextWave);
@@ -154,11 +151,24 @@ public class WaveHandler implements Runnable, Listener {
                 /*
                 Can be used in the future to perform an action every 5sec
                  */
-                if(seconds % 5 == 0)
-                {
+                if(seconds % 5 == 0) {
                     // Can add the same update here as from GameHandler to generate a single heart every 5 seconds
                     // Will have to loop through all players in the game from GameHandler.getPlayers()
                 }
+
+                /*
+                TODO: Add an ActionBar with "Wave: # Alive: # Dead: # Enemies: #"
+                Also add a Scoreboard with
+                        TITLE
+                Info:
+                    Name:
+                    Level:
+                    Exp / Exp to Next Level:
+                Stats:
+                    Money:
+                    Mob kills:
+                        ZombieArena IP
+                 */
             }
 
             // To prevent players who do not set off any listeners from staying added into the game
@@ -220,8 +230,6 @@ public class WaveHandler implements Runnable, Listener {
         Bukkit.getPluginManager().callEvent(event);
         timeUntilNextWave = event.getSecondsUntilStart();
         this.wave = event.getNewWave();
-
-        // TODO: Call update to scoreboard to change wave
     }
 
     public void start() {
