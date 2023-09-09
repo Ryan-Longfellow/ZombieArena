@@ -31,6 +31,7 @@ public class WaveHandler implements Runnable, Listener {
 
     private int timeUntilNextWave;
     private int wave;
+    private int maxWave = 50;
     private int mobsToSpawn;
     private Map<Zombie, Integer> entities;
 
@@ -128,12 +129,15 @@ public class WaveHandler implements Runnable, Listener {
                     Log.debug("Updating entity list...");
                     Log.debug("Current wave: " + wave);
                     updateEntityList();
-                    Log.debug("Checking if next wave...");
-                    Log.debug("Mobs To Spawn: " + mobsToSpawn + ". Entities Empty: " + entities.isEmpty() + ". " + "Time to next wave: " + timeUntilNextWave);
-                    if(checkNextWave()) {
-                        Log.debug("Progressing to next wave...");
-                        setWave(wave + 1);
-                    }
+
+                    // TODO: Add update to scoreboard to change mobs remaining
+                }
+                Log.debug("Checking if next wave...");
+                Log.debug("Mobs To Spawn: " + mobsToSpawn + ". Entities Empty: " + entities.isEmpty() + ". " + "Time to next wave: " + timeUntilNextWave);
+
+                if(checkNextWave()) {
+                    Log.debug("Progressing to next wave...");
+                    setWave(wave + 1);
                 }
 
                 /*
@@ -199,12 +203,25 @@ public class WaveHandler implements Runnable, Listener {
     public void setWave(int wave) {
         int previousWave = this.wave;
         this.wave = wave;
+
+        /*
+        Force the entire game to stop if the wave goes higher than the max wave
+
+        TODO: Add a message that sends to all players
+        Possibly add a title popup and an extra reward
+         */
+        if (this.wave > maxWave) {
+            gameHandler.stop();
+        }
+
         prepareNextWave();
 
         WaveChangeEvent event = new WaveChangeEvent(previousWave, wave, timeUntilNextWave);
         Bukkit.getPluginManager().callEvent(event);
         timeUntilNextWave = event.getSecondsUntilStart();
         this.wave = event.getNewWave();
+
+        // TODO: Call update to scoreboard to change wave
     }
 
     public void start() {
@@ -240,6 +257,12 @@ public class WaveHandler implements Runnable, Listener {
             if (!entity.getKey().isValid()) {
                 Log.debug("Deleting " + entity.getKey() + " : " + entity.getValue());
                 entities.remove(entity.getKey(), entity.getValue());
+                break;
+                /*
+                Have to break early because if a mob is removed from the Map and
+                it is trying to go through all of the Map it will go one value too far
+                causing an error to be thrown; to prevent just break early
+                 */
             }
         }
     }

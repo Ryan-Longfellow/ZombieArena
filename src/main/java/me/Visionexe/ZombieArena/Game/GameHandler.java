@@ -84,6 +84,9 @@ public class GameHandler {
         for (PotionEffect potion : player.getActivePotionEffects()) {
             player.removePotionEffect(potion.getType());
         }
+
+        // TODO: Call scoreboard class to add lines for game
+        // Waves, mobs remaining, time to next wave if available
     }
 
     public int getAliveCount() {
@@ -128,6 +131,8 @@ public class GameHandler {
             playerStats.remove(player.getName());
 
             player.teleport(player.getWorld().getSpawnLocation());
+
+            // TODO: Remove scoreboard information from game
         }
     }
 
