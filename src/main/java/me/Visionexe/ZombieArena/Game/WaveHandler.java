@@ -31,7 +31,7 @@ public class WaveHandler implements Runnable, Listener {
 
     private int timeUntilNextWave;
     private int wave;
-    private int maxWave = 50;
+    private int maxWave = 5;
     private int mobsToSpawn;
     private Map<Zombie, Integer> entities;
 
@@ -114,21 +114,19 @@ public class WaveHandler implements Runnable, Listener {
                 /*
                 Runs 5 times every second to spawn mob and check if next wave is available
                 Will start the next wave is all criteria is met
-
-                This value will need to be changed based off of mobs spawning/spawned
-                This causes issues with waves starting constantly after the criteria is met once
-                Ex: If i = 10 but mobsToSpawn = 5 / mobsSpawned = 5
-                Once all 5 mobs are killed it will start 4 or 5 additional waves due the loop running 5 extra times
-
-                Unsure what exactly can be done with this value
                  */
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i <= mobsToSpawn; i++) {
+                    if (mobsToSpawn <= 0) { break; }
                     Log.debug("Attempting to spawn entities...");
                     attemptSpawnEntity();
                     Log.debug("Updating entity list...");
                     Log.debug("Current wave: " + wave);
+                }
+
+                for (int i = 0; i <= entities.size(); i++) {
                     updateEntityList();
                 }
+
                 Log.debug("Checking if next wave...");
                 Log.debug("Mobs To Spawn: " + mobsToSpawn + ". Entities Empty: " + entities.isEmpty() + ". " + "Time to next wave: " + timeUntilNextWave);
 
@@ -155,20 +153,6 @@ public class WaveHandler implements Runnable, Listener {
                     // Can add the same update here as from GameHandler to generate a single heart every 5 seconds
                     // Will have to loop through all players in the game from GameHandler.getPlayers()
                 }
-
-                /*
-                TODO: Add an ActionBar with "Wave: # Alive: # Dead: # Enemies: #"
-                Also add a Scoreboard with
-                        TITLE
-                Info:
-                    Name:
-                    Level:
-                    Exp / Exp to Next Level:
-                Stats:
-                    Money:
-                    Mob kills:
-                        ZombieArena IP
-                 */
             }
 
             // To prevent players who do not set off any listeners from staying added into the game
@@ -219,9 +203,14 @@ public class WaveHandler implements Runnable, Listener {
 
         TODO: Add a message that sends to all players
         Possibly add a title popup and an extra reward
+
+        Add game stop event
          */
         if (this.wave > maxWave) {
             gameHandler.stop();
+
+            GameStopEvent event = new GameStopEvent(GameStopCause.WIN);
+            Bukkit.getPluginManager().callEvent(event);
         }
 
         prepareNextWave();

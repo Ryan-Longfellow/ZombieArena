@@ -1,5 +1,6 @@
 package me.Visionexe.ZombieArena.Game;
 
+import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnCause;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnInGameEvent;
 import me.Visionexe.ZombieArena.Log;
@@ -7,6 +8,7 @@ import me.Visionexe.ZombieArena.ZombieArena;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -86,9 +88,6 @@ public class GameHandler {
         for (PotionEffect potion : player.getActivePotionEffects()) {
             player.removePotionEffect(potion.getType());
         }
-
-        // TODO: Call scoreboard class to add lines for game
-        // Waves, mobs remaining, time to next wave if available
     }
 
     public int getAliveCount() {
@@ -133,8 +132,6 @@ public class GameHandler {
             playerStats.remove(player.getName());
 
             player.teleport(player.getWorld().getSpawnLocation());
-
-            // TODO: Remove scoreboard information from game
         }
     }
 
@@ -190,6 +187,8 @@ public class GameHandler {
 
             Player player = stats.getPlayer();
             if (player != null) {
+                removePlayer(player);
+                player.teleport(player.getWorld().getSpawnLocation());
                 for (PotionEffect potion : player.getActivePotionEffects()) {
                     player.removePotionEffect(potion.getType());
                 }

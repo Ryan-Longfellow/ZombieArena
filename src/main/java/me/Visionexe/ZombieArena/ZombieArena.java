@@ -1,5 +1,6 @@
 package me.Visionexe.ZombieArena;
 
+import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Command.CommandHandler;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.Game.GameHandler;
@@ -9,19 +10,25 @@ import me.Visionexe.ZombieArena.Storage.DatabaseConnection;
 import me.Visionexe.ZombieArena.Storage.Flatfile.FileManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public class ZombieArena extends JavaPlugin {
     private static ZombieArena instance;
     private FileManager fileManager;
     private GameHandler gameHandler;
     private Economy economy;
+    public Map<UUID, FastBoard> boards = new HashMap<>();
     @Override
     public void onEnable() {
         instance = this;
@@ -37,9 +44,11 @@ public class ZombieArena extends JavaPlugin {
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 onTick();
+                for (FastBoard board : boards.values()) {
+                    updateBoard(board);
+                }
             }
         }, 1L, 1L);
     }
@@ -141,6 +150,62 @@ public class ZombieArena extends JavaPlugin {
             return;
         }
         this.economy = rsp.getProvider();
+    }
+
+    private void updateBoard(FastBoard board) {
+
+        /*
+        Scoreboard Example
+                ZombieArena
+        Info
+            Name: <player name>
+            Level: <level>
+            Exp: <current exp> / <exp to next level>
+
+        Stats
+            Money: <money>
+            Total Kills: <kills>
+         */
+
+        PlayerWrapper playerWrapper = PlayerWrapper.get(board.getPlayer());
+
+        board.updateTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "ZombieArena");
+
+        for (Player player : gameHandler.getPlayers()) {
+            if (gameHandler.getPlayers().contains(player)) {
+                board.updateLines(
+                        ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
+                        ChatColor.GRAY + "  Name: " + ChatColor.WHITE + board.getPlayer().getName(),
+                        ChatColor.GOLD + "  Level: " + ChatColor.WHITE + playerWrapper.getLevel(),
+                        ChatColor.DARK_GREEN + "  Exp: " + ChatColor.WHITE + playerWrapper.getExperience() + " / " + playerWrapper.getExperienceForNextLevel(),
+
+                        " ", // White space to separate Info and Stats
+
+                        ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
+                        ChatColor.GREEN + "  Money: " + ChatColor.WHITE + this.getEconomy().getBalance(board.getPlayer()),
+                        ChatColor.RED + "  Total Kills: " + ChatColor.WHITE + playerWrapper.getTotalKills(),
+
+                        " ", // White space
+                        ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Game",
+                        ChatColor.LIGHT_PURPLE + "  Wave: " + ChatColor.WHITE +  gameHandler.getWaveHandler().getWave(), // Wave number
+                        ChatColor.LIGHT_PURPLE + "  Mobs Remaining: " + ChatColor.WHITE + gameHandler.getWaveHandler().getRemainingZombies() // Mobs Remaining
+                );
+                return;
+            }
+        }
+        board.updateLines(
+                ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
+                ChatColor.GRAY + "  Name: " + ChatColor.WHITE + board.getPlayer().getName(),
+                ChatColor.GOLD + "  Level: " + ChatColor.WHITE + playerWrapper.getLevel(),
+                ChatColor.DARK_GREEN + "  Exp: " + ChatColor.WHITE + playerWrapper.getExperience() + " / " + playerWrapper.getExperienceForNextLevel(),
+
+                " ", // White space to separate Info and Stats
+
+                ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
+                ChatColor.GREEN + "  Money: " + ChatColor.WHITE + this.getEconomy().getBalance(board.getPlayer()),
+                ChatColor.RED + "  Total Kills: " + ChatColor.WHITE + playerWrapper.getTotalKills()
+        );
+        boards.put(board.getPlayer().getUniqueId(), board);
     }
 
     /*
