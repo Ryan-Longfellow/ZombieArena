@@ -35,8 +35,7 @@ public class ZombieArena extends JavaPlugin {
         registerEvents();
         registerCommands();
 
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
-        {
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             @Override
             public void run()
             {

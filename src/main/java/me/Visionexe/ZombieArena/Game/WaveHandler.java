@@ -32,7 +32,7 @@ public class WaveHandler implements Runnable, Listener {
     private int timeUntilNextWave;
     private int wave;
     private int mobsToSpawn;
-    private Map<EntityType, UUID> entities;
+    private Map<Zombie, Integer> entities;
 
     int taskID = -1;
     private int seconds;
@@ -60,7 +60,7 @@ public class WaveHandler implements Runnable, Listener {
         zombie.setAdult(); // Make sure zombie is an adult
         zombie.setCustomName("Test Zombie");
         mobsToSpawn--;
-        entities.put(zombie.getType(), zombie.getUniqueId());
+        entities.put(zombie, zombie.getEntityId());
     }
 
     private boolean checkNextWave() {
@@ -82,7 +82,7 @@ public class WaveHandler implements Runnable, Listener {
         Resets timer for few entities if a player damages the entity or if the entity does damage
         Prevents entities from disappearing in the middle of fighting and a new wave randomly starting
          */
-        if(entities.containsValue(event.getEntity().getUniqueId())) {
+        if(entities.containsValue(event.getEntity().getEntityId())) {
             secondsWithFewEntities = 0;
         }
     }
@@ -112,13 +112,21 @@ public class WaveHandler implements Runnable, Listener {
                 }
             } else {
                 /*
-                Calls every 5 seconds to attempt to spawn mobs and update the entity list if the mob is killed
+                Runs 5 times every second to spawn mob and check if next wave is available
                 Will start the next wave is all criteria is met
+
+                This value will need to be changed based off of mobs spawning/spawned
+                This causes issues with waves starting constantly after the criteria is met once
+                Ex: If i = 10 but mobsToSpawn = 5 / mobsSpawned = 5
+                Once all 5 mobs are killed it will start 4 or 5 additional waves due the loop running 5 extra times
+
+                Unsure what exactly can be done with this value
                  */
-                for (int i = 0; i < 100; i++) {
+                for (int i = 0; i < 5; i++) {
                     Log.debug("Attempting to spawn entities...");
                     attemptSpawnEntity();
                     Log.debug("Updating entity list...");
+                    Log.debug("Current wave: " + wave);
                     updateEntityList();
                     Log.debug("Checking if next wave...");
                     Log.debug("Mobs To Spawn: " + mobsToSpawn + ". Entities Empty: " + entities.isEmpty() + ". " + "Time to next wave: " + timeUntilNextWave);
@@ -129,7 +137,7 @@ public class WaveHandler implements Runnable, Listener {
                 }
 
                 /*
-                Will automatiically progress to the next wave is no damage is done within 60 seconds with 5 or less mobs alive
+                Will automatically progress to the next wave is no damage is done within 60 seconds with 5 or less mobs alive
                  */
                 if(true) { // There is supposed to be a check here to see if an option is enabled for automatically progressing to next way
                     if(entities.size() <= 5) {
@@ -209,10 +217,10 @@ public class WaveHandler implements Runnable, Listener {
     }
 
     private void startWave() {
-        for(Player p : gameHandler.getPlayers()) {
-            // Utilize this if I want to update the players health to max on next wave
-            // Most likely don't see myself using this
-        }
+//        for(Player p : gameHandler.getPlayers()) {
+//            // Utilize this if I want to update the players health to max on next wave
+//            // Most likely don't see myself using this
+//        }
         // Clear entities that were stuck or not killed last wave; can find a way to teleport them
         entities.clear();
 
@@ -227,10 +235,10 @@ public class WaveHandler implements Runnable, Listener {
     }
     
     private void updateEntityList() {
-        for(Map.Entry<EntityType, UUID> entity : entities.entrySet()) {
+        for (Map.Entry<Zombie, Integer> entity : entities.entrySet()) {
             Log.debug("Checking " + entity.getKey() + " and " + entity.getValue());
-            if(!entity.getKey().isAlive()) {
-                Log.debug("Deleting " + entity.getKey().name() + " : " + entity.getValue());
+            if (!entity.getKey().isValid()) {
+                Log.debug("Deleting " + entity.getKey() + " : " + entity.getValue());
                 entities.remove(entity.getKey(), entity.getValue());
             }
         }
