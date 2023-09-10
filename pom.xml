@@ -28,7 +28,6 @@
                     <relocations>
                         <relocation>
                             <pattern>fr.mrmicky.fastboard</pattern>
-                            <!-- Replace 'com.yourpackage' with the package of your plugin ! -->
                             <shadedPattern>me.Visionexe.ZombieArena</shadedPattern>
                         </relocation>
                     </relocations>
@@ -61,6 +60,13 @@
             <id>enginehub-maven</id>
             <url>https://maven.enginehub.org/repo/</url>
         </repository>
+
+        <repository>
+            <id>nexus</id>
+            <name>Lumine Releases</name>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
+
 
     </repositories>
 
@@ -97,6 +103,13 @@
             <groupId>fr.mrmicky</groupId>
             <artifactId>fastboard</artifactId>
             <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>Mythic-Dist</artifactId>
+            <version>5.3.5</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

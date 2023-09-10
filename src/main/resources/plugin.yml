@@ -2,7 +2,7 @@ name: ZombieArena
 main: me.Visionexe.ZombieArena.ZombieArena
 version: 1.0
 api-version: 1.20
-depend: [Vault, WorldEdit]
+depend: [Vault, WorldEdit, MythicMobs]
 commands:
   zombiearena:
     description: Get help for ZombieArena plugin

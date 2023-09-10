@@ -1,5 +1,9 @@
 package me.Visionexe.ZombieArena.Game;
 
+import io.lumine.mythic.api.mobs.MythicMob;
+import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Visionexe.ZombieArena.Event.GameStopCause;
 import me.Visionexe.ZombieArena.Event.GameStopEvent;
 import me.Visionexe.ZombieArena.Event.WaveChangeEvent;
@@ -9,9 +13,7 @@ import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -31,9 +33,9 @@ public class WaveHandler implements Runnable, Listener {
 
     private int timeUntilNextWave;
     private int wave;
-    private int maxWave = 5;
+    private int maxWave = 50;
     private int mobsToSpawn;
-    private Map<Zombie, Integer> entities;
+    private Map<ActiveMob, Integer> entities;
 
     int taskID = -1;
     private int seconds;
@@ -57,11 +59,112 @@ public class WaveHandler implements Runnable, Listener {
         // It should always be the same as the arena anyway
         World world = mobSpawns.get(0).getWorld();
         // Create a Zombie Entity to spawn at a random mobSpawn location
-        Zombie zombie = (Zombie) world.spawnEntity(mobSpawns.get(random.nextInt(mobSpawns.size())), EntityType.ZOMBIE);
-        zombie.setAdult(); // Make sure zombie is an adult
-        zombie.setCustomName("Test Zombie");
+//        Zombie zombie = (Zombie) world.spawnEntity(mobSpawns.get(random.nextInt(mobSpawns.size())), EntityType.ZOMBIE);
+//        zombie.setAdult(); // Make sure zombie is an adult
+//        zombie.setCustomName("Test Zombie");
+
+        ActiveMob activeMob = getRandomMobToSpawn().spawn(BukkitAdapter.adapt(mobSpawns.get(random.nextInt(mobSpawns.size()))), 1);
         mobsToSpawn--;
-        entities.put(zombie, zombie.getEntityId());
+        entities.put(activeMob, activeMob.getEntity().getBukkitEntity().getEntityId());
+    }
+
+    private MythicMob getRandomMobToSpawn() {
+        int wave = getWave();
+        int chance = (random.nextInt(100) + 1); // Chance to spawn a mob that isn't a zombie
+        int mobChance; // Which mob type to choose to spawn
+
+        // Perform all boss checks first
+        if (wave == 10) {
+
+        }
+        if (wave == 20) {
+
+        }
+        if (wave == 30) {
+
+        }
+        if (wave == 40) {
+
+        }
+        if (wave == 50) {
+
+        }
+
+        // Mob that is not a zombie is spawning
+        if (chance <= 10) {
+            if (wave < 50) {
+                if (wave < 40) {
+                    if (wave < 30) {
+                        if (wave < 20) {
+                            if (wave > 5 && wave < 10) {
+                                return MythicBukkit.inst().getMobManager().getMythicMob("BaseSkeleton").orElse(null);
+                            }
+                            if (wave < 5) {
+                                return MythicBukkit.inst().getMobManager().getMythicMob("BaseZombie").orElse(null);
+                            }
+                            mobChance = (random.nextInt(2) + 1);
+                            switch (mobChance) {
+                                case 1 -> {
+                                    return MythicBukkit.inst().getMobManager().getMythicMob("BaseSkeleton").orElse(null);
+                                }
+                                case 2 -> {
+                                    return MythicBukkit.inst().getMobManager().getMythicMob("BaseSpider").orElse(null);
+                                }
+                            }
+                        }
+                        mobChance = (random.nextInt(3) + 1);
+                        switch (mobChance) {
+                            case 1 -> {
+                                return MythicBukkit.inst().getMobManager().getMythicMob("BaseSkeleton").orElse(null);
+                            }
+                            case 2 -> {
+                                return MythicBukkit.inst().getMobManager().getMythicMob("BaseSpider").orElse(null);
+                            }
+                            case 3 -> {
+                                return MythicBukkit.inst().getMobManager().getMythicMob("BasePiglinBrute").orElse(null);
+                            }
+                        }
+                    }
+                    mobChance = (random.nextInt(4) + 1);
+                    switch (mobChance) {
+                        case 1 -> {
+                            return MythicBukkit.inst().getMobManager().getMythicMob("BaseSkeleton").orElse(null);
+                        }
+                        case 2 -> {
+                            return MythicBukkit.inst().getMobManager().getMythicMob("BaseSpider").orElse(null);
+                        }
+                        case 3 -> {
+                            return MythicBukkit.inst().getMobManager().getMythicMob("BasePiglinBrute").orElse(null);
+                        }
+                        case 4 -> {
+                            return MythicBukkit.inst().getMobManager().getMythicMob("BaseZoglin").orElse(null);
+                        }
+                    }
+                }
+                mobChance = (random.nextInt(6) + 1);
+                switch (mobChance) {
+                    case 1 -> {
+                        return MythicBukkit.inst().getMobManager().getMythicMob("BaseSkeleton").orElse(null);
+                    }
+                    case 2 -> {
+                        return MythicBukkit.inst().getMobManager().getMythicMob("BaseSpider").orElse(null);
+                    }
+                    case 3 -> {
+                        return MythicBukkit.inst().getMobManager().getMythicMob("BasePiglinBrute").orElse(null);
+                    }
+                    case 4 -> {
+                        return MythicBukkit.inst().getMobManager().getMythicMob("BaseZoglin").orElse(null);
+                    }
+                    case 5 -> {
+                        return MythicBukkit.inst().getMobManager().getMythicMob("BaseBlaze").orElse(null);
+                    }
+                    case 6 -> {
+                        return MythicBukkit.inst().getMobManager().getMythicMob("BaseWitherSkeleton").orElse(null);
+                    }
+                }
+            }
+        }
+        return MythicBukkit.inst().getMobManager().getMythicMob("BaseZombie").orElse(null);
     }
 
     private boolean checkNextWave() {
@@ -123,7 +226,7 @@ public class WaveHandler implements Runnable, Listener {
                     Log.debug("Current wave: " + wave);
                 }
 
-                for (int i = 0; i <= entities.size(); i++) {
+                for (int i = 0; i < 10; i++) {
                     updateEntityList();
                 }
 
@@ -249,9 +352,9 @@ public class WaveHandler implements Runnable, Listener {
     }
     
     private void updateEntityList() {
-        for (Map.Entry<Zombie, Integer> entity : entities.entrySet()) {
+        for (Map.Entry<ActiveMob, Integer> entity : entities.entrySet()) {
             Log.debug("Checking " + entity.getKey() + " and " + entity.getValue());
-            if (!entity.getKey().isValid()) {
+            if (!entity.getKey().getEntity().getBukkitEntity().isValid()) {
                 Log.debug("Deleting " + entity.getKey() + " : " + entity.getValue());
                 entities.remove(entity.getKey(), entity.getValue());
                 break;
