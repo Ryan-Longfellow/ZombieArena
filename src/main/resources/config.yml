@@ -10,26 +10,26 @@ max-level: 100
 # Not having the proper entity listed WILL cause errors
 # Types should not be case-sensitive
 mob-xp:
-  zombie: 100
-  skeleton: 200
-  spider: 300
-  creeper: 400
-  piglin_brute: 500
-  zoglin: 600
-  blaze: 700
-  wither_skeleton: 800
-  wither: 900
-  warden: 1000
+  zombie: 10
+  skeleton: 20
+  spider: 30
+  creeper: 40
+  piglin_brute: 50
+  zoglin: 60
+  blaze: 70
+  wither_skeleton: 80
+  wither: 90
+  warden: 100
 
 mob-coins:
-  zombie: 100
-  skeleton: 200
-  spider: 300
-  creeper: 400
-  piglin_brute: 500
-  zoglin: 600
-  blaze: 700
-  wither_skeleton: 800
+  zombie: 2
+  skeleton: 4
+  spider: 2
+  creeper: 1
+  piglin_brute: 6
+  zoglin: 10
+  blaze: 10
+  wither_skeleton: 20
   wither: 900
   warden: 1000
 

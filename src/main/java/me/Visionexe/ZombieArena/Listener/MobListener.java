@@ -1,5 +1,6 @@
 package me.Visionexe.ZombieArena.Listener;
 
+import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.Bukkit;
@@ -8,9 +9,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MobListener implements Listener {
     /*
@@ -55,6 +58,8 @@ public class MobListener implements Listener {
     Insane difficulty should never allow a player to 1 hit, 2 hits minimum to kill mobs with max enchants
      */
 
+    private Map<Player, Double> topDamage = new HashMap<>();
+
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity().getKiller() != null) {
@@ -78,6 +83,91 @@ public class MobListener implements Listener {
             } catch (Exception exception) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + exception.getMessage());
             }
+            if (event.getEntity().getName().contains("BOSS")) {
+                /*
+                Give rewards to the top 5 damagers
+                #1 gets 50% of reward
+                #2 gets 30%
+                #3 gets 10%
+                #4 and 5 get 5%
+                All others get 2%
+
+                Need to find a proper way to implement this
+                Need to consider
+                - What if there are < 5 players who damage the boss
+                - How to split up percentage if there are < 5 players
+                - May need to create additional functions to determine how this will work
+                - Probably a good idea to create additional functions to get the list of players in order who damaged the boss and use that list to get proper values
+                 */
+                Map<Player, Double> sortedTopDamage = sortDamagers(topDamage);
+
+                for (Map.Entry<Player, Double> damager : sortedTopDamage.entrySet()) {
+                    Bukkit.broadcastMessage(damager.getKey().getName() + " dealt " + damager.getValue() + " damage");
+                }
+
+                switch (event.getEntityType()) {
+                    case ZOMBIE: {
+
+                    }
+                    case PIGLIN_BRUTE: {
+
+                    }
+                    case BLAZE: {
+
+                    }
+                    case WITHER_SKELETON: {
+
+                    }
+                    case WARDEN: {
+
+                    }
+                }
+            }
         }
+    }
+
+    /*
+    This entire section will handle the top 5 damager for bosses and split rewards for each boss
+    Rewards for bosses will be hard coded for now until exact boss names and information are
+    figured out so a config value can be added
+
+    Will need to also implement something in the onEntityDeath to register if the mob was a boss as well and provide
+    rewards to the top 5 damagers=
+     */
+
+    @EventHandler
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        Entity damager = event.getDamager();
+        // Cancels action if player is not the damager
+        if (!(damager instanceof Player)) { return; }
+        // Detects if the entity has a name containing BOSS, all bosses will be labeled this way
+        if (entity.getName().contains("BOSS")) {
+            // Cast damager into Player object to prevent having to cast each time
+            Player playerDamager = (Player) damager;
+
+            // Get the current damage dealt to be used to add to damage already done or put new player into list
+            double currentDamage = event.getDamage();
+
+            // If the list is brand new or does not contain the player, add player to list
+            if (!(topDamage.containsKey(playerDamager))) {
+                topDamage.put(playerDamager, currentDamage);
+            }
+            // If player is already on the damage list, add their current damage to their damage from the list
+            if (topDamage.containsKey(playerDamager)) {
+                double totalDamage;
+                totalDamage = topDamage.get(playerDamager) + currentDamage;
+                topDamage.replace(playerDamager, totalDamage);
+            }
+        }
+    }
+
+    /*
+    This is solely used to sort damages by most damage done to least damage done for bosses
+     */
+    private Map<Player, Double> sortDamagers(Map<Player, Double> toSort) {
+        return toSort.entrySet().stream()
+                .sorted(Map.Entry.<Player, Double>comparingByValue().reversed())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 }

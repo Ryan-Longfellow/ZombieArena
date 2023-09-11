@@ -75,19 +75,24 @@ public class WaveHandler implements Runnable, Listener {
 
         // Perform all boss checks first
         if (wave == 10) {
-
+            mobsToSpawn = 1;
+            return MythicBukkit.inst().getMobManager().getMythicMob("ZombieBoss").orElse(null);
         }
         if (wave == 20) {
-
+            mobsToSpawn = 1;
+            return MythicBukkit.inst().getMobManager().getMythicMob("PiglinBoss").orElse(null);
         }
         if (wave == 30) {
-
+            mobsToSpawn = 1;
+            return MythicBukkit.inst().getMobManager().getMythicMob("BlazeBoss").orElse(null);
         }
         if (wave == 40) {
-
+            mobsToSpawn = 1;
+            return MythicBukkit.inst().getMobManager().getMythicMob("WitherSkeletonBoss").orElse(null);
         }
         if (wave == 50) {
-
+            mobsToSpawn = 1;
+            return MythicBukkit.inst().getMobManager().getMythicMob("WardenBoss").orElse(null);
         }
 
         // Mob that is not a zombie is spawning
@@ -367,4 +372,7 @@ public class WaveHandler implements Runnable, Listener {
         }
     }
 
+    public void clearEntityList() {
+        entities.clear();
+    }
 }
