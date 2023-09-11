@@ -12,7 +12,6 @@ import me.Visionexe.ZombieArena.Log;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -55,10 +54,6 @@ public class WaveHandler implements Runnable, Listener {
         ArenaHandler arenaHandler = gameHandler.getArenaHandler();
         // A very bad process of getting the mobSpawns of an arena by taking the first player listed in the arena and getting the arena name from them
         List<Location> mobSpawns = arenaHandler.getMobSpawns(gameHandler.getPlayerStats(gameHandler.getPlayers().get(0)).getArenaName());
-        // Also probably a bad way to get the world in order to spawn the entity; this just gets the world of the location
-        // It should always be the same as the arena anyway
-        World world = mobSpawns.get(0).getWorld();
-        // Create a Zombie Entity to spawn at a random mobSpawn location
 
         ActiveMob activeMob = getRandomMobToSpawn().spawn(BukkitAdapter.adapt(mobSpawns.get(random.nextInt(mobSpawns.size()))), 1);
         mobsToSpawn--;
