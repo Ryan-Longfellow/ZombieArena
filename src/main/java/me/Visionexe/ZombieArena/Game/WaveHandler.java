@@ -59,9 +59,6 @@ public class WaveHandler implements Runnable, Listener {
         // It should always be the same as the arena anyway
         World world = mobSpawns.get(0).getWorld();
         // Create a Zombie Entity to spawn at a random mobSpawn location
-//        Zombie zombie = (Zombie) world.spawnEntity(mobSpawns.get(random.nextInt(mobSpawns.size())), EntityType.ZOMBIE);
-//        zombie.setAdult(); // Make sure zombie is an adult
-//        zombie.setCustomName("Test Zombie");
 
         ActiveMob activeMob = getRandomMobToSpawn().spawn(BukkitAdapter.adapt(mobSpawns.get(random.nextInt(mobSpawns.size()))), 1);
         mobsToSpawn--;
