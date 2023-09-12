@@ -1,9 +1,7 @@
 package me.Visionexe.ZombieArena.GUI.Blacksmith;
 
-import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.MythicItem;
-import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.GUI.*;
 import me.Visionexe.ZombieArena.Log;
 import org.bukkit.ChatColor;
