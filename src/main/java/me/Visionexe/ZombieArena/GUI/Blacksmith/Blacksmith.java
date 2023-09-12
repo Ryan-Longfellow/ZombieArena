@@ -203,8 +203,8 @@ public class Blacksmith extends ChestGUI implements Clickable {
         // Sword Enchant Menu
         if (isSlot(slot, Column.THREE, Row.TWO)) {
             if (hasSword) {
-                beforeOpen(player);
-                updateContent();
+                Sword gui = new Sword(ChatColor.translateAlternateColorCodes('&', "&aBlacksmith"), Row.THREE);
+                gui.open(player);
             } else {
                 beforeOpen(player);
                 updateContent();
