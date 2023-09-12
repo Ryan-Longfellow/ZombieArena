@@ -229,8 +229,8 @@ public class Blacksmith extends ChestGUI implements Clickable {
         // Helmet Enchant Menu
         if (isSlot(slot, Column.FOUR, Row.TWO)) {
             if (hasHelmet) {
-                beforeOpen(player);
-                updateContent();
+                Armor gui = new Armor(ChatColor.translateAlternateColorCodes('&', "&aBlacksmith"), Row.THREE, "Helmet");
+                gui.open(player);
             } else {
                 beforeOpen(player);
                 updateContent();
@@ -255,8 +255,8 @@ public class Blacksmith extends ChestGUI implements Clickable {
         // Chestplate Enchant Menu
         if (isSlot(slot, Column.FIVE, Row.TWO)) {
             if (hasChestplate) {
-                beforeOpen(player);
-                updateContent();
+                Armor gui = new Armor(ChatColor.translateAlternateColorCodes('&', "&aBlacksmith"), Row.THREE, "Chestplate");
+                gui.open(player);
             } else {
                 beforeOpen(player);
                 updateContent();
@@ -281,8 +281,8 @@ public class Blacksmith extends ChestGUI implements Clickable {
         // Leggings Enchant Menu
         if (isSlot(slot, Column.SIX, Row.TWO)) {
             if (hasLeggings) {
-                beforeOpen(player);
-                updateContent();
+                Armor gui = new Armor(ChatColor.translateAlternateColorCodes('&', "&aBlacksmith"), Row.THREE, "Leggings");
+                gui.open(player);
             } else {
                 beforeOpen(player);
                 updateContent();
@@ -307,8 +307,8 @@ public class Blacksmith extends ChestGUI implements Clickable {
         // Boots Enchant Menu
         if (isSlot(slot, Column.SEVEN, Row.TWO)) {
             if (hasBoots) {
-                beforeOpen(player);
-                updateContent();
+                Armor gui = new Armor(ChatColor.translateAlternateColorCodes('&', "&aBlacksmith"), Row.THREE, "Boots");
+                gui.open(player);
             } else {
                 beforeOpen(player);
                 updateContent();

@@ -2,6 +2,7 @@ package me.Visionexe.ZombieArena.GUI.Blacksmith;
 
 import me.Visionexe.ZombieArena.GUI.*;
 import me.Visionexe.ZombieArena.Log;
+import me.Visionexe.ZombieArena.Utils.ValueFormat;
 import me.Visionexe.ZombieArena.ZombieArena;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
@@ -21,7 +22,7 @@ public class Sword extends ChestGUI implements Clickable {
     private ItemStack swordItemStack = null;
     private int sharpnessMax = 20, smiteMax = 20, baneMax = 20, fireAspectMax = 5, knockbackMax = 3;
     private boolean isSharpnessMax = false, isSmiteMax = false, isBaneMax = false, isFireAspectMax = false, isKnockbackMax = false;
-    private double sharpnessPrice, smitePrice, banePrice, fireAspectPrice, knockbackPrice;
+    private long sharpnessPrice, smitePrice, banePrice, fireAspectPrice, knockbackPrice;
 
     public Sword(String title, Row size) {
         super(title, size);
@@ -67,7 +68,7 @@ public class Sword extends ChestGUI implements Clickable {
                     "&eSmite " + smiteMax,
                     isSmiteMax
             );
-            smiteEnchantmentItemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, smiteMax);
+            smiteEnchantmentItemStack.addUnsafeEnchantment(Enchantment.DAMAGE_UNDEAD, smiteMax);
         }
         if (swordItemStack.getEnchantmentLevel(Enchantment.DAMAGE_ARTHROPODS) >= baneMax) {
             isBaneMax = true;
@@ -76,7 +77,7 @@ public class Sword extends ChestGUI implements Clickable {
                     "&eBane of Arthropods " + baneMax,
                     isBaneMax
             );
-            baneItemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, baneMax);
+            baneItemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ARTHROPODS, baneMax);
         }
         if (swordItemStack.getEnchantmentLevel(Enchantment.FIRE_ASPECT) >= fireAspectMax) {
             isFireAspectMax = true;
@@ -85,7 +86,7 @@ public class Sword extends ChestGUI implements Clickable {
                     "&eFire Aspect " + fireAspectMax,
                     isFireAspectMax
             );
-            fireAspectItemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, fireAspectMax);
+            fireAspectItemStack.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, fireAspectMax);
         }
         if (swordItemStack.getEnchantmentLevel(Enchantment.KNOCKBACK) >= knockbackMax) {
             isKnockbackMax = true;
@@ -94,7 +95,7 @@ public class Sword extends ChestGUI implements Clickable {
                     "&eKnockback " + knockbackMax,
                     isKnockbackMax
             );
-            knockbackItemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, knockbackMax);
+            knockbackItemStack.addUnsafeEnchantment(Enchantment.KNOCKBACK, knockbackMax);
         }
         Map<Enchantment, Integer> swordEnchantments = swordItemStack.getEnchantments();
         if (swordEnchantments.containsKey(Enchantment.DAMAGE_ALL) && !(isSharpnessMax)) {
@@ -104,7 +105,6 @@ public class Sword extends ChestGUI implements Clickable {
                     sharpnessPrice = getEnchantPrice(swordEnchantments.get(Enchantment.DAMAGE_ALL) + 1)
             );
             sharpnessEnchantmentItemStack.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, swordEnchantments.get(Enchantment.DAMAGE_ALL) + 1);
-            player.sendMessage(sharpnessEnchantmentItemStack.getItemMeta().getLore().toString());
         } else if (!(isSharpnessMax)) {
             sharpnessEnchantmentItemStack = createItemStack(
                     Material.ENCHANTED_BOOK,
@@ -201,14 +201,14 @@ public class Sword extends ChestGUI implements Clickable {
     /**
      * Creates an item stack of the given material. Messages are taken from the specified configuration section.
      */
-    private ItemStack createItemStack(Material material, String displayName, Double price) {
+    private ItemStack createItemStack(Material material, String displayName, long price) {
         ItemStack itemStack = new ItemStack(material);
         ItemMeta itemMeta = itemStack.getItemMeta();
 
         itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.translateAlternateColorCodes('&', "&7Buy: &a$") + price);
+        lore.add(ChatColor.translateAlternateColorCodes('&', "&7Buy: &a$") + ValueFormat.format(price, ValueFormat.THOUSANDS | ValueFormat.MILLIONS | ValueFormat.BILLIONS));
         itemMeta.setLore(lore);
 
         itemStack.setItemMeta(itemMeta);
@@ -351,7 +351,7 @@ public class Sword extends ChestGUI implements Clickable {
         }
     }
 
-    public double getEnchantPrice(int enchantLevel) {
-        return (Math.pow(2, (enchantLevel - 1))) * 500;
+    public long getEnchantPrice(int enchantLevel) {
+        return (long) ((Math.pow(2, (enchantLevel - 1))) * 500);
     }
 }
