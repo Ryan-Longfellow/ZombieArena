@@ -4,6 +4,8 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.MythicItem;
 import me.Visionexe.ZombieArena.GUI.*;
 import me.Visionexe.ZombieArena.Log;
+import me.Visionexe.ZombieArena.ZombieArena;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -192,46 +194,138 @@ public class Blacksmith extends ChestGUI implements Clickable {
         }
 
         Player player = (Player)event.getWhoClicked();
+        Economy economy = ZombieArena.getInstance().getEconomy();
 
         int slot = event.getSlot();
 
         Log.debug("Slot clicked: " + slot);
 
-        /*
-        Will need to create a GUI for each menu
-        - Berserk Sword
-        - Custom Helmet
-        - Custom Chestplate
-        - Custom Leggings
-        - Custom Boots
-         */
-
         // Sword Enchant Menu
         if (isSlot(slot, Column.THREE, Row.TWO)) {
+            if (hasSword) {
+                beforeOpen(player);
+                updateContent();
+            } else {
+                beforeOpen(player);
+                updateContent();
+
+                // Get players current money
+                double playerBalance = economy.getBalance(player);
+                // Compare to price of sword ($10,000 coins currently)
+                if (playerBalance >= 10000) {
+                    // If player has enough, purchase
+                    player.getInventory().addItem(MythicBukkit.inst().getItemManager().getItemStack("BerserkSword"));
+                    economy.withdrawPlayer(player, 10000);
+                    player.sendMessage("You have successfully purchased the Berserk Sword!");
+                } else {
+                    // If not, send player a message that they do not have enough money
+                    player.sendMessage("You do not have enough money to purchase this item!");
+                }
+            }
             beforeOpen(player);
             updateContent();
         }
 
         // Helmet Enchant Menu
         if (isSlot(slot, Column.FOUR, Row.TWO)) {
+            if (hasHelmet) {
+                beforeOpen(player);
+                updateContent();
+            } else {
+                beforeOpen(player);
+                updateContent();
+
+                // Get players current money
+                double playerBalance = economy.getBalance(player);
+                // Compare to price of sword ($10,000 coins currently)
+                if (playerBalance >= 10000) {
+                    // If player has enough, purchase
+                    player.getInventory().addItem(MythicBukkit.inst().getItemManager().getItemStack("CustomHelmet"));
+                    economy.withdrawPlayer(player, 10000);
+                    player.sendMessage("You have successfully purchased the Netherite Helmet!");
+                } else {
+                    // If not, send player a message that they do not have enough money
+                    player.sendMessage("You do not have enough money to purchase this item!");
+                }
+            }
             beforeOpen(player);
             updateContent();
         }
 
         // Chestplate Enchant Menu
         if (isSlot(slot, Column.FIVE, Row.TWO)) {
+            if (hasChestplate) {
+                beforeOpen(player);
+                updateContent();
+            } else {
+                beforeOpen(player);
+                updateContent();
+
+                // Get players current money
+                double playerBalance = economy.getBalance(player);
+                // Compare to price of sword ($10,000 coins currently)
+                if (playerBalance >= 10000) {
+                    // If player has enough, purchase
+                    player.getInventory().addItem(MythicBukkit.inst().getItemManager().getItemStack("CustomChestplate"));
+                    economy.withdrawPlayer(player, 10000);
+                    player.sendMessage("You have successfully purchased the Netherite Chestplate!");
+                } else {
+                    // If not, send player a message that they do not have enough money
+                    player.sendMessage("You do not have enough money to purchase this item!");
+                }
+            }
             beforeOpen(player);
             updateContent();
         }
 
         // Leggings Enchant Menu
         if (isSlot(slot, Column.SIX, Row.TWO)) {
+            if (hasLeggings) {
+                beforeOpen(player);
+                updateContent();
+            } else {
+                beforeOpen(player);
+                updateContent();
+
+                // Get players current money
+                double playerBalance = economy.getBalance(player);
+                // Compare to price of sword ($10,000 coins currently)
+                if (playerBalance >= 10000) {
+                    // If player has enough, purchase
+                    player.getInventory().addItem(MythicBukkit.inst().getItemManager().getItemStack("CustomLeggings"));
+                    economy.withdrawPlayer(player, 10000);
+                    player.sendMessage("You have successfully purchased the Netherite Leggings!");
+                } else {
+                    // If not, send player a message that they do not have enough money
+                    player.sendMessage("You do not have enough money to purchase this item!");
+                }
+            }
             beforeOpen(player);
             updateContent();
         }
 
         // Boots Enchant Menu
         if (isSlot(slot, Column.SEVEN, Row.TWO)) {
+            if (hasBoots) {
+                beforeOpen(player);
+                updateContent();
+            } else {
+                beforeOpen(player);
+                updateContent();
+
+                // Get players current money
+                double playerBalance = economy.getBalance(player);
+                // Compare to price of sword ($10,000 coins currently)
+                if (playerBalance >= 10000) {
+                    // If player has enough, purchase
+                    player.getInventory().addItem(MythicBukkit.inst().getItemManager().getItemStack("CustomBoots"));
+                    economy.withdrawPlayer(player, 10000);
+                    player.sendMessage("You have successfully purchased the Netherite Boots!");
+                } else {
+                    // If not, send player a message that they do not have enough money
+                    player.sendMessage("You do not have enough money to purchase this item!");
+                }
+            }
             beforeOpen(player);
             updateContent();
         }
