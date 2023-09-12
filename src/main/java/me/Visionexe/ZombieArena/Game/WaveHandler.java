@@ -52,10 +52,24 @@ public class WaveHandler implements Runnable, Listener {
         if (mobsToSpawn <= 0) { return; }
 
         ArenaHandler arenaHandler = gameHandler.getArenaHandler();
+        List<Player> playersInGame = gameHandler.getPlayers();
         // A very bad process of getting the mobSpawns of an arena by taking the first player listed in the arena and getting the arena name from them
         List<Location> mobSpawns = arenaHandler.getMobSpawns(gameHandler.getPlayerStats(gameHandler.getPlayers().get(0)).getArenaName());
+        List<Location> playerLocations = new ArrayList<>();
+        List<Location> spawnsCloseToPlayers = new ArrayList<>();
 
-        ActiveMob activeMob = getRandomMobToSpawn().spawn(BukkitAdapter.adapt(mobSpawns.get(random.nextInt(mobSpawns.size()))), 1);
+        for (Player player : playersInGame) {
+            playerLocations.add(player.getLocation());
+        }
+        for (Location spawn : mobSpawns) {
+            for (Location playerLocation : playerLocations) {
+                if (spawn.distance(playerLocation) <= 30) {
+                    spawnsCloseToPlayers.add(spawn);
+                }
+            }
+        }
+        // mobSpawns.get(random.nextInt(mobSpawns.size()))
+        ActiveMob activeMob = getRandomMobToSpawn().spawn(BukkitAdapter.adapt(spawnsCloseToPlayers.get(random.nextInt(spawnsCloseToPlayers.size()))), 1);
         mobsToSpawn--;
         entities.put(activeMob, activeMob.getEntity().getBukkitEntity().getEntityId());
     }
