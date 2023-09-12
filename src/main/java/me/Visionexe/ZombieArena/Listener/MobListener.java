@@ -3,6 +3,7 @@ package me.Visionexe.ZombieArena.Listener;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.ZombieArena;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -58,6 +59,7 @@ public class MobListener implements Listener {
     Insane difficulty should never allow a player to 1 hit, 2 hits minimum to kill mobs with max enchants
      */
 
+    Economy economy = ZombieArena.getInstance().getEconomy();
     private Map<Player, Double> topDamage = new HashMap<>();
 
     @EventHandler
@@ -77,49 +79,40 @@ public class MobListener implements Listener {
                 for (String entity : mobTypes.getKeys(false)) {
                         if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
                             playerWrapper.addExperience(ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("mob-xp." + entity.toLowerCase()));
-                            ZombieArena.getInstance().getEconomy().depositPlayer(player, ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("mob-coins." + entity.toLowerCase()));
+                            economy.depositPlayer(player, ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("mob-coins." + entity.toLowerCase()));
                         }
                 }
             } catch (Exception exception) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + exception.getMessage());
             }
             if (event.getEntity().getName().contains("BOSS")) {
-                /*
-                Give rewards to the top 5 damagers
-                #1 gets 50% of reward
-                #2 gets 30%
-                #3 gets 10%
-                #4 and 5 get 5%
-                All others get 2%
-
-                Need to find a proper way to implement this
-                Need to consider
-                - What if there are < 5 players who damage the boss
-                - How to split up percentage if there are < 5 players
-                - May need to create additional functions to determine how this will work
-                - Probably a good idea to create additional functions to get the list of players in order who damaged the boss and use that list to get proper values
-                 */
-                Map<Player, Double> sortedTopDamage = sortDamagers(topDamage);
-
+                LinkedHashMap<Player, Double> sortedTopDamage = (LinkedHashMap<Player, Double>) sortDamagers(topDamage);
+                int count = 0;
                 for (Map.Entry<Player, Double> damager : sortedTopDamage.entrySet()) {
-                    Bukkit.broadcastMessage(damager.getKey().getName() + " dealt " + damager.getValue() + " damage");
+                    count++;
+                    if (count >= 5) break;
+                    Bukkit.broadcastMessage(count + ". " + damager.getKey().getName() + " dealt " + damager.getValue() + " damage");
                 }
 
+                // Check size of top damagers
+                // If <= 5 damagers, split equally among all damagers
+                // If > 5 damagers, split among top 5, give all other players 5%
+
                 switch (event.getEntityType()) {
-                    case ZOMBIE: {
-
+                    case ZOMBIE -> {
+                        splitRewards(sortedTopDamage, 1000, 1000);
                     }
-                    case PIGLIN_BRUTE: {
-
+                    case PIGLIN_BRUTE -> {
+                        splitRewards(sortedTopDamage, 2000, 2000);
                     }
-                    case BLAZE: {
-
+                    case BLAZE -> {
+                        splitRewards(sortedTopDamage, 3000, 3000);
                     }
-                    case WITHER_SKELETON: {
-
+                    case WITHER_SKELETON -> {
+                        splitRewards(sortedTopDamage, 4000, 4000);
                     }
-                    case WARDEN: {
-
+                    case WARDEN -> {
+                        splitRewards(sortedTopDamage, 5000, 5000);
                     }
                 }
             }
@@ -169,5 +162,33 @@ public class MobListener implements Listener {
         return toSort.entrySet().stream()
                 .sorted(Map.Entry.<Player, Double>comparingByValue().reversed())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+    private void splitRewards(LinkedHashMap<Player, Double> damagers, int experience, double money) {
+        int totalDamagers = damagers.size();
+        if (totalDamagers <= 5) {
+            for (Map.Entry<Player, Double> damager : damagers.entrySet()) {
+                PlayerWrapper.get(damager.getKey()).addExperience(experience / totalDamagers);
+                economy.depositPlayer(damager.getKey(), money / totalDamagers);
+                damager.getKey().sendMessage("You received " + (experience / totalDamagers) + " experience and " +
+                        (money / totalDamagers) + " money");
+            }
+        } else {
+            int count = 0;
+            for (Map.Entry<Player, Double> damager : damagers.entrySet()) {
+                count++;
+                if (count <= 5) {
+                    PlayerWrapper.get(damager.getKey()).addExperience(experience / 5);
+                    economy.depositPlayer(damager.getKey(), money / 5);
+                    damager.getKey().sendMessage("You received " + (experience / 5) + " experience and " +
+                            (money / 5) + " money");
+                } else {
+                    PlayerWrapper.get(damager.getKey()).addExperience((int) (experience * 0.10));
+                    economy.depositPlayer(damager.getKey(), money * 0.10);
+                    damager.getKey().sendMessage("You received " + (experience * 0.10) + " experience and " +
+                            (money * 0.10) + " money");
+                }
+            }
+        }
     }
 }
