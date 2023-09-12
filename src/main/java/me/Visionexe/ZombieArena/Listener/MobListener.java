@@ -1,6 +1,5 @@
 package me.Visionexe.ZombieArena.Listener;
 
-import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.ZombieArena;
 import net.milkbowl.vault.economy.Economy;
@@ -133,7 +132,9 @@ public class MobListener implements Listener {
         Entity entity = event.getEntity();
         Entity damager = event.getDamager();
         // Cancels action if player is not the damager
-        if (!(damager instanceof Player)) { return; }
+        if (!(damager instanceof Player)) {
+            return;
+        }
         // Detects if the entity has a name containing BOSS, all bosses will be labeled this way
         if (entity.getName().contains("BOSS")) {
             // Cast damager into Player object to prevent having to cast each time

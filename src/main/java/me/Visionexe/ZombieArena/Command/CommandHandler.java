@@ -28,6 +28,7 @@ public class CommandHandler implements CommandExecutor {
         subcommands.add(new StartGameCommand());
         subcommands.add(new SetWaveCommand());
         subcommands.add(new BlacksmithCommand());
+        subcommands.add(new LeaveCommand());
     }
 
     @Override
