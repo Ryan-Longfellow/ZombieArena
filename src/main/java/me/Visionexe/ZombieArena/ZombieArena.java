@@ -8,6 +8,7 @@ import me.Visionexe.ZombieArena.Listener.MobListener;
 import me.Visionexe.ZombieArena.Listener.PlayerListener;
 import me.Visionexe.ZombieArena.Storage.DatabaseConnection;
 import me.Visionexe.ZombieArena.Storage.Flatfile.FileManager;
+import me.Visionexe.ZombieArena.Utils.ValueFormat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -182,7 +184,7 @@ public class ZombieArena extends JavaPlugin {
                         " ", // White space to separate Info and Stats
 
                         ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
-                        ChatColor.GREEN + "  Money: " + ChatColor.WHITE + this.getEconomy().getBalance(board.getPlayer()),
+                        ChatColor.GREEN + "  Money: " + ChatColor.WHITE + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer()), ValueFormat.PRECISION(2) | ValueFormat.THOUSANDS | ValueFormat.MILLIONS | ValueFormat.BILLIONS),
                         ChatColor.RED + "  Total Kills: " + ChatColor.WHITE + playerWrapper.getTotalKills(),
 
                         " ", // White space
@@ -203,7 +205,7 @@ public class ZombieArena extends JavaPlugin {
                 " ", // White space to separate Info and Stats
 
                 ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
-                ChatColor.GREEN + "  Money: " + ChatColor.WHITE + this.getEconomy().getBalance(board.getPlayer()),
+                ChatColor.GREEN + "  Money: " + ChatColor.WHITE + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer()), ValueFormat.PRECISION(2) | ValueFormat.THOUSANDS | ValueFormat.MILLIONS | ValueFormat.BILLIONS),
                 ChatColor.RED + "  Total Kills: " + ChatColor.WHITE + playerWrapper.getTotalKills()
         );
         boards.put(board.getPlayer().getUniqueId(), board);
