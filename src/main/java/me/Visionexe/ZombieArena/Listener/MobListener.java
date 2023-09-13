@@ -100,18 +100,23 @@ public class MobListener implements Listener {
                 switch (event.getEntityType()) {
                     case ZOMBIE -> {
                         splitRewards(sortedTopDamage, 1000, 1000);
+                        topDamage.clear();
                     }
                     case PIGLIN_BRUTE -> {
                         splitRewards(sortedTopDamage, 2000, 2000);
+                        topDamage.clear();
                     }
                     case BLAZE -> {
                         splitRewards(sortedTopDamage, 3000, 3000);
+                        topDamage.clear();
                     }
                     case WITHER_SKELETON -> {
                         splitRewards(sortedTopDamage, 4000, 4000);
+                        topDamage.clear();
                     }
                     case WARDEN -> {
                         splitRewards(sortedTopDamage, 5000, 5000);
+                        topDamage.clear();
                     }
                 }
             }

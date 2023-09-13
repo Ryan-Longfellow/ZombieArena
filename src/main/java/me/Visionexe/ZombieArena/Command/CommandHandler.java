@@ -48,8 +48,10 @@ public class CommandHandler implements CommandExecutor {
             } else if(args.length == 0) {
                 player.sendMessage(ChatColor.GREEN + "--------------------------------");
                 for (int i = 0; i < getSubcommands().size(); i++) {
-                    player.sendMessage(ChatColor.YELLOW + getSubcommands().get(i).getSyntax() + " - " +
-                            ChatColor.GREEN + getSubcommands().get(i).getDescription());
+                    if (player.hasPermission(getSubcommands().get(i).getPermission())) {
+                        player.sendMessage(ChatColor.YELLOW + getSubcommands().get(i).getSyntax() + " - " +
+                                ChatColor.GREEN + getSubcommands().get(i).getDescription());
+                    }
                 }
                 player.sendMessage(ChatColor.GREEN + "--------------------------------");
             }
