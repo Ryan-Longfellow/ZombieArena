@@ -389,7 +389,6 @@ public class WaveHandler implements Runnable, Listener {
                 Log.debug("Deleting " + entity.getKey() + " : " + entity.getValue());
                 entities.remove(entity.getKey(), entity.getValue());
             } else {
-                Bukkit.getConsoleSender().sendMessage("Removing " + entity.getKey().getEntity().getBukkitEntity().getName() + " " + entity.getValue());
                 entity.getKey().remove();
             }
         }
