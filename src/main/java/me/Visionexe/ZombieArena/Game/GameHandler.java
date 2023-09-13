@@ -184,6 +184,7 @@ public class GameHandler {
         waveHandler.removeEntities();
 
         for (PlayerStats stats : playerStats.values()) {
+            if (!(stats.isAlive())) respawnPlayer(stats.getPlayer());
             stats.resetStats();
             stats.setAlive(false);
 
