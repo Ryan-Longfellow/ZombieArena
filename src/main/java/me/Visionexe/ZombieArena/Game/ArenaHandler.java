@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class ArenaHandler {
@@ -21,12 +22,16 @@ public class ArenaHandler {
     }
 
     public String getArena(String arenaName) {
-        for (String arena : arenas) {
-            if (arenas.contains(arenaName)) {
-                return arena;
-            }
+        loadArenas();
+        if (arenas.contains(arenaName)) {
+            return arenaName;
         }
-        return null;
+        return "UNKNOWN";
+    }
+
+    public boolean isArenaValid(String arenaName) {
+        loadArenas();
+        return arenas.contains(arenaName);
     }
 
     public void loadArenas() {
@@ -35,7 +40,7 @@ public class ArenaHandler {
     }
 
     public Location getPlayerSpawn(String arenaName) {
-        World world = Bukkit.getWorld(arenasFile.getString(arenaName + ".World"));
+        World world = Bukkit.getWorld(Objects.requireNonNull(arenasFile.getString(arenaName + ".World")));
         return new Location(
                 world,
                 arenasFile.getInt(arenaName + ".PlayerSpawn.x"),
@@ -51,7 +56,7 @@ public class ArenaHandler {
         for (String mobSpawn : mobSpawnsString) {
             String[] splitSpawn = mobSpawn.split(",");
             mobSpawnsLocation.add(new Location(
-                    Bukkit.getWorld(arenasFile.getString(arenaName + ".World")),
+                    Bukkit.getWorld(Objects.requireNonNull(arenasFile.getString(arenaName + ".World"))),
                     Double.parseDouble(splitSpawn[0]),
                     Double.parseDouble(splitSpawn[1]),
                     Double.parseDouble(splitSpawn[2])

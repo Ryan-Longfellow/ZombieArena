@@ -63,7 +63,7 @@ public class WaveHandler implements Runnable, Listener {
         }
         for (Location spawn : mobSpawns) {
             for (Location playerLocation : playerLocations) {
-                if (spawn.distance(playerLocation) <= 30) {
+                if (spawn.distance(playerLocation) <= 20) {
                     spawnsCloseToPlayers.add(spawn);
                 }
             }
@@ -215,7 +215,7 @@ public class WaveHandler implements Runnable, Listener {
 
     @Override
     public void run() {
-        if(gameHandler.isRunning()) {
+        if (gameHandler.isRunning()) {
             Log.debug("Game is running...");
             if(timeUntilNextWave > 0) {
                 timeUntilNextWave--;
@@ -371,7 +371,7 @@ public class WaveHandler implements Runnable, Listener {
                 break;
                 /*
                 Have to break early because if a mob is removed from the Map and
-                it is trying to go through all of the Map it will go one value too far
+                it is trying to go through all the Map it will go one value too far
                 causing an error to be thrown; to prevent just break early
                  */
             }
@@ -379,6 +379,20 @@ public class WaveHandler implements Runnable, Listener {
     }
 
     public void clearEntityList() {
+        entities.clear();
+    }
+
+    public void removeEntities() {
+        if (entities.isEmpty()) return;
+        for (Map.Entry<ActiveMob, Integer> entity : entities.entrySet()) {
+            if (!entity.getKey().getEntity().getBukkitEntity().isValid()) {
+                Log.debug("Deleting " + entity.getKey() + " : " + entity.getValue());
+                entities.remove(entity.getKey(), entity.getValue());
+            } else {
+                Bukkit.getConsoleSender().sendMessage("Removing " + entity.getKey().getEntity().getBukkitEntity().getName() + " " + entity.getValue());
+                entity.getKey().remove();
+            }
+        }
         entities.clear();
     }
 }

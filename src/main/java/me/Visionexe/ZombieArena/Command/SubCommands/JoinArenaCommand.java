@@ -29,9 +29,18 @@ public class JoinArenaCommand extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
         GameHandler gameHandler = ZombieArena.getInstance().getGameHandler();
+        String arenaName;
 
         if (args.length == 2) {
-            gameHandler.addPlayer(player, args[1]);
+            arenaName = args[1];
+            // Check if arena is valid
+            if (gameHandler.getArenaHandler().isArenaValid(arenaName)) {
+                gameHandler.addPlayer(player, arenaName);
+            } else {
+                player.sendMessage("No arena exists with that name!");
+            }
+        } else {
+            player.sendMessage("Please specify an Arena Name");
         }
     }
 }

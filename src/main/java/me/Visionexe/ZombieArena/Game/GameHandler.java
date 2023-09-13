@@ -181,6 +181,8 @@ public class GameHandler {
         isRunning = false;
         isWaiting = true;
 
+        waveHandler.removeEntities();
+
         for (PlayerStats stats : playerStats.values()) {
             stats.resetStats();
             stats.setAlive(false);
@@ -189,11 +191,11 @@ public class GameHandler {
             if (player != null) {
                 removePlayer(player);
                 player.teleport(player.getWorld().getSpawnLocation());
+                player.setGameMode(GameMode.ADVENTURE);
                 for (PotionEffect potion : player.getActivePotionEffects()) {
                     player.removePotionEffect(potion.getType());
                 }
             }
         }
     }
-
 }
