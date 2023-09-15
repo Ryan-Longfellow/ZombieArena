@@ -32,7 +32,7 @@ public class JoinArenaCommand extends SubCommand {
         String arenaName;
 
         if (args.length == 2) {
-            arenaName = args[1];
+            arenaName = args[1].toLowerCase();
             // Check if arena is valid
             if (gameHandler.getArenaHandler().isArenaValid(arenaName)) {
                 gameHandler.addPlayer(player, arenaName);

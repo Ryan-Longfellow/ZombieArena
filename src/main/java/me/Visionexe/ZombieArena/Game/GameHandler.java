@@ -64,8 +64,11 @@ public class GameHandler {
                     addToGame(stats);
                 }
             } else {
-                // Create a function to put player into spectator mode and teleport to arena spawn.
-                // Have player wait 5 seconds then spawn in adventure back at arena spawn again.
+                PlayerRespawnInGameEvent event = new PlayerRespawnInGameEvent(stats.getPlayer(), PlayerRespawnCause.CUSTOM);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    addToGame(stats);
+                }
             }
         } else {
             Log.debug("Game is waiting. Starting game...");
@@ -132,6 +135,7 @@ public class GameHandler {
             playerStats.remove(player.getName());
 
             player.teleport(player.getWorld().getSpawnLocation());
+            healPlayer(player);
         }
     }
 
@@ -149,6 +153,10 @@ public class GameHandler {
             }
         }
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("add text here"));
+    }
+
+    public void healPlayer(Player player) {
+        player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
     }
 
     public void start() {
