@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -52,5 +53,12 @@ public class PlayerListener implements Listener {
             // Teleport them to arena spawn
             player.teleport(gameHandler.getArenaHandler().getPlayerSpawn(gameHandler.getPlayerStats(player).getArenaName()));
         }
+    }
+
+    @EventHandler
+    public void onHungerChange(FoodLevelChangeEvent event) {
+        event.setCancelled(true);
+        Player player = (Player) event.getEntity();
+        player.setFoodLevel(20);
     }
 }
