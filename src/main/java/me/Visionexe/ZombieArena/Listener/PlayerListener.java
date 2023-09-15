@@ -44,13 +44,13 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
             // Set the player to not be alive
             gameHandler.getPlayerStats(player).setAlive(false);
-            // Put them in spectator
-            player.setGameMode(GameMode.SPECTATOR);
+            gameHandler.getPlayerStats(player).registerDeath();
             // Heal player so they should be at full health
             gameHandler.healPlayer(player);
+            // Put them in spectator
+            player.setGameMode(GameMode.SPECTATOR);
             // Teleport them to arena spawn
             player.teleport(gameHandler.getArenaHandler().getPlayerSpawn(gameHandler.getPlayerStats(player).getArenaName()));
         }
-
     }
 }

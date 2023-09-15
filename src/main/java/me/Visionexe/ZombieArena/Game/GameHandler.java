@@ -50,6 +50,7 @@ public class GameHandler {
         Log.debug("Added player stats to game list");
 
         player.setGameMode(GameMode.ADVENTURE);
+        healPlayer(player);
         Log.debug("Player set to adventure mode");
         int wave = waveHandler.getWave();
         Log.debug("Current wave: " + wave);
@@ -83,7 +84,7 @@ public class GameHandler {
         player.teleport(arenaHandler.getPlayerSpawn(stats.getArenaName()));
 
         // Set player to max health, food and saturation
-        player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
+        healPlayer(player);
         // Remove any active potion effects
         for (PotionEffect potion : player.getActivePotionEffects()) {
             player.removePotionEffect(potion.getType());
@@ -122,8 +123,14 @@ public class GameHandler {
     public boolean isWaiting() { return isWaiting; }
 
     public void removePlayer(String playerName) {
-        players.remove(playerName);
-        playerStats.remove(playerName);
+        if (players.contains(playerName)) {
+            players.remove(playerName);
+            playerStats.remove(playerName);
+            Player player = Bukkit.getPlayer(playerName);
+
+            player.teleport(player.getWorld().getSpawnLocation());
+            healPlayer(player);
+        };
     }
 
     public void removePlayer(Player player) {
@@ -137,11 +144,12 @@ public class GameHandler {
     }
 
     public void respawnPlayer(Player player) {
-        if (!getPlayerStats(player).isAlive()) {
+        if (!(getPlayerStats(player).isAlive())) {
             getPlayerStats(player).setAlive(true);
             // Teleport to arena spawn
             player.teleport(arenaHandler.getPlayerSpawn(getPlayerStats(player).getArenaName()));
-
+            // Confirm player is in adventure mode
+            player.setGameMode(GameMode.ADVENTURE);
             // Set player to max health, food and saturation
             healPlayer(player);
             // Remove any active potion effects
@@ -149,11 +157,12 @@ public class GameHandler {
                 player.removePotionEffect(potion.getType());
             }
         }
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("add text here"));
+//        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("add text here"));
     }
 
     public void healPlayer(Player player) {
         player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
+        player.setHealth(20);
     }
 
     public void healAllPlayers() {
@@ -193,7 +202,6 @@ public class GameHandler {
         isWaiting = true;
 
         waveHandler.removeEntities();
-        healAllPlayers();
 
         for (PlayerStats stats : playerStats.values()) {
             if (!(stats.isAlive())) respawnPlayer(stats.getPlayer());
@@ -202,12 +210,13 @@ public class GameHandler {
 
             Player player = stats.getPlayer();
             if (player != null) {
-                removePlayer(player);
                 player.teleport(player.getWorld().getSpawnLocation());
                 player.setGameMode(GameMode.ADVENTURE);
+                healPlayer(player);
                 for (PotionEffect potion : player.getActivePotionEffects()) {
                     player.removePotionEffect(potion.getType());
                 }
+                removePlayer(player);
             }
         }
     }

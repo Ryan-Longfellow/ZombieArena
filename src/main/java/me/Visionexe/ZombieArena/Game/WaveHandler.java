@@ -279,7 +279,7 @@ public class WaveHandler implements Runnable, Listener {
             // Respawn player after 10 seconds if dead
             if(true) { // Will need to configure player respawn time, current will be 10sec
                 for(PlayerStats stats : gameHandler.getPlayerStats().values()) {
-                    if(!stats.isAlive()) {
+                    if(!(stats.isAlive())) {
                         if(stats.getTimeSinceDeath() >= 10) {
                             gameHandler.respawnPlayer(stats.getPlayer());
                         } else if(stats.getTimeSinceDeath() % 10 == 0) {
@@ -309,8 +309,6 @@ public class WaveHandler implements Runnable, Listener {
 
         TODO: Add a message that sends to all players
         Possibly add a title popup and an extra reward
-
-        Add game stop event
          */
         if (this.wave > maxWave) {
             gameHandler.stop();
