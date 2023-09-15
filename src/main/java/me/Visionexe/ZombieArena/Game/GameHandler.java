@@ -14,10 +14,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameHandler {
     // As the name implies, this handles all the overall information for the game itself
@@ -146,7 +143,7 @@ public class GameHandler {
             player.teleport(arenaHandler.getPlayerSpawn(getPlayerStats(player).getArenaName()));
 
             // Set player to max health, food and saturation
-            player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
+            healPlayer(player);
             // Remove any active potion effects
             for (PotionEffect potion : player.getActivePotionEffects()) {
                 player.removePotionEffect(potion.getType());
@@ -157,6 +154,12 @@ public class GameHandler {
 
     public void healPlayer(Player player) {
         player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
+    }
+
+    public void healAllPlayers() {
+        for (String player : players) {
+            healPlayer(Objects.requireNonNull(Bukkit.getPlayer(player)));
+        }
     }
 
     public void start() {
@@ -190,6 +193,7 @@ public class GameHandler {
         isWaiting = true;
 
         waveHandler.removeEntities();
+        healAllPlayers();
 
         for (PlayerStats stats : playerStats.values()) {
             if (!(stats.isAlive())) respawnPlayer(stats.getPlayer());

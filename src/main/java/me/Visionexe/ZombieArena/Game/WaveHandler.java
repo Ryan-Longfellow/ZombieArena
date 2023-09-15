@@ -216,12 +216,9 @@ public class WaveHandler implements Runnable, Listener {
     @Override
     public void run() {
         if (gameHandler.isRunning()) {
-            Log.debug("Game is running...");
             if(timeUntilNextWave > 0) {
                 timeUntilNextWave--;
-                Log.debug("Time until next wave: " + timeUntilNextWave);
                 if(timeUntilNextWave <= 0) {
-                    Log.debug("Time for next wave ended. Starting wave...");
                     startWave();
                 }
             } else {
@@ -231,18 +228,12 @@ public class WaveHandler implements Runnable, Listener {
                  */
                 for (int i = 0; i <= mobsToSpawn; i++) {
                     if (mobsToSpawn <= 0) { break; }
-                    Log.debug("Attempting to spawn entities...");
                     attemptSpawnEntity();
-                    Log.debug("Updating entity list...");
-                    Log.debug("Current wave: " + wave);
                 }
 
                 for (int i = 0; i < 10; i++) {
                     updateEntityList();
                 }
-
-                Log.debug("Checking if next wave...");
-                Log.debug("Mobs To Spawn: " + mobsToSpawn + ". Entities Empty: " + entities.isEmpty() + ". " + "Time to next wave: " + timeUntilNextWave);
 
                 if(checkNextWave()) {
                     Log.debug("Progressing to next wave...");
@@ -364,9 +355,9 @@ public class WaveHandler implements Runnable, Listener {
     
     private void updateEntityList() {
         for (Map.Entry<ActiveMob, Integer> entity : entities.entrySet()) {
-            Log.debug("Checking " + entity.getKey() + " and " + entity.getValue());
+//            Log.debug("Checking " + entity.getKey() + " and " + entity.getValue());
             if (!entity.getKey().getEntity().getBukkitEntity().isValid()) {
-                Log.debug("Deleting " + entity.getKey() + " : " + entity.getValue());
+//                Log.debug("Deleting " + entity.getKey() + " : " + entity.getValue());
                 entities.remove(entity.getKey(), entity.getValue());
                 break;
                 /*
@@ -386,7 +377,6 @@ public class WaveHandler implements Runnable, Listener {
         if (entities.isEmpty()) return;
         for (Map.Entry<ActiveMob, Integer> entity : entities.entrySet()) {
             if (!entity.getKey().getEntity().getBukkitEntity().isValid()) {
-                Log.debug("Deleting " + entity.getKey() + " : " + entity.getValue());
                 entities.remove(entity.getKey(), entity.getValue());
             } else {
                 entity.getKey().remove();
