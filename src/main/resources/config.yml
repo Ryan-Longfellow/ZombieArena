@@ -9,29 +9,28 @@ max-level: 100
 # Entity listed here must be valid from: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
 # Not having the proper entity listed WILL cause errors
 # Types should not be case-sensitive
-mob-xp:
-  zombie: 10
-  skeleton: 20
-  spider: 30
-  creeper: 40
-  piglin_brute: 50
-  zoglin: 60
-  blaze: 70
-  wither_skeleton: 80
-  wither: 90
-  warden: 100
-
-mob-coins:
-  zombie: 2
-  skeleton: 4
-  spider: 2
-  creeper: 1
-  piglin_brute: 6
-  zoglin: 10
-  blaze: 10
-  wither_skeleton: 20
-  wither: 900
-  warden: 1000
+mob-types:
+  zombie:
+    xp: 10
+    coins: 2
+  skeleton:
+    xp: 20
+    coins: 4
+  spider:
+    xp: 30
+    coins: 2
+  piglin_brute:
+    xp: 50
+    coins: 6
+  zoglin:
+    xp: 60
+    coins: 10
+  blaze:
+    xp: 70
+    coins: 10
+  wither_skeleton:
+    xp: 80
+    coins: 20
 
 # Multiplier for each difficulty type
 # Difficulty: <integer value>
