@@ -162,7 +162,7 @@ public class MobListener implements Listener {
     figured out so a config value can be added
 
     Will need to also implement something in the onEntityDeath to register if the mob was a boss as well and provide
-    rewards to the top 5 damagers=
+    rewards to the top 5 damagers
      */
 
     @EventHandler
@@ -209,8 +209,9 @@ public class MobListener implements Listener {
             for (Map.Entry<Player, Double> damager : damagers.entrySet()) {
                 PlayerWrapper.get(damager.getKey()).addExperience(experience / totalDamagers);
                 economy.depositPlayer(damager.getKey(), money / totalDamagers);
-                damager.getKey().sendMessage("You received " + (experience / totalDamagers) + " experience and " +
-                        (money / totalDamagers) + " money");
+                damager.getKey().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                        "&aYou received &e" + (experience / totalDamagers) + " &aexperience and &e$" +
+                        (money / totalDamagers) + "&a."));
             }
         } else {
             int count = 0;
@@ -219,13 +220,17 @@ public class MobListener implements Listener {
                 if (count <= 5) {
                     PlayerWrapper.get(damager.getKey()).addExperience(experience / 5);
                     economy.depositPlayer(damager.getKey(), money / 5);
-                    damager.getKey().sendMessage("You received " + (experience / 5) + " experience and " +
-                            (money / 5) + " money");
+                    damager.getKey().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            "&aYou received &e" + (experience / 5) + " &aexperience and &e$" +
+                                    (money / 5) + "&a."));
                 } else {
                     PlayerWrapper.get(damager.getKey()).addExperience((int) (experience * 0.10));
                     economy.depositPlayer(damager.getKey(), money * 0.10);
-                    damager.getKey().sendMessage("You received " + (experience * 0.10) + " experience and " +
-                            (money * 0.10) + " money");
+//                    "You received " + (experience * 0.10) + " experience and " +
+//                            (money * 0.10) + " money"
+                    damager.getKey().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            "&aYou received &e" + (experience * 0.10) + " &aexperience and " +
+                                    (money * 0.10) + "&a."));
                 }
             }
         }
