@@ -32,6 +32,23 @@ mob-types:
     xp: 80
     coins: 20
 
+boss-types:
+  zombie:
+    xp: 1000
+    coins: 1000
+  piglin_brute:
+    xp: 2000
+    coins: 2000
+  blaze:
+    xp: 3000
+    coins: 3000
+  wither_skeleton:
+    xp: 4000
+    coins: 4000
+  warden:
+    xp: 5000
+    coins: 5000
+
 # Multiplier for each difficulty type
 # Difficulty: <integer value>
 # To disable set all values to one
