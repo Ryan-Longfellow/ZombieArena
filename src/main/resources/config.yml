@@ -4,6 +4,9 @@ database: "data.db"
 # Configure the max levels for PLAYERS here.
 max-level: 100
 
+# Configure the max prestige
+max-prestige: 100
+
 # Configure how much xp and coins a mob will give
 # <entity type>: <integer value>
 # Entity listed here must be valid from: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
