@@ -8,7 +8,11 @@ max-level: 100
 max-prestige: 100
 
 # Configure how much xp and coins a mob will give
-# <entity type>: <integer value>
+# Format is:
+# <mob-type>:
+#   xp: <value>
+#   coins: <value>
+# Do not stray away from this format as it will break and possibly wipe the entire file
 # Entity listed here must be valid from: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
 # Not having the proper entity listed WILL cause errors
 # Types should not be case-sensitive
@@ -35,6 +39,7 @@ mob-types:
     xp: 80
     coins: 20
 
+# These types are hard coded, only change values until this is changed in the futu
 boss-types:
   zombie:
     xp: 1000
@@ -53,7 +58,7 @@ boss-types:
     coins: 5000
 
 # Multiplier for each difficulty type
-# Difficulty: <integer value>
+# Do not change the difficulty as this will break and possibly wipe the file
 # To disable set all values to one
 # This is a multiplier, meaning all values above for xp and coins will be MULTIPLIED; setting to 0 means players get nothing
 EASY: 1
