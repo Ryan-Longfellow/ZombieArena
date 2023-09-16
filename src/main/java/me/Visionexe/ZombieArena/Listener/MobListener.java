@@ -76,11 +76,30 @@ public class MobListener implements Listener {
             if (event.getEntity().getName().contains("BOSS")) {
                 LinkedHashMap<Player, Double> sortedTopDamage = (LinkedHashMap<Player, Double>) sortDamagers(topDamage);
                 int count = 0;
+                Bukkit.broadcastMessage(ChatColor.GREEN + "-----------------------------------------");
                 for (Map.Entry<Player, Double> damager : sortedTopDamage.entrySet()) {
                     count++;
                     if (count >= 5) break;
-                    Bukkit.broadcastMessage(count + ". " + damager.getKey().getName() + " dealt " + damager.getValue() + " damage");
+
+                    /*
+                    Broadcast message as follows
+                    -----------------------------------------
+                    WAVE <#> BOSS KILLED
+                    1. Damager
+                    2. Damager
+                    3. Damager
+                    4. Damager
+                    5. Damager
+                    All other players received 10% of rewards
+                    -----------------------------------------
+                     */
+                    Bukkit.broadcastMessage(ChatColor.YELLOW + "" + count + ". " +
+                            ChatColor.WHITE + damager.getKey().getName() + " dealt " +
+                            ChatColor.AQUA + damager.getValue() +
+                            ChatColor.WHITE + " damage");
                 }
+                Bukkit.broadcastMessage(ChatColor.GREEN + "-----------------------------------------");
+
 
                 // Check size of top damagers
                 // If <= 5 damagers, split equally among all damagers
