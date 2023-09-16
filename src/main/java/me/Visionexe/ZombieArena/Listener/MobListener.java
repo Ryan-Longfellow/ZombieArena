@@ -77,6 +77,9 @@ public class MobListener implements Listener {
                 LinkedHashMap<Player, Double> sortedTopDamage = (LinkedHashMap<Player, Double>) sortDamagers(topDamage);
                 int count = 0;
                 Bukkit.broadcastMessage(ChatColor.GREEN + "-----------------------------------------");
+                Bukkit.broadcastMessage(ChatColor.GREEN + "Wave " +
+                        ChatColor.YELLOW + ZombieArena.getInstance().getGameHandler().getWaveHandler().getWave() +
+                        ChatColor.GREEN + " Boss Killed");
                 for (Map.Entry<Player, Double> damager : sortedTopDamage.entrySet()) {
                     count++;
                     if (count >= 5) break;
