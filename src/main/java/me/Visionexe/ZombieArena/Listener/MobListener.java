@@ -114,8 +114,8 @@ public class MobListener implements Listener {
                     }
                     case PIGLIN_BRUTE -> {
                         splitRewards(sortedTopDamage,
-                                config.getInt("boss-types.piglin-brute.xp"),
-                                config.getDouble("boss-types.piglin-brute.coins"));
+                                config.getInt("boss-types.piglin_brute.xp"),
+                                config.getDouble("boss-types.piglin_brute.coins"));
                         topDamage.clear();
                     }
                     case BLAZE -> {
