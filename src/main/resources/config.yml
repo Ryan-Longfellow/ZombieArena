@@ -39,7 +39,7 @@ mob-types:
     xp: 80
     coins: 20
 
-# These types are hard coded, only change values until this is changed in the futu
+# These types are hard coded, only change values until this is changed in the future
 boss-types:
   zombie:
     xp: 1000
