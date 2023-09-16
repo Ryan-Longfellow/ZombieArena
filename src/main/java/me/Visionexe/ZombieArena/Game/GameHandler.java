@@ -1,5 +1,9 @@
 package me.Visionexe.ZombieArena.Game;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.commands.EssentialsCommand;
+import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnCause;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnInGameEvent;
@@ -10,6 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -25,6 +30,7 @@ public class GameHandler {
     private boolean isWaiting;
     private List<String> players;
     private Map<String, PlayerStats> playerStats;
+    private Location lobbySpawn = Objects.requireNonNull(Bukkit.getWorld("Lobby")).getSpawnLocation();
 
     public GameHandler() {
         plugin = ZombieArena.getInstance();
@@ -128,7 +134,7 @@ public class GameHandler {
             playerStats.remove(playerName);
             Player player = Bukkit.getPlayer(playerName);
 
-            player.teleport(player.getWorld().getSpawnLocation());
+            player.teleport(lobbySpawn);
             healPlayer(player);
         };
     }
@@ -138,7 +144,7 @@ public class GameHandler {
             players.remove(player.getName());
             playerStats.remove(player.getName());
 
-            player.teleport(player.getWorld().getSpawnLocation());
+            player.teleport(lobbySpawn);
             healPlayer(player);
         }
     }
@@ -210,7 +216,7 @@ public class GameHandler {
 
             Player player = stats.getPlayer();
             if (player != null) {
-                player.teleport(player.getWorld().getSpawnLocation());
+                player.teleport(lobbySpawn);
                 player.setGameMode(GameMode.ADVENTURE);
                 healPlayer(player);
                 for (PotionEffect potion : player.getActivePotionEffects()) {
