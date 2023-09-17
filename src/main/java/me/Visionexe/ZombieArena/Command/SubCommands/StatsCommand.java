@@ -23,7 +23,7 @@ public class StatsCommand extends SubCommand {
     }
 
     @Override
-    public String getPermission() { return "zombiearena.stats"; }
+    public String getPermission() { return "zombiearena.player"; }
 
     @Override
     public void perform(Player player, String[] args) {

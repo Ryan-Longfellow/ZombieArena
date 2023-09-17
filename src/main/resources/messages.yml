@@ -1,0 +1,19 @@
+# This will handle most messages sent by the plugin
+# Do NOT change the name of the message or any values inside % as this will break the plugin
+# Color codes can be changed/added using &<code> or &<#FFFFFF> for hex codes
+# This is a YAML file, please validate the file before changing as any incorrect YAML formatting can wipe the file
+add-experience: "You successfully added %experience% experience to %player%!"
+arena-add-mobspawn: "You successfully added a Mob Spawn to %arena% at %location%!"
+arena-set-playerspawn: "You successfully set the Player Spawn of %arena% to %location%!"
+arena-join: "You join %arena% on %difficulty% on Wave %wave%!"
+arena-leave: "You have left the arena!"
+blacksmith-item-purchase: "You bought %item% for $%price%!"
+blacksmith-enchant-upgraded: "You successfully upgraded %enchant% to %level%!"
+boss-kill: "You have received %experience% experience and $%money% from participating in killing %boss%!"
+set-experience: "You have set %player%'s experience to %experience%!"
+set-games-played: "You have set %player%'s games played to %games_played%!"
+set-games-won: "You have set %player%'s games won to %games_won%!"
+set-level: "You have set %player%'s level to %level%!"
+set-prestige: "You have set %player%'s prestige to %prestige%!"
+set-total-kills: "You have set %player%'s total kills to %total_kills%"
+set-wave: "You have successfully set the wave to %wave%!"

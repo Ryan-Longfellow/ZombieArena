@@ -4,37 +4,61 @@ database: "data.db"
 # Configure the max levels for PLAYERS here.
 max-level: 100
 
+# Configure the max prestige
+max-prestige: 100
+
 # Configure how much xp and coins a mob will give
-# <entity type>: <integer value>
+# Format is:
+# <mob-type>:
+#   xp: <value>
+#   coins: <value>
+# Do not stray away from this format as it will break and possibly wipe the entire file
 # Entity listed here must be valid from: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
 # Not having the proper entity listed WILL cause errors
 # Types should not be case-sensitive
-mob-xp:
-  zombie: 10
-  skeleton: 20
-  spider: 30
-  creeper: 40
-  piglin_brute: 50
-  zoglin: 60
-  blaze: 70
-  wither_skeleton: 80
-  wither: 90
-  warden: 100
+mob-types:
+  zombie:
+    xp: 10
+    coins: 2
+  skeleton:
+    xp: 20
+    coins: 4
+  spider:
+    xp: 30
+    coins: 2
+  piglin_brute:
+    xp: 50
+    coins: 6
+  zoglin:
+    xp: 60
+    coins: 10
+  blaze:
+    xp: 70
+    coins: 10
+  wither_skeleton:
+    xp: 80
+    coins: 20
 
-mob-coins:
-  zombie: 2
-  skeleton: 4
-  spider: 2
-  creeper: 1
-  piglin_brute: 6
-  zoglin: 10
-  blaze: 10
-  wither_skeleton: 20
-  wither: 900
-  warden: 1000
+# These types are hard coded, only change values until this is changed in the future
+boss-types:
+  zombie:
+    xp: 1000
+    coins: 1000
+  piglin_brute:
+    xp: 2000
+    coins: 2000
+  blaze:
+    xp: 3000
+    coins: 3000
+  wither_skeleton:
+    xp: 4000
+    coins: 4000
+  warden:
+    xp: 5000
+    coins: 5000
 
 # Multiplier for each difficulty type
-# Difficulty: <integer value>
+# Do not change the difficulty as this will break and possibly wipe the file
 # To disable set all values to one
 # This is a multiplier, meaning all values above for xp and coins will be MULTIPLIED; setting to 0 means players get nothing
 EASY: 1

@@ -1,5 +1,9 @@
 package me.Visionexe.ZombieArena.Game;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.commands.EssentialsCommand;
+import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnCause;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnInGameEvent;
@@ -10,14 +14,12 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameHandler {
     // As the name implies, this handles all the overall information for the game itself
@@ -28,6 +30,7 @@ public class GameHandler {
     private boolean isWaiting;
     private List<String> players;
     private Map<String, PlayerStats> playerStats;
+    private Location lobbySpawn = Objects.requireNonNull(Bukkit.getWorld("Lobby")).getSpawnLocation();
 
     public GameHandler() {
         plugin = ZombieArena.getInstance();
@@ -53,6 +56,7 @@ public class GameHandler {
         Log.debug("Added player stats to game list");
 
         player.setGameMode(GameMode.ADVENTURE);
+        healPlayer(player);
         Log.debug("Player set to adventure mode");
         int wave = waveHandler.getWave();
         Log.debug("Current wave: " + wave);
@@ -64,8 +68,11 @@ public class GameHandler {
                     addToGame(stats);
                 }
             } else {
-                // Create a function to put player into spectator mode and teleport to arena spawn.
-                // Have player wait 5 seconds then spawn in adventure back at arena spawn again.
+                PlayerRespawnInGameEvent event = new PlayerRespawnInGameEvent(stats.getPlayer(), PlayerRespawnCause.CUSTOM);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    addToGame(stats);
+                }
             }
         } else {
             Log.debug("Game is waiting. Starting game...");
@@ -83,7 +90,7 @@ public class GameHandler {
         player.teleport(arenaHandler.getPlayerSpawn(stats.getArenaName()));
 
         // Set player to max health, food and saturation
-        player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
+        healPlayer(player);
         // Remove any active potion effects
         for (PotionEffect potion : player.getActivePotionEffects()) {
             player.removePotionEffect(potion.getType());
@@ -122,8 +129,14 @@ public class GameHandler {
     public boolean isWaiting() { return isWaiting; }
 
     public void removePlayer(String playerName) {
-        players.remove(playerName);
-        playerStats.remove(playerName);
+        if (players.contains(playerName)) {
+            players.remove(playerName);
+            playerStats.remove(playerName);
+            Player player = Bukkit.getPlayer(playerName);
+
+            player.teleport(lobbySpawn);
+            healPlayer(player);
+        };
     }
 
     public void removePlayer(Player player) {
@@ -131,24 +144,37 @@ public class GameHandler {
             players.remove(player.getName());
             playerStats.remove(player.getName());
 
-            player.teleport(player.getWorld().getSpawnLocation());
+            player.teleport(lobbySpawn);
+            healPlayer(player);
         }
     }
 
     public void respawnPlayer(Player player) {
-        if (!getPlayerStats(player).isAlive()) {
+        if (!(getPlayerStats(player).isAlive())) {
             getPlayerStats(player).setAlive(true);
             // Teleport to arena spawn
             player.teleport(arenaHandler.getPlayerSpawn(getPlayerStats(player).getArenaName()));
-
+            // Confirm player is in adventure mode
+            player.setGameMode(GameMode.ADVENTURE);
             // Set player to max health, food and saturation
-            player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
+            healPlayer(player);
             // Remove any active potion effects
             for (PotionEffect potion : player.getActivePotionEffects()) {
                 player.removePotionEffect(potion.getType());
             }
         }
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("add text here"));
+//        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("add text here"));
+    }
+
+    public void healPlayer(Player player) {
+        player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
+        player.setHealth(20);
+    }
+
+    public void healAllPlayers() {
+        for (String player : players) {
+            healPlayer(Objects.requireNonNull(Bukkit.getPlayer(player)));
+        }
     }
 
     public void start() {
@@ -190,12 +216,13 @@ public class GameHandler {
 
             Player player = stats.getPlayer();
             if (player != null) {
-                removePlayer(player);
-                player.teleport(player.getWorld().getSpawnLocation());
+                player.teleport(lobbySpawn);
                 player.setGameMode(GameMode.ADVENTURE);
+                healPlayer(player);
                 for (PotionEffect potion : player.getActivePotionEffects()) {
                     player.removePotionEffect(potion.getType());
                 }
+                removePlayer(player);
             }
         }
     }

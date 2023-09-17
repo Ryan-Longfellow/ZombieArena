@@ -5,6 +5,7 @@ import me.Visionexe.ZombieArena.ZombieArena;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -58,6 +59,7 @@ public class MobListener implements Listener {
     Insane difficulty should never allow a player to 1 hit, 2 hits minimum to kill mobs with max enchants
      */
 
+    private Configuration config = ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration();
     Economy economy = ZombieArena.getInstance().getEconomy();
     private Map<Player, Double> topDamage = new HashMap<>();
 
@@ -71,27 +73,36 @@ public class MobListener implements Listener {
             Player player = event.getEntity().getKiller();
             PlayerWrapper playerWrapper = PlayerWrapper.get(player);
 
-            // Get the list of mobtypes in the config, allows easy editing so mob types are not hard coded
-            ConfigurationSection mobTypes = ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getConfigurationSection("mob-xp");
-            // Check if mob type is valid, if not return nothing
-            try {
-                for (String entity : mobTypes.getKeys(false)) {
-                        if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
-                            playerWrapper.addExperience(ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("mob-xp." + entity.toLowerCase()));
-                            economy.depositPlayer(player, ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration().getInt("mob-coins." + entity.toLowerCase()));
-                        }
-                }
-            } catch (Exception exception) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + exception.getMessage());
-            }
             if (event.getEntity().getName().contains("BOSS")) {
                 LinkedHashMap<Player, Double> sortedTopDamage = (LinkedHashMap<Player, Double>) sortDamagers(topDamage);
                 int count = 0;
+                Bukkit.broadcastMessage(ChatColor.GREEN + "-----------------------------------------");
+                Bukkit.broadcastMessage(ChatColor.GREEN + "Wave " +
+                        ChatColor.YELLOW + ZombieArena.getInstance().getGameHandler().getWaveHandler().getWave() +
+                        ChatColor.GREEN + " Boss Killed");
                 for (Map.Entry<Player, Double> damager : sortedTopDamage.entrySet()) {
                     count++;
                     if (count >= 5) break;
-                    Bukkit.broadcastMessage(count + ". " + damager.getKey().getName() + " dealt " + damager.getValue() + " damage");
+
+                    /*
+                    Broadcast message as follows
+                    -----------------------------------------
+                    WAVE <#> BOSS KILLED
+                    1. Damager
+                    2. Damager
+                    3. Damager
+                    4. Damager
+                    5. Damager
+                    All other players received 10% of rewards
+                    -----------------------------------------
+                     */
+                    Bukkit.broadcastMessage(ChatColor.YELLOW + "" + count + ". " +
+                            ChatColor.WHITE + damager.getKey().getName() + " dealt " +
+                            ChatColor.AQUA + damager.getValue() +
+                            ChatColor.WHITE + " damage");
                 }
+                Bukkit.broadcastMessage(ChatColor.GREEN + "-----------------------------------------");
+
 
                 // Check size of top damagers
                 // If <= 5 damagers, split equally among all damagers
@@ -99,21 +110,51 @@ public class MobListener implements Listener {
 
                 switch (event.getEntityType()) {
                     case ZOMBIE -> {
-                        splitRewards(sortedTopDamage, 1000, 1000);
+                        splitRewards(sortedTopDamage,
+                                config.getInt("boss-types.zombie.xp"),
+                                config.getDouble("boss-types.zombie.coins"));
+                        topDamage.clear();
                     }
                     case PIGLIN_BRUTE -> {
-                        splitRewards(sortedTopDamage, 2000, 2000);
+                        splitRewards(sortedTopDamage,
+                                config.getInt("boss-types.piglin_brute.xp"),
+                                config.getDouble("boss-types.piglin_brute.coins"));
+                        topDamage.clear();
                     }
                     case BLAZE -> {
-                        splitRewards(sortedTopDamage, 3000, 3000);
+                        splitRewards(sortedTopDamage,
+                                config.getInt("boss-types.blaze.xp"),
+                                config.getDouble("boss-types.blaze.coins"));
+                        topDamage.clear();
                     }
                     case WITHER_SKELETON -> {
-                        splitRewards(sortedTopDamage, 4000, 4000);
+                        splitRewards(sortedTopDamage,
+                                config.getInt("boss-types.wither_skeleton.xp"),
+                                config.getDouble("boss-types.wither_skeleton.coins"));
+                        topDamage.clear();
                     }
                     case WARDEN -> {
-                        splitRewards(sortedTopDamage, 5000, 5000);
+                        splitRewards(sortedTopDamage,
+                                config.getInt("boss-types.warden.xp"),
+                                config.getDouble("boss-types.warden.coins"));
+                        topDamage.clear();
                     }
                 }
+                return;
+            }
+
+            // Get the list of mobtypes in the config, allows easy editing so mob types are not hard coded
+            ConfigurationSection mobTypes = config.getConfigurationSection("mob-types");
+            // Check if mob type is valid, if not return nothing
+            try {
+                for (String entity : mobTypes.getKeys(false)) {
+                        if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
+                            playerWrapper.addExperience(config.getInt("mob-types." + entity.toLowerCase() + ".xp"));
+                            economy.depositPlayer(player, config.getInt("mob-types." + entity.toLowerCase() + ".coins"));
+                        }
+                }
+            } catch (Exception exception) {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + exception.getMessage());
             }
         }
     }
@@ -124,7 +165,7 @@ public class MobListener implements Listener {
     figured out so a config value can be added
 
     Will need to also implement something in the onEntityDeath to register if the mob was a boss as well and provide
-    rewards to the top 5 damagers=
+    rewards to the top 5 damagers
      */
 
     @EventHandler
@@ -171,8 +212,9 @@ public class MobListener implements Listener {
             for (Map.Entry<Player, Double> damager : damagers.entrySet()) {
                 PlayerWrapper.get(damager.getKey()).addExperience(experience / totalDamagers);
                 economy.depositPlayer(damager.getKey(), money / totalDamagers);
-                damager.getKey().sendMessage("You received " + (experience / totalDamagers) + " experience and " +
-                        (money / totalDamagers) + " money");
+                damager.getKey().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                        "&aYou received &e" + (experience / totalDamagers) + " &aexperience and &e$" +
+                        (money / totalDamagers) + "&a."));
             }
         } else {
             int count = 0;
@@ -181,13 +223,17 @@ public class MobListener implements Listener {
                 if (count <= 5) {
                     PlayerWrapper.get(damager.getKey()).addExperience(experience / 5);
                     economy.depositPlayer(damager.getKey(), money / 5);
-                    damager.getKey().sendMessage("You received " + (experience / 5) + " experience and " +
-                            (money / 5) + " money");
+                    damager.getKey().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            "&aYou received &e" + (experience / 5) + " &aexperience and &e$" +
+                                    (money / 5) + "&a."));
                 } else {
                     PlayerWrapper.get(damager.getKey()).addExperience((int) (experience * 0.10));
                     economy.depositPlayer(damager.getKey(), money * 0.10);
-                    damager.getKey().sendMessage("You received " + (experience * 0.10) + " experience and " +
-                            (money * 0.10) + " money");
+//                    "You received " + (experience * 0.10) + " experience and " +
+//                            (money * 0.10) + " money"
+                    damager.getKey().sendMessage(ChatColor.translateAlternateColorCodes('&',
+                            "&aYou received &e" + (experience * 0.10) + " &aexperience and " +
+                                    (money * 0.10) + "&a."));
                 }
             }
         }

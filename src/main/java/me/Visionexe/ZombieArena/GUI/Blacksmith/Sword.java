@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -205,6 +206,12 @@ public class Sword extends ChestGUI implements Clickable {
         ItemStack itemStack = new ItemStack(material);
         ItemMeta itemMeta = itemStack.getItemMeta();
 
+        // TODO: Hide enchants and add custom lore to items in order to fix enchants showing as enchantment.level #
+        /*
+        Do this by adding itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+        Get all enchants on the item
+        Loop and add a lore line for each enchantment corresponding to the level
+         */
         itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
 
         List<String> lore = new ArrayList<>();
