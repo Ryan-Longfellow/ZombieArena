@@ -1,9 +1,5 @@
 package me.Visionexe.ZombieArena.Game;
 
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.commands.EssentialsCommand;
-import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnCause;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnInGameEvent;
@@ -30,7 +26,7 @@ public class GameHandler {
     private boolean isWaiting;
     private List<String> players;
     private Map<String, PlayerStats> playerStats;
-    private Location lobbySpawn = Objects.requireNonNull(Bukkit.getWorld("Lobby")).getSpawnLocation();
+    private Location lobbySpawn = Objects.requireNonNull(Bukkit.getWorld("test")).getSpawnLocation();
 
     public GameHandler() {
         plugin = ZombieArena.getInstance();

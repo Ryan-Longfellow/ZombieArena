@@ -47,12 +47,8 @@
       <url>https://mvn.lumine.io/repository/maven-public/</url>
     </repository>
     <repository>
-      <id>essentials-releases</id>
-      <url>https://repo.essentialsx.net/releases/</url>
-    </repository>
-    <repository>
-      <id>paper-repo</id>
-      <url>https://papermc.io/repo/repository/maven-public/</url>
+      <id>MG-Dev Jenkins CI Maven Repository</id>
+      <url>https://ci.mg-dev.eu/plugin/repository/everything</url>
     </repository>
   </repositories>
   <dependencies>
@@ -81,9 +77,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>net.essentialsx</groupId>
-      <artifactId>EssentialsX</artifactId>
-      <version>2.20.1</version>
+      <groupId>com.bergerkiller.bukkit</groupId>
+      <artifactId>BKCommonLib</artifactId>
+      <version>1.20.1-v2</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

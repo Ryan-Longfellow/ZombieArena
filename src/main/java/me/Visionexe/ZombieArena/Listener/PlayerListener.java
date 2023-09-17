@@ -22,13 +22,14 @@ public class PlayerListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         PlayerWrapper.get(event.getPlayer());
 
-        FastBoard board = new FastBoard(event.getPlayer());
-        ZombieArena.getInstance().boards.put(event.getPlayer().getUniqueId(), board);
+        ZombieArena.getInstance().addScoreboardPlayer(event.getPlayer());
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         PlayerWrapper.remove(event.getPlayer());
+
+        ZombieArena.getInstance().removeScoreboardPlayer(event.getPlayer());
     }
 
     @EventHandler

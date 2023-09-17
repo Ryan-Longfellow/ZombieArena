@@ -1,5 +1,8 @@
 package me.Visionexe.ZombieArena;
 
+import com.bergerkiller.bukkit.common.scoreboards.CommonObjective;
+import com.bergerkiller.bukkit.common.scoreboards.CommonScore;
+import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Command.CommandHandler;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
@@ -19,18 +22,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class ZombieArena extends JavaPlugin {
     private static ZombieArena instance;
     private FileManager fileManager;
     private GameHandler gameHandler;
     private Economy economy;
-    public Map<UUID, FastBoard> boards = new HashMap<>();
+//    public Map<UUID, FastBoard> boards = new HashMap<>();
+    private List<Player> scoreboardPlayers = new ArrayList<>();
     @Override
     public void onEnable() {
         instance = this;
@@ -48,9 +48,7 @@ public class ZombieArena extends JavaPlugin {
             @Override
             public void run() {
                 onTick();
-                for (FastBoard board : boards.values()) {
-                    updateBoard(board);
-                }
+                updateBoard(getScoreboardPlayers());
             }
         }, 1L, 1L);
     }
@@ -154,8 +152,8 @@ public class ZombieArena extends JavaPlugin {
         this.economy = rsp.getProvider();
     }
 
-    private void updateBoard(FastBoard board) {
-
+    private void updateBoard(List<Player> players) {
+        if (players == null) return;
         /*
         Scoreboard Example
                 ZombieArena
@@ -168,48 +166,62 @@ public class ZombieArena extends JavaPlugin {
             Money: <money>
             Total Kills: <kills>
          */
-
-        PlayerWrapper playerWrapper = PlayerWrapper.get(board.getPlayer());
-
-        board.updateTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "ZombieArena");
-
-        for (Player player : gameHandler.getPlayers()) {
+        for (Player player : players) {
+            PlayerWrapper playerWrapper = PlayerWrapper.get(player);
+            CommonScoreboard scoreboard = CommonScoreboard.get(player);
+            CommonObjective sidebar = scoreboard.getObjective(CommonScoreboard.Display.SIDEBAR);
             if (gameHandler.getPlayers().contains(player)) {
-                board.updateLines(
-                        ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
-                        ChatColor.GRAY + "  Name: " + ChatColor.WHITE + board.getPlayer().getName(),
-                        ChatColor.GOLD + "  Level: " + ChatColor.WHITE + playerWrapper.getLevel(),
-                        ChatColor.DARK_GREEN + "  Exp: " + ChatColor.WHITE + playerWrapper.getExperience() + " / " + playerWrapper.getExperienceForNextLevel(),
-
-                        " ", // White space to separate Info and Stats
-
-                        ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
-                        ChatColor.GREEN + "  Money: " + ChatColor.WHITE + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer()), ValueFormat.PRECISION(2) | ValueFormat.THOUSANDS | ValueFormat.MILLIONS | ValueFormat.BILLIONS),
-                        ChatColor.RED + "  Total Kills: " + ChatColor.WHITE + playerWrapper.getTotalKills(),
-
-                        " ", // White space
-                        ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Game",
-                        ChatColor.LIGHT_PURPLE + "  Time In Game: " + ChatColor.WHITE + gameHandler.getWaveHandler().getGameLength(),
-                        ChatColor.LIGHT_PURPLE + "  Wave: " + ChatColor.WHITE + gameHandler.getWaveHandler().getWave() + " / " + gameHandler.getWaveHandler().getMaxWave(), // Wave number
-                        ChatColor.LIGHT_PURPLE + "  Mobs Remaining: " + ChatColor.WHITE + gameHandler.getWaveHandler().getRemainingZombies(), // Mobs Remaining
-                        ChatColor.LIGHT_PURPLE + "  Players: " + ChatColor.WHITE + gameHandler.getPlayers().size()
-                );
-                return;
+                sidebar.setDisplayName("&a&lZombieArena");
+                sidebar.createScore("Info", "&b&lInfo", 0);
+            } else {
+                sidebar.setDisplayName("&a&lZombieArena");
+                sidebar.createScore("Info", "&b&lInfo", 0);
             }
+            sidebar.update();
+            sidebar.show();
         }
-        board.updateLines(
-                ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
-                ChatColor.GRAY + "  Name: " + ChatColor.WHITE + board.getPlayer().getName(),
-                ChatColor.GOLD + "  Level: " + ChatColor.WHITE + playerWrapper.getLevel(),
-                ChatColor.DARK_GREEN + "  Exp: " + ChatColor.WHITE + playerWrapper.getExperience() + " / " + playerWrapper.getExperienceForNextLevel(),
 
-                " ", // White space to separate Info and Stats
-
-                ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
-                ChatColor.GREEN + "  Money: " + ChatColor.WHITE + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer()), ValueFormat.PRECISION(2) | ValueFormat.THOUSANDS | ValueFormat.MILLIONS | ValueFormat.BILLIONS),
-                ChatColor.RED + "  Total Kills: " + ChatColor.WHITE + playerWrapper.getTotalKills()
-        );
-        boards.put(board.getPlayer().getUniqueId(), board);
+//        board.updateTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "ZombieArena");
+//
+//        for (Player player : gameHandler.getPlayers()) {
+//            scoreboard = CommonScoreboard.get(player);
+//            CommonObjective sidebar = scoreboard.getObjective(CommonScoreboard.Display.SIDEBAR);
+//            if (gameHandler.getPlayers().contains(player)) {
+//                board.updateLines(
+//                        ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
+//                        ChatColor.GRAY + "  Name: " + ChatColor.WHITE + board.getPlayer().getName(),
+//                        ChatColor.GOLD + "  Level: " + ChatColor.WHITE + playerWrapper.getLevel(),
+//                        ChatColor.DARK_GREEN + "  Exp: " + ChatColor.WHITE + playerWrapper.getExperience() + " / " + playerWrapper.getExperienceForNextLevel(),
+//
+//                        " ", // White space to separate Info and Stats
+//
+//                        ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
+//                        ChatColor.GREEN + "  Money: " + ChatColor.WHITE + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer()), ValueFormat.PRECISION(2) | ValueFormat.THOUSANDS | ValueFormat.MILLIONS | ValueFormat.BILLIONS),
+//                        ChatColor.RED + "  Total Kills: " + ChatColor.WHITE + playerWrapper.getTotalKills(),
+//
+//                        " ", // White space
+//                        ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Game",
+//                        ChatColor.LIGHT_PURPLE + "  Time In Game: " + ChatColor.WHITE + gameHandler.getWaveHandler().getGameLength(),
+//                        ChatColor.LIGHT_PURPLE + "  Wave: " + ChatColor.WHITE + gameHandler.getWaveHandler().getWave() + " / " + gameHandler.getWaveHandler().getMaxWave(), // Wave number
+//                        ChatColor.LIGHT_PURPLE + "  Mobs Remaining: " + ChatColor.WHITE + gameHandler.getWaveHandler().getRemainingZombies(), // Mobs Remaining
+//                        ChatColor.LIGHT_PURPLE + "  Players: " + ChatColor.WHITE + gameHandler.getPlayers().size()
+//                );
+//                return;
+//            }
+//        }
+//        board.updateLines(
+//                ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
+//                ChatColor.GRAY + "  Name: " + ChatColor.WHITE + board.getPlayer().getName(),
+//                ChatColor.GOLD + "  Level: " + ChatColor.WHITE + playerWrapper.getLevel(),
+//                ChatColor.DARK_GREEN + "  Exp: " + ChatColor.WHITE + playerWrapper.getExperience() + " / " + playerWrapper.getExperienceForNextLevel(),
+//
+//                " ", // White space to separate Info and Stats
+//
+//                ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
+//                ChatColor.GREEN + "  Money: " + ChatColor.WHITE + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer()), ValueFormat.PRECISION(2) | ValueFormat.THOUSANDS | ValueFormat.MILLIONS | ValueFormat.BILLIONS),
+//                ChatColor.RED + "  Total Kills: " + ChatColor.WHITE + playerWrapper.getTotalKills()
+//        );
+//        boards.put(board.getPlayer().getUniqueId(), board);
     }
 
     /*
@@ -237,4 +249,16 @@ public class ZombieArena extends JavaPlugin {
 
     private int tick;
     private void onTick() { tick++; }
+
+    public void addScoreboardPlayer(Player player) {
+        this.scoreboardPlayers.add(player);
+    }
+
+    public void removeScoreboardPlayer(Player player) {
+        this.scoreboardPlayers.remove(player);
+    }
+
+    public List<Player> getScoreboardPlayers() {
+        return this.scoreboardPlayers;
+    }
 }
