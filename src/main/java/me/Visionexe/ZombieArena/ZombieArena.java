@@ -183,7 +183,7 @@ public class ZombieArena extends JavaPlugin {
                         " ", // White space to separate Info and Stats
 
                         ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
-                        ChatColor.GREEN + "  Money" + ChatColor.WHITE + ": " + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer()), ValueFormat.PRECISION(1) | ValueFormat.MILLIONS | ValueFormat.BILLIONS),
+                        ChatColor.GREEN + "  Money" + ChatColor.WHITE + ": " + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer())),
                         ChatColor.RED + "  Total Kills" + ": " + ChatColor.WHITE + playerWrapper.getTotalKills(),
 
                         " ", // White space
@@ -205,7 +205,7 @@ public class ZombieArena extends JavaPlugin {
                 " ", // White space to separate Info and Stats
 
                 ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
-                ChatColor.GREEN + "  Money" + ChatColor.WHITE + ": " + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer()), ValueFormat.PRECISION(1) | ValueFormat.MILLIONS | ValueFormat.BILLIONS),
+                ChatColor.GREEN + "  Money" + ChatColor.WHITE + ": " + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer())),
                 ChatColor.RED + "  Total Kills" + ChatColor.WHITE + ": " + playerWrapper.getTotalKills()
         );
         boards.put(board.getPlayer().getUniqueId(), board);

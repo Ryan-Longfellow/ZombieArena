@@ -209,7 +209,7 @@ public class Armor extends ChestGUI implements Clickable {
         itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.translateAlternateColorCodes('&', "&7Buy: &a$") + ValueFormat.format(price, ValueFormat.THOUSANDS | ValueFormat.MILLIONS | ValueFormat.BILLIONS));
+        lore.add(ChatColor.translateAlternateColorCodes('&', "&7Buy: &a$") + ValueFormat.format(price));
         itemMeta.setLore(lore);
 
         itemStack.setItemMeta(itemMeta);
