@@ -340,7 +340,7 @@ public class WaveHandler implements Runnable, Listener {
 //            // Most likely don't see myself using this
 //        }
         // Clear entities that were stuck or not killed last wave; can find a way to teleport them
-        entities.clear();
+//        entities.clear();
 
         WaveStartEvent event = new WaveStartEvent(wave);
         Bukkit.getPluginManager().callEvent(event);
