@@ -203,7 +203,7 @@ public class WaveHandler implements Runnable, Listener {
     }
 
     public int calcQuantity(int wave) {
-        return wave * 5; // Currently just returning the wave * 5 to spawn that many entities; will create something more complex later maybe
+        return wave * 3; // Currently just returning the wave * 5 to spawn that many entities; will create something more complex later maybe
     }
 
     private void prepareNextWave() {
