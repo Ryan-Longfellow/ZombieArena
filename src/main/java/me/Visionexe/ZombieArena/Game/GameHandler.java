@@ -1,18 +1,10 @@
 package me.Visionexe.ZombieArena.Game;
 
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.commands.EssentialsCommand;
-import com.earth2me.essentials.config.EssentialsUserConfiguration;
-import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnCause;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnInGameEvent;
 import me.Visionexe.ZombieArena.Log;
 import me.Visionexe.ZombieArena.ZombieArena;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -30,7 +22,7 @@ public class GameHandler {
     private boolean isWaiting;
     private List<String> players;
     private Map<String, PlayerStats> playerStats;
-    private Location lobbySpawn = Objects.requireNonNull(Bukkit.getWorld("Lobby")).getSpawnLocation();
+    private Location lobbySpawn = Objects.requireNonNull(Bukkit.getWorld("test")).getSpawnLocation();
 
     public GameHandler() {
         plugin = ZombieArena.getInstance();
