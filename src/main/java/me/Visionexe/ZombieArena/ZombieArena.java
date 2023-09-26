@@ -59,7 +59,6 @@ public class ZombieArena extends JavaPlugin {
     public void onDisable() {
         PlayerWrapper.saveAll();
         gameHandler.stop();
-        this.fileManager = new FileManager(this);
         try {
             fileManager.save("config");
             fileManager.save("arenas");
