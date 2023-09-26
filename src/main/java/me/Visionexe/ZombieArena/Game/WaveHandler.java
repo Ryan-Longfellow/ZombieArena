@@ -190,7 +190,7 @@ public class WaveHandler implements Runnable, Listener {
     }
 
     public int getWave() { return wave; }
-    public int getMaxWave() {return maxWave; }
+    public int getMaxWave() { return maxWave; }
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
