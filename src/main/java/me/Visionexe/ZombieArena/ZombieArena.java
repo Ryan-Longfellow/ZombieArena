@@ -235,16 +235,4 @@ public class ZombieArena extends JavaPlugin {
 
     private int tick;
     private void onTick() { tick++; }
-
-    public void addScoreboardPlayer(Player player) {
-        this.scoreboardPlayers.add(player);
-    }
-
-    public void removeScoreboardPlayer(Player player) {
-        this.scoreboardPlayers.remove(player);
-    }
-
-    public List<Player> getScoreboardPlayers() {
-        return this.scoreboardPlayers;
-    }
 }
