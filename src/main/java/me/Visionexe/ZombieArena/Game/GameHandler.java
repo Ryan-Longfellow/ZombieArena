@@ -1,5 +1,6 @@
 package me.Visionexe.ZombieArena.Game;
 
+import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnCause;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnInGameEvent;
 import me.Visionexe.ZombieArena.Log;

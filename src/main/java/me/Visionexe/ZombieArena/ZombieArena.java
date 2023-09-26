@@ -1,5 +1,8 @@
 package me.Visionexe.ZombieArena;
 
+import com.bergerkiller.bukkit.common.scoreboards.CommonObjective;
+import com.bergerkiller.bukkit.common.scoreboards.CommonScore;
+import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Command.CommandHandler;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
@@ -19,10 +22,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 public class ZombieArena extends JavaPlugin {
     private static ZombieArena instance;
@@ -154,7 +153,6 @@ public class ZombieArena extends JavaPlugin {
     }
 
     private void updateBoard(FastBoard board) {
-
         /*
         Scoreboard Example
                 ZombieArena

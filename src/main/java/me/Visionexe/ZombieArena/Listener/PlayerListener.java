@@ -29,6 +29,9 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         PlayerWrapper.remove(event.getPlayer());
+
+        FastBoard board = new FastBoard(event.getPlayer());
+        ZombieArena.getInstance().boards.put(event.getPlayer().getUniqueId(), board);
     }
 
     @EventHandler
