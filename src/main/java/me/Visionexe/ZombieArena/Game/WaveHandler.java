@@ -83,23 +83,23 @@ public class WaveHandler implements Runnable, Listener {
         // Perform all boss checks first
         if (wave == 10) {
             mobsToSpawn = 1;
-            return spawnMob("ZombieBoss");
+            return createMob("ZombieBoss");
         }
         if (wave == 20) {
             mobsToSpawn = 1;
-            return spawnMob("PiglinBoss");
+            return createMob("PiglinBoss");
         }
         if (wave == 30) {
             mobsToSpawn = 1;
-            return spawnMob("BlazeBoss");
+            return createMob("BlazeBoss");
         }
         if (wave == 40) {
             mobsToSpawn = 1;
-            return spawnMob("WitherSkeletonBoss");
+            return createMob("WitherSkeletonBoss");
         }
         if (wave == 50) {
             mobsToSpawn = 1;
-            return spawnMob("WardenBoss");
+            return createMob("WardenBoss");
         }
 
         // Mob that is not a zombie is spawning
@@ -109,77 +109,77 @@ public class WaveHandler implements Runnable, Listener {
                     if (wave < 30) {
                         if (wave < 20) {
                             if (wave > 5 && wave < 10) {
-                                return spawnMob("BaseSkeleton");
+                                return createMob("BaseSkeleton");
                             }
                             if (wave < 5) {
-                                return spawnMob("BaseZombie");
+                                return createMob("BaseZombie");
                             }
                             mobChance = (random.nextInt(2) + 1);
                             switch (mobChance) {
                                 case 1 -> {
-                                    return spawnMob("BaseSkeleton");
+                                    return createMob("BaseSkeleton");
                                 }
                                 case 2 -> {
-                                    return spawnMob("BaseSpider");
+                                    return createMob("BaseSpider");
                                 }
                             }
                         }
                         mobChance = (random.nextInt(3) + 1);
                         switch (mobChance) {
                             case 1 -> {
-                                return spawnMob("BaseSkeleton");
+                                return createMob("BaseSkeleton");
                             }
                             case 2 -> {
-                                return spawnMob("BaseSpider");
+                                return createMob("BaseSpider");
                             }
                             case 3 -> {
-                                return spawnMob("BasePiglinBrute");
+                                return createMob("BasePiglinBrute");
                             }
                         }
                     }
                     mobChance = (random.nextInt(4) + 1);
                     switch (mobChance) {
                         case 1 -> {
-                            return spawnMob("BaseSkeleton");
+                            return createMob("BaseSkeleton");
                         }
                         case 2 -> {
-                            return spawnMob("BaseSpider");
+                            return createMob("BaseSpider");
                         }
                         case 3 -> {
-                            return spawnMob("BasePiglinBrute");
+                            return createMob("BasePiglinBrute");
                         }
                         case 4 -> {
-                            return spawnMob("BaseZoglin");
+                            return createMob("BaseZoglin");
                         }
                     }
                 }
                 mobChance = (random.nextInt(6) + 1);
                 switch (mobChance) {
                     case 1 -> {
-                        return spawnMob("BaseSkeleton");
+                        return createMob("BaseSkeleton");
                     }
                     case 2 -> {
-                        return spawnMob("BaseSpider");
+                        return createMob("BaseSpider");
                     }
                     case 3 -> {
-                        return spawnMob("BasePiglinBrute");
+                        return createMob("BasePiglinBrute");
                     }
                     case 4 -> {
-                        return spawnMob("BaseZoglin");
+                        return createMob("BaseZoglin");
                     }
                     case 5 -> {
-                        return spawnMob("BaseBlaze");
+                        return createMob("BaseBlaze");
                     }
                     case 6 -> {
-                        return spawnMob("BaseWitherSkeleton");
+                        return createMob("BaseWitherSkeleton");
                     }
                 }
             }
         }
-        return spawnMob("BaseZombie");
+        return createMob("BaseZombie");
     }
     
-    private MythicMob spawnMob(String type) {
+    private MythicMob createMob(String type) {
         return MythicBukkit.inst().getMobManager().getMythicMob(type).orElse(null);
     }
 
