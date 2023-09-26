@@ -1,8 +1,5 @@
 package me.Visionexe.ZombieArena;
 
-import com.bergerkiller.bukkit.common.scoreboards.CommonObjective;
-import com.bergerkiller.bukkit.common.scoreboards.CommonScore;
-import com.bergerkiller.bukkit.common.scoreboards.CommonScoreboard;
 import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Command.CommandHandler;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
@@ -39,12 +36,11 @@ public class ZombieArena extends JavaPlugin {
         getLogger().info("Enabling " + this.getDescription().getName() + " " + this.getDescription().getVersion());
         registerConfigs();
         prepareDatabase();
-
-        gameHandler = new GameHandler();
-
         registerEconomy();
         registerEvents();
         registerCommands();
+
+        gameHandler = new GameHandler();
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             @Override

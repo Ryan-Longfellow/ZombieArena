@@ -23,10 +23,11 @@ public class GameHandler {
     private boolean isWaiting;
     private List<String> players;
     private Map<String, PlayerStats> playerStats;
-    private Location lobbySpawn = Objects.requireNonNull(Bukkit.getWorld("test")).getSpawnLocation();
+    private Location lobbySpawn;
 
     public GameHandler() {
         plugin = ZombieArena.getInstance();
+        lobbySpawn = Objects.requireNonNull(Bukkit.getWorld(plugin.getFileManager().get("config").get().getConfiguration().getString("LobbyWorld"))).getSpawnLocation();
         waveHandler = new WaveHandler(this);
         arenaHandler = new ArenaHandler();
         arenaHandler.loadArenas();
