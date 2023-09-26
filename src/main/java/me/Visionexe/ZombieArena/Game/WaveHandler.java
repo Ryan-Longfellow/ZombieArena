@@ -83,23 +83,23 @@ public class WaveHandler implements Runnable, Listener {
         // Perform all boss checks first
         if (wave == 10) {
             mobsToSpawn = 1;
-            return MythicBukkit.inst().getMobManager().getMythicMob("ZombieBoss").orElse(null);
+            return spawnMob("ZombieBoss");
         }
         if (wave == 20) {
             mobsToSpawn = 1;
-            return MythicBukkit.inst().getMobManager().getMythicMob("PiglinBoss").orElse(null);
+            return spawnMob("PiglinBoss");
         }
         if (wave == 30) {
             mobsToSpawn = 1;
-            return MythicBukkit.inst().getMobManager().getMythicMob("BlazeBoss").orElse(null);
+            return spawnMob("BlazeBoss");
         }
         if (wave == 40) {
             mobsToSpawn = 1;
-            return MythicBukkit.inst().getMobManager().getMythicMob("WitherSkeletonBoss").orElse(null);
+            return spawnMob("WitherSkeletonBoss");
         }
         if (wave == 50) {
             mobsToSpawn = 1;
-            return MythicBukkit.inst().getMobManager().getMythicMob("WardenBoss").orElse(null);
+            return spawnMob("WardenBoss");
         }
 
         // Mob that is not a zombie is spawning
@@ -109,74 +109,78 @@ public class WaveHandler implements Runnable, Listener {
                     if (wave < 30) {
                         if (wave < 20) {
                             if (wave > 5 && wave < 10) {
-                                return MythicBukkit.inst().getMobManager().getMythicMob("BaseSkeleton").orElse(null);
+                                return spawnMob("BaseSkeleton");
                             }
                             if (wave < 5) {
-                                return MythicBukkit.inst().getMobManager().getMythicMob("BaseZombie").orElse(null);
+                                return spawnMob("BaseZombie");
                             }
                             mobChance = (random.nextInt(2) + 1);
                             switch (mobChance) {
                                 case 1 -> {
-                                    return MythicBukkit.inst().getMobManager().getMythicMob("BaseSkeleton").orElse(null);
+                                    return spawnMob("BaseSkeleton");
                                 }
                                 case 2 -> {
-                                    return MythicBukkit.inst().getMobManager().getMythicMob("BaseSpider").orElse(null);
+                                    return spawnMob("BaseSpider");
                                 }
                             }
                         }
                         mobChance = (random.nextInt(3) + 1);
                         switch (mobChance) {
                             case 1 -> {
-                                return MythicBukkit.inst().getMobManager().getMythicMob("BaseSkeleton").orElse(null);
+                                return spawnMob("BaseSkeleton");
                             }
                             case 2 -> {
-                                return MythicBukkit.inst().getMobManager().getMythicMob("BaseSpider").orElse(null);
+                                return spawnMob("BaseSpider");
                             }
                             case 3 -> {
-                                return MythicBukkit.inst().getMobManager().getMythicMob("BasePiglinBrute").orElse(null);
+                                return spawnMob("BasePiglinBrute");
                             }
                         }
                     }
                     mobChance = (random.nextInt(4) + 1);
                     switch (mobChance) {
                         case 1 -> {
-                            return MythicBukkit.inst().getMobManager().getMythicMob("BaseSkeleton").orElse(null);
+                            return spawnMob("BaseSkeleton");
                         }
                         case 2 -> {
-                            return MythicBukkit.inst().getMobManager().getMythicMob("BaseSpider").orElse(null);
+                            return spawnMob("BaseSpider");
                         }
                         case 3 -> {
-                            return MythicBukkit.inst().getMobManager().getMythicMob("BasePiglinBrute").orElse(null);
+                            return spawnMob("BasePiglinBrute");
                         }
                         case 4 -> {
-                            return MythicBukkit.inst().getMobManager().getMythicMob("BaseZoglin").orElse(null);
+                            return spawnMob("BaseZoglin");
                         }
                     }
                 }
                 mobChance = (random.nextInt(6) + 1);
                 switch (mobChance) {
                     case 1 -> {
-                        return MythicBukkit.inst().getMobManager().getMythicMob("BaseSkeleton").orElse(null);
+                        return spawnMob("BaseSkeleton");
                     }
                     case 2 -> {
-                        return MythicBukkit.inst().getMobManager().getMythicMob("BaseSpider").orElse(null);
+                        return spawnMob("BaseSpider");
                     }
                     case 3 -> {
-                        return MythicBukkit.inst().getMobManager().getMythicMob("BasePiglinBrute").orElse(null);
+                        return spawnMob("BasePiglinBrute");
                     }
                     case 4 -> {
-                        return MythicBukkit.inst().getMobManager().getMythicMob("BaseZoglin").orElse(null);
+                        return spawnMob("BaseZoglin");
                     }
                     case 5 -> {
-                        return MythicBukkit.inst().getMobManager().getMythicMob("BaseBlaze").orElse(null);
+                        return spawnMob("BaseBlaze");
                     }
                     case 6 -> {
-                        return MythicBukkit.inst().getMobManager().getMythicMob("BaseWitherSkeleton").orElse(null);
+                        return spawnMob("BaseWitherSkeleton");
                     }
                 }
             }
         }
-        return MythicBukkit.inst().getMobManager().getMythicMob("BaseZombie").orElse(null);
+        return spawnMob("BaseZombie");
+    }
+    
+    private MythicMob spawnMob(String type) {
+        return MythicBukkit.inst().getMobManager().getMythicMob(type).orElse(null);
     }
 
     private boolean checkNextWave() {
