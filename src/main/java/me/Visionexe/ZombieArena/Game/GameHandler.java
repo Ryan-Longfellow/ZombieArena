@@ -42,7 +42,11 @@ public class GameHandler {
         if (players.contains(player.getName())) {
             Log.debug("Player already found in game.");
             return;
-        };
+        }
+        if (players.size() >= maxPlayers) {
+            player.sendMessage("Game is full!");
+            return;
+        }
         players.add(player.getName());
         Log.debug("Added player to game list");
         PlayerStats stats = new PlayerStats(player);

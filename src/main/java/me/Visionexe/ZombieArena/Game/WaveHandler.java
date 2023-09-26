@@ -21,9 +21,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class WaveHandler implements Runnable, Listener {
-    // As the name implies, this will handle the wave system within the game
-    // There are to be 50 waves, every 10 waves there will be a miniboss
-    // At wave 50 there will be a Warden/Wither boss (unsure which one should be last boss)
+
     private ZombieArena plugin;
     private GameHandler gameHandler;
 
