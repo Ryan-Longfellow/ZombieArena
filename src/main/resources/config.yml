@@ -4,6 +4,9 @@ database: "data.db"
 # Name of the world the lobby is in. Note: This IS case-sensitive
 LobbyWorld: Lobby
 
+# Set the max players of the arenas
+max-players: 10
+
 # Configure the max levels for PLAYERS here.
 max-level: 100
 

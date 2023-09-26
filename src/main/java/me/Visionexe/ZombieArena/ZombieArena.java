@@ -12,9 +12,11 @@ import me.Visionexe.ZombieArena.Utils.ValueFormat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -225,6 +227,14 @@ public class ZombieArena extends JavaPlugin {
 
     public FileManager getFileManager() {
         return fileManager;
+    }
+    @NotNull
+    public YamlConfiguration getConfigFile() {
+        return getFileManager().get("config").get().getConfiguration();
+    }
+    @NotNull
+    public YamlConfiguration getArenasFile() {
+        return getFileManager().get("arenas").get().getConfiguration();
     }
     public GameHandler getGameHandler() { return gameHandler; }
 

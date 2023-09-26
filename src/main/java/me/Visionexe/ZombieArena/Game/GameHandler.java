@@ -14,24 +14,26 @@ import org.bukkit.potion.PotionEffect;
 import java.util.*;
 
 public class GameHandler {
-    // As the name implies, this handles all the overall information for the game itself
     private ZombieArena plugin;
     private WaveHandler waveHandler;
     private ArenaHandler arenaHandler;
     private boolean isRunning;
     private boolean isWaiting;
+    private int maxPlayers;
+    private GameDifficulty difficulty;
     private List<String> players;
     private Map<String, PlayerStats> playerStats;
     private Location lobbySpawn;
 
     public GameHandler() {
         plugin = ZombieArena.getInstance();
-        lobbySpawn = Objects.requireNonNull(Bukkit.getWorld(plugin.getFileManager().get("config").get().getConfiguration().getString("LobbyWorld"))).getSpawnLocation();
+        lobbySpawn = Objects.requireNonNull(Bukkit.getWorld(plugin.getConfigFile().getString("LobbyWorld"))).getSpawnLocation();
         waveHandler = new WaveHandler(this);
         arenaHandler = new ArenaHandler();
         arenaHandler.loadArenas();
         isRunning = false;
         isWaiting = true;
+        maxPlayers = plugin.getConfigFile().getInt("max-players");
         players = new ArrayList<>();
         playerStats = new HashMap<>();
     }
@@ -97,7 +99,7 @@ public class GameHandler {
     public synchronized List<String> getPlayerNames() { return players; }
 
     public synchronized List<Player> getPlayers() {
-        List<Player> playerInstances = new ArrayList<Player>();
+        List<Player> playerInstances = new ArrayList<>();
         for (String playerName : players) {
             Player player = Bukkit.getPlayer(playerName);
             if (player != null) { playerInstances.add(player); }
@@ -116,6 +118,7 @@ public class GameHandler {
 
     public boolean isRunning() { return isRunning; }
     public boolean isWaiting() { return isWaiting; }
+    public int getMaxPlayers() { return maxPlayers; }
 
     public void removePlayer(String playerName) {
         if (players.contains(playerName)) {
