@@ -22,7 +22,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.*;
 
 public class ZombieArena extends JavaPlugin {
     private static ZombieArena instance;

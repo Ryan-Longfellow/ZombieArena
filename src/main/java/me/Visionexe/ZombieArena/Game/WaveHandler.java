@@ -203,7 +203,7 @@ public class WaveHandler implements Runnable, Listener {
     }
 
     public int calcQuantity(int wave) {
-        return wave * 5; // Currently just returning the wave * 5 to spawn that many entities; will create something more complex later maybe
+        return wave * 3; // Currently just returning the wave * 5 to spawn that many entities; will create something more complex later maybe
     }
 
     private void prepareNextWave() {
@@ -340,7 +340,7 @@ public class WaveHandler implements Runnable, Listener {
 //            // Most likely don't see myself using this
 //        }
         // Clear entities that were stuck or not killed last wave; can find a way to teleport them
-        entities.clear();
+//        entities.clear();
 
         WaveStartEvent event = new WaveStartEvent(wave);
         Bukkit.getPluginManager().callEvent(event);
