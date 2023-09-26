@@ -1,6 +1,5 @@
 package me.Visionexe.ZombieArena.Game;
 
-import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnCause;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnInGameEvent;
 import me.Visionexe.ZombieArena.Log;
@@ -34,7 +33,7 @@ public class GameHandler {
         isRunning = false;
         isWaiting = true;
         players = new ArrayList<>();
-        playerStats = new HashMap<String, PlayerStats>();
+        playerStats = new HashMap<>();
     }
 
     public void addPlayer(Player player, String arenaName) {
@@ -85,10 +84,6 @@ public class GameHandler {
 
         // Set player to max health, food and saturation
         healPlayer(player);
-        // Remove any active potion effects
-        for (PotionEffect potion : player.getActivePotionEffects()) {
-            player.removePotionEffect(potion.getType());
-        }
     }
 
     public int getAliveCount() {
@@ -152,17 +147,21 @@ public class GameHandler {
             player.setGameMode(GameMode.ADVENTURE);
             // Set player to max health, food and saturation
             healPlayer(player);
-            // Remove any active potion effects
-            for (PotionEffect potion : player.getActivePotionEffects()) {
-                player.removePotionEffect(potion.getType());
-            }
         }
 //        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("add text here"));
     }
 
+    /*
+    Sets player to max health, food and saturation and removes all petition effects
+     */
     public void healPlayer(Player player) {
-        player.sendHealthUpdate(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), 20, 20);
-        player.setHealth(20);
+        double playerMaxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+        if (playerMaxHealth < 20.0) playerMaxHealth = 20.0;
+        player.sendHealthUpdate(playerMaxHealth, 20, 20);
+        player.setHealth(playerMaxHealth);
+        for (PotionEffect potion : player.getActivePotionEffects()) {
+            player.removePotionEffect(potion.getType());
+        }
     }
 
     public void healAllPlayers() {
@@ -213,9 +212,6 @@ public class GameHandler {
                 player.teleport(lobbySpawn);
                 player.setGameMode(GameMode.ADVENTURE);
                 healPlayer(player);
-                for (PotionEffect potion : player.getActivePotionEffects()) {
-                    player.removePotionEffect(potion.getType());
-                }
                 removePlayer(player);
             }
         }

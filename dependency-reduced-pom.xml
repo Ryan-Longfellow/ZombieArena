@@ -46,10 +46,6 @@
       <name>Lumine Releases</name>
       <url>https://mvn.lumine.io/repository/maven-public/</url>
     </repository>
-    <repository>
-      <id>MG-Dev Jenkins CI Maven Repository</id>
-      <url>https://ci.mg-dev.eu/plugin/repository/everything</url>
-    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -74,12 +70,6 @@
       <groupId>io.lumine</groupId>
       <artifactId>Mythic-Dist</artifactId>
       <version>5.3.5</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.bergerkiller.bukkit</groupId>
-      <artifactId>BKCommonLib</artifactId>
-      <version>1.20.1-v2</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
