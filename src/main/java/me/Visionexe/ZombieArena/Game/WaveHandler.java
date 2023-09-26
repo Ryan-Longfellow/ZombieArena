@@ -32,7 +32,7 @@ public class WaveHandler implements Runnable, Listener {
 
     private int timeUntilNextWave;
     private int wave;
-    private int maxWave = 50;
+    private int maxWave;
     private int mobsToSpawn;
     private Map<ActiveMob, Integer> entities;
 
@@ -45,6 +45,7 @@ public class WaveHandler implements Runnable, Listener {
         gameHandler = instance;
         random = new Random();
         wave = 0;
+        maxWave = plugin.getConfigFile().getInt("max-wave");
         entities = new HashMap<>();
     }
 

@@ -6,6 +6,7 @@ LobbyWorld: Lobby
 
 # Set the max players of the arenas
 max-players: 10
+max-wave: 50
 
 # Configure the max levels for PLAYERS here.
 max-level: 100
