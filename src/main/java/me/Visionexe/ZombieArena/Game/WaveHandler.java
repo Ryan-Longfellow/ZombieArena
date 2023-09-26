@@ -226,6 +226,13 @@ public class WaveHandler implements Runnable, Listener {
                     startWave();
                 }
             } else {
+                // To prevent players who do not set off any listeners from staying added into the game
+                for(String pName : gameHandler.getPlayerNames()) {
+                    Player p = Bukkit.getPlayer(pName);
+                    if(p == null || !p.isOnline()) {
+                        gameHandler.removePlayer(pName);
+                    }
+                }
                 /*
                 Runs 5 times every second to spawn mob and check if next wave is available
                 Will start the next wave is all criteria is met
@@ -261,14 +268,6 @@ public class WaveHandler implements Runnable, Listener {
                 if(seconds % 5 == 0) {
                     // Can add the same update here as from GameHandler to generate a single heart every 5 seconds
                     // Will have to loop through all players in the game from GameHandler.getPlayers()
-                }
-            }
-
-            // To prevent players who do not set off any listeners from staying added into the game
-            for(String pName : gameHandler.getPlayerNames()) {
-                Player p = Bukkit.getPlayer(pName);
-                if(p == null || !p.isOnline()) {
-                    gameHandler.removePlayer(pName);
                 }
             }
 
