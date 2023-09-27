@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ public class CommandHandler implements CommandExecutor {
         subcommands.add(new ArenaSetPlayerSpawnCommand());
         subcommands.add(new ArenaAddMobSpawnPointCommand());
         subcommands.add(new JoinArenaCommand());
-        subcommands.add(new StartGameCommand());
         subcommands.add(new SetWaveCommand());
         subcommands.add(new BlacksmithCommand());
         subcommands.add(new LeaveCommand());
@@ -46,7 +46,7 @@ public class CommandHandler implements CommandExecutor {
                         }
                     }
                 }
-            } else if(args.length == 0) {
+            } else {
                 player.sendMessage(ChatColor.GREEN + "--------------------------------");
                 for (int i = 0; i < getSubcommands().size(); i++) {
                     if (player.hasPermission(getSubcommands().get(i).getPermission())) {
@@ -55,6 +55,21 @@ public class CommandHandler implements CommandExecutor {
                     }
                 }
                 player.sendMessage(ChatColor.GREEN + "--------------------------------");
+            }
+        } else {
+            if (args.length > 0) {
+                for (int i = 0; i < getSubcommands().size(); i++) {
+                    if (args[0].equalsIgnoreCase(getSubcommands().get(i).getName())) {
+                        getSubcommands().get(i).perform(commandSender, args);
+                    }
+                }
+            } else {
+                commandSender.sendMessage(ChatColor.GREEN + "--------------------------------");
+                for (int i = 0; i < getSubcommands().size(); i++) {
+                    commandSender.sendMessage(ChatColor.YELLOW + getSubcommands().get(i).getSyntax() + " - " +
+                            ChatColor.GREEN + getSubcommands().get(i).getDescription());
+                }
+                commandSender.sendMessage(ChatColor.GREEN + "--------------------------------");
             }
         }
         return true;

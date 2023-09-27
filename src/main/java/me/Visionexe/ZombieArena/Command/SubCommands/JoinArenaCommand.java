@@ -3,6 +3,7 @@ package me.Visionexe.ZombieArena.Command.SubCommands;
 import me.Visionexe.ZombieArena.Command.SubCommand;
 import me.Visionexe.ZombieArena.Game.GameHandler;
 import me.Visionexe.ZombieArena.ZombieArena;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class JoinArenaCommand extends SubCommand {
@@ -27,20 +28,25 @@ public class JoinArenaCommand extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
-        GameHandler gameHandler = ZombieArena.getInstance().getGameHandler();
-        String arenaName;
+    public void perform(CommandSender commandSender, String[] args) {
+        if (commandSender instanceof Player) {
+            Player player = (Player) commandSender;
+            GameHandler gameHandler = ZombieArena.getInstance().getGameHandler();
+            String arenaName;
 
-        if (args.length == 2) {
-            arenaName = args[1].toLowerCase();
-            // Check if arena is valid
-            if (gameHandler.getArenaHandler().isArenaValid(arenaName)) {
-                gameHandler.addPlayer(player, arenaName);
+            if (args.length == 2) {
+                arenaName = args[1].toLowerCase();
+                // Check if arena is valid
+                if (gameHandler.getArenaHandler().isArenaValid(arenaName)) {
+                    gameHandler.addPlayer(player, arenaName);
+                } else {
+                    player.sendMessage("No arena exists with that name!");
+                }
             } else {
-                player.sendMessage("No arena exists with that name!");
+                player.sendMessage("Please specify an Arena Name");
             }
         } else {
-            player.sendMessage("Please specify an Arena Name");
+            commandSender.sendMessage("Only players are allowed to use this command!");
         }
     }
 }

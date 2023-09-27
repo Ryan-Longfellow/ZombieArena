@@ -4,6 +4,7 @@ import me.Visionexe.ZombieArena.Command.SubCommand;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SetExperienceCommand extends SubCommand {
@@ -26,7 +27,7 @@ public class SetExperienceCommand extends SubCommand {
     public String getPermission() { return "zombiearena.admin"; }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public void perform(CommandSender commandSender, String[] args) {
         if (args.length == 3) {
             Player getPlayer = Bukkit.getPlayer(args[1]);
             int exp = Integer.parseInt(args[2]);
@@ -34,18 +35,18 @@ public class SetExperienceCommand extends SubCommand {
             if (getPlayer != null) {
                 PlayerWrapper playerWrapper = PlayerWrapper.get(getPlayer);
                 if (playerWrapper.setExperience(exp)) {
-                    if (getPlayer.equals(player)) {
+                    if (getPlayer.equals(commandSender)) {
                         getPlayer.sendMessage(ChatColor.GREEN + "Your EXP has been set to: " + ChatColor.YELLOW + exp);
                     } else {
                         getPlayer.sendMessage(ChatColor.GREEN + "Your EXP has been set to: " + ChatColor.YELLOW + exp);
-                        player.sendMessage(
-                                ChatColor.YELLOW + player.getName() + "'s" +
+                        commandSender.sendMessage(
+                                ChatColor.YELLOW + getPlayer.getName() + "'s" +
                                         ChatColor.GREEN + " exp has been set to " +
                                         ChatColor.YELLOW + exp);
                     }
                 }
             } else {
-                player.sendMessage(ChatColor.RED + "Please enter a valid username.");
+                commandSender.sendMessage(ChatColor.RED + "Please enter a valid username.");
             }
         }
     }

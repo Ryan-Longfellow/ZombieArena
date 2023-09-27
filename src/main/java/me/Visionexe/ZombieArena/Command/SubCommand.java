@@ -1,6 +1,6 @@
 package me.Visionexe.ZombieArena.Command;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 public abstract class SubCommand {
     // Name of the sub command, Ex: /zombiearena <command>
@@ -16,6 +16,6 @@ public abstract class SubCommand {
     public abstract String getPermission();
 
     // Code to execute for said sub command
-    public abstract void perform(Player player, String args[]);
+    public abstract void perform(CommandSender commandSender, String args[]);
 
 }

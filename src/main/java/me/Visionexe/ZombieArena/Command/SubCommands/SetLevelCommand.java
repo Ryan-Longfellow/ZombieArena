@@ -4,6 +4,7 @@ import me.Visionexe.ZombieArena.Command.SubCommand;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SetLevelCommand extends SubCommand {
@@ -26,7 +27,7 @@ public class SetLevelCommand extends SubCommand {
     public String getPermission() { return "zombiearena.admin"; }
 
     @Override
-    public void perform(Player player, String[] args) {
+    public void perform(CommandSender commandSender, String[] args) {
         if (args.length == 3) {
             Player getPlayer = Bukkit.getPlayer(args[1]);
             int level = Integer.parseInt(args[2]);
@@ -34,20 +35,20 @@ public class SetLevelCommand extends SubCommand {
             if (getPlayer != null) {
                 PlayerWrapper playerWrapper = PlayerWrapper.get(getPlayer);
                 if (playerWrapper.setLevel(level)) {
-                    if (getPlayer.equals(player)) {
+                    if (getPlayer.equals(commandSender)) {
                         getPlayer.sendMessage(ChatColor.GREEN + "Your Level has been set to: " + ChatColor.YELLOW + level);
                     } else {
                         getPlayer.sendMessage(ChatColor.GREEN + "Your Level has been set to: " + ChatColor.YELLOW + level);
-                        player.sendMessage(
-                                ChatColor.YELLOW + player.getName() +
+                        commandSender.sendMessage(
+                                ChatColor.YELLOW + getPlayer.getName() +
                                         ChatColor.GREEN + " has been set to level " +
                                         ChatColor.YELLOW + level);
                     }
                 } else {
-                    player.sendMessage(ChatColor.RED + "Level must be between 1 and " + playerWrapper.getMaxLevel());
+                    commandSender.sendMessage(ChatColor.RED + "Level must be between 1 and " + playerWrapper.getMaxLevel());
                 }
             } else {
-                player.sendMessage(ChatColor.RED + "Please enter a valid username.");
+                commandSender.sendMessage(ChatColor.RED + "Please enter a valid username.");
             }
         }
     }

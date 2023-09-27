@@ -4,6 +4,7 @@ import me.Visionexe.ZombieArena.Command.SubCommand;
 import me.Visionexe.ZombieArena.GUI.Blacksmith.Blacksmith;
 import me.Visionexe.ZombieArena.GUI.Row;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class BlacksmithCommand extends SubCommand {
@@ -28,8 +29,13 @@ public class BlacksmithCommand extends SubCommand {
     }
 
     @Override
-    public void perform(Player player, String[] args) {
-        Blacksmith gui = new Blacksmith(ChatColor.translateAlternateColorCodes('&', "&aBlacksmith"), Row.THREE);
-        gui.open(player);
+    public void perform(CommandSender commandSender, String[] args) {
+        if (commandSender instanceof Player) {
+            Player player = (Player) commandSender;
+            Blacksmith gui = new Blacksmith(ChatColor.translateAlternateColorCodes('&', "&aBlacksmith"), Row.THREE);
+            gui.open(player);
+        } else {
+            commandSender.sendMessage("Only players are allowed to use this command!");
+        }
     }
 }
