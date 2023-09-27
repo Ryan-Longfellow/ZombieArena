@@ -67,7 +67,6 @@ public class ZombieArena extends JavaPlugin {
         }
         getLogger().info("Disabling " + this.getDescription().getName() + " " + this.getDescription().getVersion());
     }
-    // test
 
     /*
     Register configs, will create defaults if none are detected
