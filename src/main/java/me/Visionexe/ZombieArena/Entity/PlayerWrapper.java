@@ -3,8 +3,6 @@ package me.Visionexe.ZombieArena.Entity;
 import me.Visionexe.ZombieArena.Log;
 import me.Visionexe.ZombieArena.Storage.DatabaseConnection;
 import me.Visionexe.ZombieArena.ZombieArena;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -14,7 +12,7 @@ import java.util.*;
 
 public class PlayerWrapper {
     // HashMap relating UUID to each PlayerWrapper
-    private static HashMap<UUID, PlayerWrapper> all = new HashMap<>();
+    private static final HashMap<UUID, PlayerWrapper> all = new HashMap<>();
     // Obviously to store players' UUIDs
     private UUID uuid;
     // Obviously to store players' statistics to track
@@ -123,7 +121,7 @@ public class PlayerWrapper {
     Called in init minimize the amount of places where this needs to be called
      */
     public void load() {
-        // Setup the Player Stats HashMap to default values to replace when loading information from database
+        // Set up the Player Stats HashMap to default values to replace when loading information from database
         this.playerStats.put("level", 1);
         this.playerStats.put("experience", 0);
         this.playerStats.put("prestige", 0);
@@ -380,7 +378,7 @@ public class PlayerWrapper {
     /*
     Returns the amount of experience required for the next level
      */
-    public int getExperienceForNextLevel() { return getExperienceForLevel((int)this.playerStats.get("level") + 1); }
+    public int getExperienceForNextLevel() { return getExperienceForLevel(this.playerStats.get("level") + 1); }
 
     /*
     Returns the amount of experience required for the specified level
