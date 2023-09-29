@@ -259,7 +259,7 @@ public class WaveHandler implements Runnable, Listener {
                     if(entities.size() <= 5 && wave != 50) {
                         secondsWithFewEntities++;
                     }
-                    if(secondsWithFewEntities > 60) {
+                    if(secondsWithFewEntities > 60 && wave != 50) {
                         setWave(wave + 1);
                     }
                 }
