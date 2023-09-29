@@ -36,16 +36,17 @@ public class StatsCommand extends SubCommand {
                 Player player = (Player) commandSender;
                 PlayerWrapper playerWrapper = PlayerWrapper.get(player);
                 player.sendMessage(ChatColor.GREEN + "================================");
-//                player.sendMessage(ChatColor.GREEN + "Stats for " + ChatColor.YELLOW + player.getName());
-//                player.sendMessage(ChatColor.GREEN + "Level: " + playerWrapper.getLevel());
-//                player.sendMessage(ChatColor.GREEN + "Experience: " + playerWrapper.getExperience());
-//                player.sendMessage(ChatColor.GREEN + "Prestige: " + playerWrapper.getPrestige());
-//                player.sendMessage(ChatColor.GREEN + "Games Played: " + playerWrapper.getGamesPlayed());
-//                player.sendMessage(ChatColor.GREEN + "Games Won: " + playerWrapper.getGamesWon());
-//                player.sendMessage(ChatColor.GREEN + "Total Kills: " + playerWrapper.getTotalKills());
-                for (Map.Entry<String,Integer> stats : playerWrapper.getPlayerStats().entrySet()) {
-                    player.sendMessage(ChatColor.GREEN + stats.getKey() + ": " + stats.getValue());
-                }
+                player.sendMessage(ChatColor.GREEN + "Stats for " + ChatColor.YELLOW + player.getName());
+                player.sendMessage(ChatColor.GREEN + "Level: " + playerWrapper.getLevel());
+                player.sendMessage(ChatColor.GREEN + "Experience: " + playerWrapper.getExperience());
+                player.sendMessage(ChatColor.GREEN + "Prestige: " + playerWrapper.getPrestige());
+                player.sendMessage(ChatColor.GREEN + "Games Played: " + playerWrapper.getGamesPlayed());
+                player.sendMessage(ChatColor.GREEN + "Games Won: " + playerWrapper.getGamesWon());
+                player.sendMessage(ChatColor.GREEN + "Total Kills: " + playerWrapper.getTotalKills());
+                player.sendMessage(ChatColor.GREEN + "Total Boss Damage: " + playerWrapper.getTotalBossDamage());
+//                for (Map.Entry<String,Integer> stats : playerWrapper.getPlayerStats().entrySet()) {
+//                    player.sendMessage(ChatColor.GREEN + stats.getKey() + ": " + stats.getValue());
+//                }
                 player.sendMessage(ChatColor.GREEN + "================================");
 
             } else {
@@ -63,6 +64,7 @@ public class StatsCommand extends SubCommand {
                 commandSender.sendMessage(ChatColor.GREEN + "Games Played: " + playerWrapper.getGamesPlayed());
                 commandSender.sendMessage(ChatColor.GREEN + "Games Won: " + playerWrapper.getGamesWon());
                 commandSender.sendMessage(ChatColor.GREEN + "Total Kills: " + playerWrapper.getTotalKills());
+                commandSender.sendMessage(ChatColor.GREEN + "Total Boss Damage: " + playerWrapper.getTotalBossDamage());
                 commandSender.sendMessage(ChatColor.GREEN + "================================");
             } else {
                 commandSender.sendMessage(ChatColor.RED + "Please enter a valid username.");
