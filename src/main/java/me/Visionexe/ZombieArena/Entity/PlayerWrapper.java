@@ -393,7 +393,6 @@ public class PlayerWrapper {
             return false;
         }
     }
-
     public boolean setExperience(int experience) {
         // If experience provided is not valid, cancel
         if (experience < 0) { return false; }
@@ -407,7 +406,6 @@ public class PlayerWrapper {
         updateLevel();
         return true;
     }
-
     public boolean setPrestige(int prestige) {
         // This will also set player's level to 1 and experience to 0 as prestiges are intended
 
@@ -426,28 +424,24 @@ public class PlayerWrapper {
 
         return true;
     }
-
     public boolean setGamesPlayed(int gamesPlayed) {
         // If games played is not valid, cancel
         if (gamesPlayed < 0) { return false; }
         this.playerStats.replace("games_played", gamesPlayed);
         return true;
     }
-
     public boolean setGamesWon(int gamesWon) {
         // If games won is not valid, cancel
         if (gamesWon < 0) { return false; }
         this.playerStats.replace("games_won", gamesWon);
         return true;
     }
-
     public boolean setTotalKills(int totalKills) {
         // If total kills is not valid, cancel
         if (totalKills < 0) { return false; }
         this.playerStats.replace("total_kills", totalKills);
         return true;
     }
-
     public boolean setZombieKills(int zombieKills) {
         if (zombieKills < 0) { return false; }
         this.playerStats.replace("zombie_kills", zombieKills);
@@ -460,7 +454,7 @@ public class PlayerWrapper {
     }
     public boolean setSpiderKills(int spiderKills) {
         if (spiderKills < 0) { return false; }
-        this.playerStats.replace("skeleton_kills", spiderKills);
+        this.playerStats.replace("spider_kills", spiderKills);
         return true;
     }
     public boolean setPiglinBruteKills(int piglinBruteKills) {
@@ -556,7 +550,6 @@ public class PlayerWrapper {
 
         return false;
     }
-
     public boolean addExperience(int amount) {
         if (amount < 0) {
             return false;
@@ -568,24 +561,96 @@ public class PlayerWrapper {
 
         return true;
     }
-
     public boolean addPrestige(int prestige) {
         this.playerStats.replace("prestige", this.playerStats.get("prestige") + prestige);
         return true;
     }
-
     public boolean addGamesPlayed(int gamesPlayed) {
         this.playerStats.replace("games_played", this.playerStats.get("games_played") + gamesPlayed);
         return true;
     }
-
     public boolean addGamesWon(int gamesWon) {
         this.playerStats.replace("games_won", this.playerStats.get("games_won") + gamesWon);
         return true;
     }
-
     public boolean addTotalKills(int totalKills) {
         this.playerStats.replace("total_kills", this.playerStats.get("total_kills") + totalKills);
+        return true;
+    }
+    public boolean addZombieKills(int zombieKills) {
+        this.playerStats.replace("zombie_kills", this.playerStats.get("zombie_kills") + zombieKills);
+        return true;
+    }
+    public boolean addSkeletonKills(int skeletonKills) {
+        this.playerStats.replace("skeleton_kills", this.playerStats.get("skeleton_kills") + skeletonKills);
+        return true;
+    }
+    public boolean addSpiderKills(int spiderKills) {
+        this.playerStats.replace("spider_kills", this.playerStats.get("spider_kills") + spiderKills);
+        return true;
+    }
+    public boolean addPiglinBruteKills(int piglinBruteKills) {
+        this.playerStats.replace("piglin_brute_kills", this.playerStats.get("piglin_brute_kills") + piglinBruteKills);
+        return true;
+    }
+    public boolean addZoglinKills(int zoglinKills) {
+        this.playerStats.replace("zoglin_kills", this.playerStats.get("zoglin_kills") + zoglinKills);
+        return true;
+    }
+    public boolean addBlazeKills(int blazeKills) {
+        this.playerStats.replace("blaze_kills", this.playerStats.get("blaze_kills") + blazeKills);
+        return true;
+    }
+    public boolean addWitherSkeletonKills(int witherSkeletonKills) {
+        this.playerStats.replace("wither_skeleton_kills", this.playerStats.get("wither_skeleton_kills") + witherSkeletonKills);
+        return true;
+    }
+    public boolean addTotalBossKills(int totalBossKills) {
+        this.playerStats.replace("total_boss_kills", this.playerStats.get("total_boss_kills") + totalBossKills);
+        return true;
+    }
+    public boolean addWave10BossKills(int wave10BossKills) {
+        this.playerStats.replace("wave_10_boss_kills", this.playerStats.get("wave_10_boss_kills") + wave10BossKills);
+        return true;
+    }
+    public boolean addWave20BossKills(int wave20BossKills) {
+        this.playerStats.replace("wave_20_boss_kills", this.playerStats.get("wave_20_boss_kills") + wave20BossKills);
+        return true;
+    }
+    public boolean addWave30BossKills(int wave30BossKills) {
+        this.playerStats.replace("wave_30_boss_kills", this.playerStats.get("wave_30_boss_kills") + wave30BossKills);
+        return true;
+    }
+    public boolean addWave40BossKills(int wave40BossKills) {
+        this.playerStats.replace("wave_40_boss_kills", this.playerStats.get("wave_40_boss_kills") + wave40BossKills);
+        return true;
+    }
+    public boolean addWave50BossKills(int wave50BossKills) {
+        this.playerStats.replace("wave_50_boss_kills", this.playerStats.get("wave_50_boss_kills") + wave50BossKills);
+        return true;
+    }
+    public boolean addTotalBossDamage(int totalBossDamage) {
+        this.playerStats.replace("total_boss_damage", this.playerStats.get("total_boss_damage") + totalBossDamage);
+        return true;
+    }
+    public boolean addWave10BossDamage(int wave10BossDamage) {
+        this.playerStats.replace("wave_10_boss_damage", this.playerStats.get("wave_10_boss_damage") + wave10BossDamage);
+        return true;
+    }
+    public boolean addWave20BossDamage(int wave20BossDamage) {
+        this.playerStats.replace("wave_20_boss_damage", this.playerStats.get("wave_20_boss_damage") + wave20BossDamage);
+        return true;
+    }
+    public boolean addWave30BossDamage(int wave30BossDamage) {
+        this.playerStats.replace("wave_30_boss_damage", this.playerStats.get("wave_30_boss_damage") + wave30BossDamage);
+        return true;
+    }
+    public boolean addWave40BossDamage(int wave40BossDamage) {
+        this.playerStats.replace("wave_40_boss_damage", this.playerStats.get("wave_40_boss_damage") + wave40BossDamage);
+        return true;
+    }
+    public boolean addWave50BossDamage(int wave50BossDamage) {
+        this.playerStats.replace("wave_50_boss_damage", this.playerStats.get("wave_50_boss_damage") + wave50BossDamage);
         return true;
     }
 
