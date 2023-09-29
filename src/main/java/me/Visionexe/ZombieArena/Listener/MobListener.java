@@ -75,12 +75,14 @@ public class MobListener implements Listener {
 
             if (!(ZombieArena.getInstance().getGameHandler().getPlayers().contains(player))) return;
 
+            int wave = ZombieArena.getInstance().getGameHandler().getWaveHandler().getWave();
+
             if (event.getEntity().getName().contains("BOSS")) {
                 LinkedHashMap<Player, Double> sortedTopDamage = (LinkedHashMap<Player, Double>) sortDamagers(topDamage);
                 int count = 0;
                 Bukkit.broadcastMessage(ChatColor.GREEN + "-----------------------------------------");
                 Bukkit.broadcastMessage(ChatColor.GREEN + "Wave " +
-                        ChatColor.YELLOW + ZombieArena.getInstance().getGameHandler().getWaveHandler().getWave() +
+                        ChatColor.YELLOW + wave +
                         ChatColor.GREEN + " Boss Killed");
                 for (Map.Entry<Player, Double> damager : sortedTopDamage.entrySet()) {
                     count++;
@@ -103,6 +105,7 @@ public class MobListener implements Listener {
                             ChatColor.AQUA + damager.getValue() +
                             ChatColor.WHITE + " damage");
                 }
+                Bukkit.broadcastMessage(ChatColor.WHITE + "All other players received 10% of rewards.");
                 Bukkit.broadcastMessage(ChatColor.GREEN + "-----------------------------------------");
 
 
@@ -116,6 +119,7 @@ public class MobListener implements Listener {
                                 config.getInt("boss-types.zombie.xp"),
                                 config.getDouble("boss-types.zombie.coins"));
                         playerWrapper.addWave10BossKills(1);
+                        saveBossDamage(sortedTopDamage, wave);
                         topDamage.clear();
                     }
                     case PIGLIN_BRUTE -> {
@@ -123,6 +127,7 @@ public class MobListener implements Listener {
                                 config.getInt("boss-types.piglin_brute.xp"),
                                 config.getDouble("boss-types.piglin_brute.coins"));
                         playerWrapper.addWave20BossKills(1);
+                        saveBossDamage(sortedTopDamage, wave);
                         topDamage.clear();
                     }
                     case BLAZE -> {
@@ -130,6 +135,7 @@ public class MobListener implements Listener {
                                 config.getInt("boss-types.blaze.xp"),
                                 config.getDouble("boss-types.blaze.coins"));
                         playerWrapper.addWave30BossKills(1);
+                        saveBossDamage(sortedTopDamage, wave);
                         topDamage.clear();
                     }
                     case WITHER_SKELETON -> {
@@ -137,6 +143,7 @@ public class MobListener implements Listener {
                                 config.getInt("boss-types.wither_skeleton.xp"),
                                 config.getDouble("boss-types.wither_skeleton.coins"));
                         playerWrapper.addWave40BossKills(1);
+                        saveBossDamage(sortedTopDamage, wave);
                         topDamage.clear();
                     }
                     case WARDEN -> {
@@ -144,9 +151,11 @@ public class MobListener implements Listener {
                                 config.getInt("boss-types.warden.xp"),
                                 config.getDouble("boss-types.warden.coins"));
                         playerWrapper.addWave50BossKills(1);
+                        saveBossDamage(sortedTopDamage, wave);
                         topDamage.clear();
                     }
                 }
+                playerWrapper.addTotalBossKills(1);
                 return;
             }
 
@@ -158,6 +167,8 @@ public class MobListener implements Listener {
                         if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
                             playerWrapper.addExperience(config.getInt("mob-types." + entity.toLowerCase() + ".xp"));
                             economy.depositPlayer(player, config.getInt("mob-types." + entity.toLowerCase() + ".coins"));
+                            playerWrapper.addGenericMobKills(event.getEntityType().toString().toLowerCase(), 1);
+                            playerWrapper.addTotalKills(1);
                         }
                 }
             } catch (Exception exception) {
@@ -239,13 +250,24 @@ public class MobListener implements Listener {
                 } else {
                     PlayerWrapper.get(damager.getKey()).addExperience((int) (experience * 0.10));
                     economy.depositPlayer(damager.getKey(), money * 0.10);
-//                    "You received " + (experience * 0.10) + " experience and " +
-//                            (money * 0.10) + " money"
                     damager.getKey().sendMessage(ChatColor.translateAlternateColorCodes('&',
                             "&aYou received &e" + (experience * 0.10) + " &aexperience and " +
                                     (money * 0.10) + "&a."));
                 }
             }
+        }
+    }
+    private void saveTotalDamage(LinkedHashMap<Player, Double> damagers) {
+        for (Map.Entry<Player, Double> player : damagers.entrySet()) {
+            PlayerWrapper playerWrapper = PlayerWrapper.get(player.getKey());
+            playerWrapper.addTotalBossDamage((player.getValue()).intValue());
+        }
+    }
+    private void saveBossDamage(LinkedHashMap<Player, Double> damagers, int wave) {
+        for (Map.Entry<Player, Double> player : damagers.entrySet()) {
+            PlayerWrapper playerWrapper = PlayerWrapper.get(player.getKey());
+            playerWrapper.addGenericBossDamage((player.getValue()).intValue(), wave);
+            playerWrapper.addTotalBossDamage((player.getValue()).intValue());
         }
     }
 }

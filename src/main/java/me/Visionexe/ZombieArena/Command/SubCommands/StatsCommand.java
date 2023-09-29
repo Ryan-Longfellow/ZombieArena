@@ -7,6 +7,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class StatsCommand extends SubCommand {
     @Override
     public String getName() {
@@ -33,13 +36,16 @@ public class StatsCommand extends SubCommand {
                 Player player = (Player) commandSender;
                 PlayerWrapper playerWrapper = PlayerWrapper.get(player);
                 player.sendMessage(ChatColor.GREEN + "================================");
-                player.sendMessage(ChatColor.GREEN + "Stats for " + ChatColor.YELLOW + player.getName());
-                player.sendMessage(ChatColor.GREEN + "Level: " + playerWrapper.getLevel());
-                player.sendMessage(ChatColor.GREEN + "Experience: " + playerWrapper.getExperience());
-                player.sendMessage(ChatColor.GREEN + "Prestige: " + playerWrapper.getPrestige());
-                player.sendMessage(ChatColor.GREEN + "Games Played: " + playerWrapper.getGamesPlayed());
-                player.sendMessage(ChatColor.GREEN + "Games Won: " + playerWrapper.getGamesWon());
-                player.sendMessage(ChatColor.GREEN + "Total Kills: " + playerWrapper.getTotalKills());
+//                player.sendMessage(ChatColor.GREEN + "Stats for " + ChatColor.YELLOW + player.getName());
+//                player.sendMessage(ChatColor.GREEN + "Level: " + playerWrapper.getLevel());
+//                player.sendMessage(ChatColor.GREEN + "Experience: " + playerWrapper.getExperience());
+//                player.sendMessage(ChatColor.GREEN + "Prestige: " + playerWrapper.getPrestige());
+//                player.sendMessage(ChatColor.GREEN + "Games Played: " + playerWrapper.getGamesPlayed());
+//                player.sendMessage(ChatColor.GREEN + "Games Won: " + playerWrapper.getGamesWon());
+//                player.sendMessage(ChatColor.GREEN + "Total Kills: " + playerWrapper.getTotalKills());
+                for (Map.Entry<String,Integer> stats : playerWrapper.getPlayerStats().entrySet()) {
+                    player.sendMessage(ChatColor.GREEN + stats.getKey() + ": " + stats.getValue());
+                }
                 player.sendMessage(ChatColor.GREEN + "================================");
 
             } else {

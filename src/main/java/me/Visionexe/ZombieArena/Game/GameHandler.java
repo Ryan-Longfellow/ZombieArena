@@ -1,5 +1,6 @@
 package me.Visionexe.ZombieArena.Game;
 
+import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnCause;
 import me.Visionexe.ZombieArena.Event.PlayerRespawnInGameEvent;
 import me.Visionexe.ZombieArena.Log;
@@ -90,6 +91,8 @@ public class GameHandler {
 
         // Set player to max health, food and saturation
         healPlayer(player);
+
+        PlayerWrapper.get(player).addGamesPlayed(1);
     }
 
     public int getAliveCount() {

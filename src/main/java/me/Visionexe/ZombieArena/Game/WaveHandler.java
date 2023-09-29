@@ -4,6 +4,7 @@ import io.lumine.mythic.api.mobs.MythicMob;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
+import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.Event.GameStopCause;
 import me.Visionexe.ZombieArena.Event.GameStopEvent;
 import me.Visionexe.ZombieArena.Event.WaveChangeEvent;
@@ -313,6 +314,9 @@ public class WaveHandler implements Runnable, Listener {
         Possibly add a title popup and an extra reward
          */
         if (this.wave > maxWave) {
+            for (Player player : gameHandler.getPlayers()) {
+                PlayerWrapper.get(player).addGamesWon(1);
+            }
             gameHandler.stop();
 
             GameStopEvent event = new GameStopEvent(GameStopCause.WIN);

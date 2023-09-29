@@ -99,7 +99,33 @@ public class ZombieArena extends JavaPlugin {
         try {
             DatabaseConnection connection = new DatabaseConnection();
 
-            Optional<PreparedStatement> psOptional = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `players` (uuid varchar(190) PRIMARY KEY NOT NULL, level INT NOT NULL, experience INT NOT NULL, prestige INT NOT NULL, games_played INT NOT NULL, games_won INT NOT NULL, total_kills INT NOT NULL);");
+            Optional<PreparedStatement> psOptional = connection.prepareStatement("CREATE TABLE IF NOT EXISTS `players` (uuid varchar(190) PRIMARY KEY NOT NULL, " +
+                    "level INT NOT NULL, " +
+                    "experience INT NOT NULL, " +
+                    "prestige INT NOT NULL, " +
+                    "games_played INT NOT NULL, " +
+                    "games_won INT NOT NULL, " +
+                    "total_kills INT NOT NULL, " +
+                    "zombie_kills INT NOT NULL, " +
+                    "skeleton_kills INT NOT NULL, " +
+                    "spider_kills INT NOT NULL, " +
+                    "piglin_brute_kills INT NOT NULL, " +
+                    "zoglin_kills INT NOT NULL, " +
+                    "blaze_kills INT NOT NULL, " +
+                    "wither_skeleton_kills INT NOT NULL, " +
+                    "total_boss_kills INT NOT NULL, " +
+                    "wave_10_boss_kills INT NOT NULL, " +
+                    "wave_20_boss_kills INT NOT NULL, " +
+                    "wave_30_boss_kills INT NOT NULL, " +
+                    "wave_40_boss_kills INT NOT NULL, " +
+                    "wave_50_boss_kills INT NOT NULL, " +
+                    "total_boss_damage INT NOT NULL, " +
+                    "wave_10_boss_damage INT NOT NULL, " +
+                    "wave_20_boss_damage INT NOT NULL, " +
+                    "wave_30_boss_damage INT NOT NULL, " +
+                    "wave_40_boss_damage INT NOT NULL, " +
+                    "wave_50_boss_damage INT NOT NULL" +
+                    ");");
             if (psOptional.isEmpty()) {
                 Bukkit.getConsoleSender().sendMessage("Database(s) could not be set up!");
                 this.getPluginLoader().disablePlugin(this);
