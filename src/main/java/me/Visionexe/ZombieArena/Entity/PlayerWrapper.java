@@ -95,6 +95,7 @@ public class PlayerWrapper {
                 "`zoglin_kills`, " +
                 "`blaze_kills`, " +
                 "`wither_skeleton_kills`, " +
+                "`total_boss_kills`, " +
                 "`wave_10_boss_kills`, " +
                 "`wave_20_boss_kills`, " +
                 "`wave_30_boss_kills`, " +
@@ -106,7 +107,7 @@ public class PlayerWrapper {
                 "`wave_30_boss_damage`, " +
                 "`wave_40_boss_damage`, " +
                 "`wave_50_boss_damage`" +
-                ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+                ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
         );
 
         if (!psOptional.isPresent()) {
@@ -132,17 +133,18 @@ public class PlayerWrapper {
             ps.setInt(12, 0); // Zoglin Kills
             ps.setInt(13, 0); // Blaze Kills
             ps.setInt(14, 0); // Wither Skeleton Kills
-            ps.setInt(15, 0); // Wave 10 Boss Kills
-            ps.setInt(16, 0); // Wave 20 Boss Kills
-            ps.setInt(17, 0); // Wave 30 Boss Kills
-            ps.setInt(18, 0); // Wave 40 Boss Kills
-            ps.setInt(19, 0); // Wave 50 Boss Kills
-            ps.setInt(20, 0); // Total Boss Damage
-            ps.setInt(21, 0); // Wave 10 Boss Damage
-            ps.setInt(22, 0); // Wave 20 Boss Damage
-            ps.setInt(23, 0); // Wave 30 Boss Damage
-            ps.setInt(24, 0); // Wave 40 Boss Damage
-            ps.setInt(25, 0); // Wave 50 Boss Damage
+            ps.setInt(15, 0); // Total Boss Kills
+            ps.setInt(16, 0); // Wave 10 Boss Kills
+            ps.setInt(17, 0); // Wave 20 Boss Kills
+            ps.setInt(18, 0); // Wave 30 Boss Kills
+            ps.setInt(19, 0); // Wave 40 Boss Kills
+            ps.setInt(20, 0); // Wave 50 Boss Kills
+            ps.setInt(21, 0); // Total Boss Damage
+            ps.setInt(22, 0); // Wave 10 Boss Damage
+            ps.setInt(23, 0); // Wave 20 Boss Damage
+            ps.setInt(24, 0); // Wave 30 Boss Damage
+            ps.setInt(25, 0); // Wave 40 Boss Damage
+            ps.setInt(26, 0); // Wave 50 Boss Damage
 
             connection.update(ps);
         } catch (SQLException e) {
@@ -177,6 +179,7 @@ public class PlayerWrapper {
         this.playerStats.put("zoglin_kills", 0);
         this.playerStats.put("blaze_kills", 0);
         this.playerStats.put("wither_skeleton_kills", 0);
+        this.playerStats.put("total_boss_kills", 0);
         this.playerStats.put("wave_10_boss_kills", 0);
         this.playerStats.put("wave_20_boss_kills", 0);
         this.playerStats.put("wave_30_boss_kills", 0);
@@ -221,6 +224,7 @@ public class PlayerWrapper {
                 this.playerStats.replace("zoglin_kills", rs.getInt("zoglin_kills"));
                 this.playerStats.replace("blaze_kills", rs.getInt("blaze_kills"));
                 this.playerStats.replace("wither_skeleton_kills", rs.getInt("wither_skeleton_kills"));
+                this.playerStats.replace("total_boss_kills", rs.getInt("total_boss_kills"));
                 this.playerStats.replace("wave_10_boss_kills", rs.getInt("wave_10_boss_kills"));
                 this.playerStats.replace("wave_20_boss_kills", rs.getInt("wave_20_boss_kills"));
                 this.playerStats.replace("wave_30_boss_kills", rs.getInt("wave_30_boss_kills"));
@@ -279,6 +283,7 @@ public class PlayerWrapper {
                 "`zoglin_kills`, " +
                 "`blaze_kills`, " +
                 "`wither_skeleton_kills`, " +
+                "`total_boss_kills`, " +
                 "`wave_10_boss_kills`, " +
                 "`wave_20_boss_kills`, " +
                 "`wave_30_boss_kills`, " +
@@ -314,18 +319,19 @@ public class PlayerWrapper {
             ps.setInt(11, this.playerStats.get("zoglin_kills")); // Zoglin Kills
             ps.setInt(12, this.playerStats.get("blaze_kills")); // Blaze Kills
             ps.setInt(13, this.playerStats.get("wither_skeleton_kills")); // Wither Skeleton Kills
-            ps.setInt(14, this.playerStats.get("wave_10_boss_kills")); // Wave 10 Boss Kills
-            ps.setInt(15, this.playerStats.get("wave_20_boss_kills")); // Wave 20 Boss Kills
-            ps.setInt(16, this.playerStats.get("wave_30_boss_kills")); // Wave 30 Boss Kills
-            ps.setInt(17, this.playerStats.get("wave_40_boss_kills")); // Wave 40 Boss Kills
-            ps.setInt(18, this.playerStats.get("wave_50_boss_kills")); // Wave 50 Boss Kills
-            ps.setInt(19, this.playerStats.get("total_boss_damage")); // Total Boss Damage
-            ps.setInt(20, this.playerStats.get("wave_10_boss_damage")); // Wave 10 Boss Damage
-            ps.setInt(21, this.playerStats.get("wave_20_boss_damage")); // Wave 20 Boss Damage
-            ps.setInt(22, this.playerStats.get("wave_30_boss_damage")); // Wave 30 Boss Damage
-            ps.setInt(23, this.playerStats.get("wave_40_boss_damage")); // Wave 40 Boss Damage
-            ps.setInt(24, this.playerStats.get("wave_50_boss_damage")); // Wave 50 Boss Damage
-            ps.setString(25, this.uuid.toString());
+            ps.setInt(14, this.playerStats.get("total_boss_kills"));
+            ps.setInt(15, this.playerStats.get("wave_10_boss_kills")); // Wave 10 Boss Kills
+            ps.setInt(16, this.playerStats.get("wave_20_boss_kills")); // Wave 20 Boss Kills
+            ps.setInt(17, this.playerStats.get("wave_30_boss_kills")); // Wave 30 Boss Kills
+            ps.setInt(18, this.playerStats.get("wave_40_boss_kills")); // Wave 40 Boss Kills
+            ps.setInt(19, this.playerStats.get("wave_50_boss_kills")); // Wave 50 Boss Kills
+            ps.setInt(20, this.playerStats.get("total_boss_damage")); // Total Boss Damage
+            ps.setInt(21, this.playerStats.get("wave_10_boss_damage")); // Wave 10 Boss Damage
+            ps.setInt(22, this.playerStats.get("wave_20_boss_damage")); // Wave 20 Boss Damage
+            ps.setInt(23, this.playerStats.get("wave_30_boss_damage")); // Wave 30 Boss Damage
+            ps.setInt(24, this.playerStats.get("wave_40_boss_damage")); // Wave 40 Boss Damage
+            ps.setInt(25, this.playerStats.get("wave_50_boss_damage")); // Wave 50 Boss Damage
+            ps.setString(26, this.uuid.toString());
 
             connection.update(ps);
 
@@ -352,6 +358,25 @@ public class PlayerWrapper {
     public int getGamesPlayed() { return this.playerStats.get("games_played"); }
     public int getGamesWon() { return this.playerStats.get("games_won"); }
     public int getTotalKills() { return this.playerStats.get("total_kills"); }
+    public int getZombieKills() { return this.playerStats.get("zombie_kills"); }
+    public int getSkeletonKills() { return this.playerStats.get("skeleton_kills"); }
+    public int getSpiderKills() { return this.playerStats.get("spider_kills"); }
+    public int getPiglinBruteKills() { return this.playerStats.get("piglin_brute_kills"); }
+    public int getZoglinKills() { return this.playerStats.get("zoglin_kills"); }
+    public int getBlazeKills() { return this.playerStats.get("blaze_kills"); }
+    public int getWitherSkeletonKills() { return this.playerStats.get("wither_skeleton_kills"); }
+    public int getTotalBossKills() { return this.playerStats.get("total_boss_kills"); }
+    public int getWave10BossKills() { return this.playerStats.get("wave_10_boss_kills"); }
+    public int getWave20BossKills() { return this.playerStats.get("wave_20_boss_kills"); }
+    public int getWave30BossKills() { return this.playerStats.get("wave_30_boss_kills"); }
+    public int getWave40BossKills() { return this.playerStats.get("wave_40_boss_kills"); }
+    public int getWave50BossKills() { return this.playerStats.get("wave_50_boss_kills"); }
+    public int getTotalBossDamage() { return this.playerStats.get("total_boss_damage"); }
+    public int getWave10BossDamage() { return this.playerStats.get("wave_10_boss_damage"); }
+    public int getWave20BossDamage() { return this.playerStats.get("wave_20_boss_damage"); }
+    public int getWave30BossDamage() { return this.playerStats.get("wave_30_boss_damage"); }
+    public int getWave40BossDamage() { return this.playerStats.get("wave_40_boss_damage"); }
+    public int getWave50BossDamage() { return this.playerStats.get("wave_50_boss_damage"); }
 
     /*
     Setters for all statistics
