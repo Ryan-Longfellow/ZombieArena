@@ -448,6 +448,102 @@ public class PlayerWrapper {
         return true;
     }
 
+    public boolean setZombieKills(int zombieKills) {
+        if (zombieKills < 0) { return false; }
+        this.playerStats.replace("zombie_kills", zombieKills);
+        return true;
+    }
+    public boolean setSkeletonKills(int skeletonKills) {
+        if (skeletonKills < 0) { return false; }
+        this.playerStats.replace("skeleton_kills", skeletonKills);
+        return true;
+    }
+    public boolean setSpiderKills(int spiderKills) {
+        if (spiderKills < 0) { return false; }
+        this.playerStats.replace("skeleton_kills", spiderKills);
+        return true;
+    }
+    public boolean setPiglinBruteKills(int piglinBruteKills) {
+        if (piglinBruteKills < 0) { return false; }
+        this.playerStats.replace("piglin_brute_kills", piglinBruteKills);
+        return true;
+    }
+    public boolean setZoglinKills(int zoglinKills) {
+        if (zoglinKills < 0) { return false; }
+        this.playerStats.replace("zoglin_kills", zoglinKills);
+        return true;
+    }
+    public boolean setBlazeKills(int blazeKills) {
+        if (blazeKills < 0) { return false; }
+        this.playerStats.replace("blaze_kills", blazeKills);
+        return true;
+    }
+    public boolean setWitherSkeletonKills(int witherSkeletonKills) {
+        if (witherSkeletonKills < 0) { return false; }
+        this.playerStats.replace("wither_skeleton_kills", witherSkeletonKills);
+        return true;
+    }
+    public boolean setTotalBossKills(int totalBossKills) {
+        if (totalBossKills < 0) { return false; }
+        this.playerStats.replace("total_boss_kills", totalBossKills);
+        return true;
+    }
+    public boolean setWave10BossKills(int wave10BossKills) {
+        if (wave10BossKills < 0) { return false; }
+        this.playerStats.replace("wave_10_boss_kills", wave10BossKills);
+        return true;
+    }
+    public boolean setWave20BossKills(int wave20BossKills) {
+        if (wave20BossKills < 0) { return false; }
+        this.playerStats.replace("wave_20_boss_kills", wave20BossKills);
+        return true;
+    }
+    public boolean setWave30BossKills(int wave30BossKills) {
+        if (wave30BossKills < 0) { return false; }
+        this.playerStats.replace("wave_30_boss_kills", wave30BossKills);
+        return true;
+    }
+    public boolean setWave40BossKills(int wave40BossKills) {
+        if (wave40BossKills < 0) { return false; }
+        this.playerStats.replace("wave_40_boss_kills", wave40BossKills);
+        return true;
+    }
+    public boolean setWave50BossKills(int wave50BossKills) {
+        if (wave50BossKills < 0) { return false; }
+        this.playerStats.replace("wave_50_boss_kills", wave50BossKills);
+        return true;
+    }
+    public boolean setTotalBossDamage(int totalBossDamage) {
+        if (totalBossDamage < 0) { return false; }
+        this.playerStats.replace("total_boss_damage", totalBossDamage);
+        return true;
+    }
+    public boolean setWave10BossDamage(int wave10BossDamage) {
+        if (wave10BossDamage < 0) { return false; }
+        this.playerStats.replace("wave_10_boss_damage", wave10BossDamage);
+        return true;
+    }
+    public boolean setWave20BossDamage(int wave20BossDamage) {
+        if (wave20BossDamage < 0) { return false; }
+        this.playerStats.replace("wave_20_boss_damage", wave20BossDamage);
+        return true;
+    }
+    public boolean setWave30BossDamage(int wave30BossDamage) {
+        if (wave30BossDamage < 0) { return false; }
+        this.playerStats.replace("wave_30_boss_damage", wave30BossDamage);
+        return true;
+    }
+    public boolean setWave40BossDamage(int wave40BossDamage) {
+        if (wave40BossDamage < 0) { return false; }
+        this.playerStats.replace("wave_40_boss_damage", wave40BossDamage);
+        return true;
+    }
+    public boolean setWave50BossDamage(int wave50BossDamage) {
+        if (wave50BossDamage < 0) { return false; }
+        this.playerStats.replace("wave_50_boss_damage", wave50BossDamage);
+        return true;
+    }
+
     /*
     Adders for all statistics
      */
