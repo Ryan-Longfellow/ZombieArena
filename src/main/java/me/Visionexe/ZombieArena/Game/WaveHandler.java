@@ -256,7 +256,7 @@ public class WaveHandler implements Runnable, Listener {
                 Will automatically progress to the next wave is no damage is done within 60 seconds with 5 or less mobs alive
                  */
                 if(true) { // There is supposed to be a check here to see if an option is enabled for automatically progressing to next way
-                    if(entities.size() <= 5) {
+                    if(entities.size() <= 5 && wave != 50) {
                         secondsWithFewEntities++;
                     }
                     if(secondsWithFewEntities > 60) {
