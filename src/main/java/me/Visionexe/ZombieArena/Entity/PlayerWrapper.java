@@ -80,7 +80,34 @@ public class PlayerWrapper {
         // Start a new Database Connection in order to initialize a new player if not found
         connection = new DatabaseConnection();
         // Statement to prepare to insert new player into database
-        psOptional = connection.prepareStatement("INSERT INTO `players` (`uuid`, `level`, `experience`, `prestige`, `games_played`, `games_won`, `total_kills`) VALUES(?,?,?,?,?,?,?);");
+        psOptional = connection.prepareStatement("INSERT INTO `players` (" +
+                "`uuid`, " +
+                "`level`, " +
+                "`experience`, " +
+                "`prestige`, " +
+                "`games_played`, " +
+                "`games_won`, " +
+                "`total_kills`, " +
+                "`zombie_kills`, " +
+                "`skeleton_kills`, " +
+                "`spider_kills`, " +
+                "`piglin_brute_kills`, " +
+                "`zoglin_kills`, " +
+                "`blaze_kills`, " +
+                "`wither_skeleton_kills`, " +
+                "`wave_10_boss_kills`, " +
+                "`wave_20_boss_kills`, " +
+                "`wave_30_boss_kills`, " +
+                "`wave_40_boss_kills`, " +
+                "`wave_50_boss_kills`, " +
+                "`total_boss_damage`, " +
+                "`wave_10_boss_damage`, " +
+                "`wave_20_boss_damage`, " +
+                "`wave_30_boss_damage`, " +
+                "`wave_40_boss_damage`, " +
+                "`wave_50_boss_damage`" +
+                ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+        );
 
         if (!psOptional.isPresent()) {
             Log.debug("An error occurred during player initialisation.");
@@ -92,15 +119,30 @@ public class PlayerWrapper {
         try {
             // Insert default information into database using previously declared statement
             ps.setString(1, this.uuid.toString());
-            ps.setInt(2, 1);
-            ps.setInt(3, 0);
-            ps.setInt(4, 0);
-            ps.setInt(5, 0);
-            ps.setInt(6, 0);
-            ps.setInt(7, 0);
-
-            // Have the default information also loaded into the HashMap for the player's statistics
-
+            ps.setInt(2, 1); // Level
+            ps.setInt(3, 0); // Exp
+            ps.setInt(4, 0); // Prestige
+            ps.setInt(5, 0); // Games Played
+            ps.setInt(6, 0); // Games Won
+            ps.setInt(7, 0); // Total Kills
+            ps.setInt(8, 0); // Zombie Kills
+            ps.setInt(9, 0); // Skeleton Kills
+            ps.setInt(10, 0); // Spider Kills
+            ps.setInt(11, 0); // Piglin Brute Kills
+            ps.setInt(12, 0); // Zoglin Kills
+            ps.setInt(13, 0); // Blaze Kills
+            ps.setInt(14, 0); // Wither Skeleton Kills
+            ps.setInt(15, 0); // Wave 10 Boss Kills
+            ps.setInt(16, 0); // Wave 20 Boss Kills
+            ps.setInt(17, 0); // Wave 30 Boss Kills
+            ps.setInt(18, 0); // Wave 40 Boss Kills
+            ps.setInt(19, 0); // Wave 50 Boss Kills
+            ps.setInt(20, 0); // Total Boss Damage
+            ps.setInt(21, 0); // Wave 10 Boss Damage
+            ps.setInt(22, 0); // Wave 20 Boss Damage
+            ps.setInt(23, 0); // Wave 30 Boss Damage
+            ps.setInt(24, 0); // Wave 40 Boss Damage
+            ps.setInt(25, 0); // Wave 50 Boss Damage
 
             connection.update(ps);
         } catch (SQLException e) {
@@ -128,6 +170,24 @@ public class PlayerWrapper {
         this.playerStats.put("games_played", 0);
         this.playerStats.put("games_won", 0);
         this.playerStats.put("total_kills", 0);
+        this.playerStats.put("zombie_kills", 0);
+        this.playerStats.put("skeleton_kills", 0);
+        this.playerStats.put("spider_kills", 0);
+        this.playerStats.put("piglin_brute_kills", 0);
+        this.playerStats.put("zoglin_kills", 0);
+        this.playerStats.put("blaze_kills", 0);
+        this.playerStats.put("wither_skeleton_kills", 0);
+        this.playerStats.put("wave_10_boss_kills", 0);
+        this.playerStats.put("wave_20_boss_kills", 0);
+        this.playerStats.put("wave_30_boss_kills", 0);
+        this.playerStats.put("wave_40_boss_kills", 0);
+        this.playerStats.put("wave_50_boss_kills", 0);
+        this.playerStats.put("total_boss_damage", 0);
+        this.playerStats.put("wave_10_boss_damage", 0);
+        this.playerStats.put("wave_20_boss_damage", 0);
+        this.playerStats.put("wave_30_boss_damage", 0);
+        this.playerStats.put("wave_40_boss_damage", 0);
+        this.playerStats.put("wave_50_boss_damage", 0);
 
         // Connect to database and get statement ready to select from given UUID
         DatabaseConnection connection = new DatabaseConnection();
@@ -154,6 +214,24 @@ public class PlayerWrapper {
                 this.playerStats.replace("games_played", rs.getInt("games_played"));
                 this.playerStats.replace("games_won", rs.getInt("games_won"));
                 this.playerStats.replace("total_kills", rs.getInt("total_kills"));
+                this.playerStats.replace("zombie_kills", rs.getInt("zombie_kills"));
+                this.playerStats.replace("skeleton_kills", rs.getInt("skeleton_kills"));
+                this.playerStats.replace("spider_kills", rs.getInt("spider_kills"));
+                this.playerStats.replace("piglin_brute_kills", rs.getInt("piglin_brute_kills"));
+                this.playerStats.replace("zoglin_kills", rs.getInt("zoglin_kills"));
+                this.playerStats.replace("blaze_kills", rs.getInt("blaze_kills"));
+                this.playerStats.replace("wither_skeleton_kills", rs.getInt("wither_skeleton_kills"));
+                this.playerStats.replace("wave_10_boss_kills", rs.getInt("wave_10_boss_kills"));
+                this.playerStats.replace("wave_20_boss_kills", rs.getInt("wave_20_boss_kills"));
+                this.playerStats.replace("wave_30_boss_kills", rs.getInt("wave_30_boss_kills"));
+                this.playerStats.replace("wave_40_boss_kills", rs.getInt("wave_40_boss_kills"));
+                this.playerStats.replace("wave_50_boss_kills", rs.getInt("wave_50_boss_kills"));
+                this.playerStats.replace("total_boss_damage", rs.getInt("total_boss_damage"));
+                this.playerStats.replace("wave_10_boss_damage", rs.getInt("wave_10_boss_damage"));
+                this.playerStats.replace("wave_20_boss_damage", rs.getInt("wave_20_boss_damage"));
+                this.playerStats.replace("wave_30_boss_damage", rs.getInt("wave_30_boss_damage"));
+                this.playerStats.replace("wave_40_boss_damage", rs.getInt("wave_40_boss_damage"));
+                this.playerStats.replace("wave_50_boss_damage", rs.getInt("wave_50_boss_damage"));
                 Log.debug("Level: " + rs.getInt("level"));
                 Log.debug("Experience: " + rs.getInt("experience"));
                 Log.debug("Prestige: " + rs.getInt("prestige"));
@@ -187,7 +265,33 @@ public class PlayerWrapper {
 //		INSERT INTO visits (ip, hits)
 //		VALUES ('127.0.0.1', 1)
 //		ON CONFLICT(ip) DO UPDATE SET hits = hits + 1;
-        Optional<PreparedStatement> psOptional = connection.prepareStatement("UPDATE `players` SET `level` = ?, `experience` = ?, `prestige` = ?, `games_played` = ?, `games_won` = ?, `total_kills` = ? WHERE `uuid` = ?;");
+        Optional<PreparedStatement> psOptional = connection.prepareStatement("UPDATE `players` SET " +
+                "`level` = ?, " +
+                "`experience` = ?, " +
+                "`prestige` = ?, " +
+                "`games_played` = ?, " +
+                "`games_won` = ?, " +
+                "`total_kills` = ? " +
+                "`zombie_kills`, " +
+                "`skeleton_kills`, " +
+                "`spider_kills`, " +
+                "`piglin_brute_kills`, " +
+                "`zoglin_kills`, " +
+                "`blaze_kills`, " +
+                "`wither_skeleton_kills`, " +
+                "`wave_10_boss_kills`, " +
+                "`wave_20_boss_kills`, " +
+                "`wave_30_boss_kills`, " +
+                "`wave_40_boss_kills`, " +
+                "`wave_50_boss_kills`, " +
+                "`total_boss_damage`, " +
+                "`wave_10_boss_damage`, " +
+                "`wave_20_boss_damage`, " +
+                "`wave_30_boss_damage`, " +
+                "`wave_40_boss_damage`, " +
+                "`wave_50_boss_damage`" +
+                "WHERE `uuid` = ?;"
+        );
 
         if (!psOptional.isPresent()) {
             Log.debug("Failed to save data of player with UUID '" + this.uuid.toString() + "'. Data loss might have occurred!");
@@ -203,7 +307,25 @@ public class PlayerWrapper {
             ps.setInt(4, this.playerStats.get("games_played"));
             ps.setInt(5, this.playerStats.get("games_won"));
             ps.setInt(6, this.playerStats.get("total_kills"));
-            ps.setString(7, this.uuid.toString());
+            ps.setInt(7, this.playerStats.get("zombie_kills")); // Zombie Kills
+            ps.setInt(8, this.playerStats.get("skeleton_kills")); // Skeleton Kills
+            ps.setInt(9, this.playerStats.get("spider_kills")); // Spider Kills
+            ps.setInt(10, this.playerStats.get("piglin_brute_kills")); // Piglin Brute Kills
+            ps.setInt(11, this.playerStats.get("zoglin_kills")); // Zoglin Kills
+            ps.setInt(12, this.playerStats.get("blaze_kills")); // Blaze Kills
+            ps.setInt(13, this.playerStats.get("wither_skeleton_kills")); // Wither Skeleton Kills
+            ps.setInt(14, this.playerStats.get("wave_10_boss_kills")); // Wave 10 Boss Kills
+            ps.setInt(15, this.playerStats.get("wave_20_boss_kills")); // Wave 20 Boss Kills
+            ps.setInt(16, this.playerStats.get("wave_30_boss_kills")); // Wave 30 Boss Kills
+            ps.setInt(17, this.playerStats.get("wave_40_boss_kills")); // Wave 40 Boss Kills
+            ps.setInt(18, this.playerStats.get("wave_50_boss_kills")); // Wave 50 Boss Kills
+            ps.setInt(19, this.playerStats.get("total_boss_damage")); // Total Boss Damage
+            ps.setInt(20, this.playerStats.get("wave_10_boss_damage")); // Wave 10 Boss Damage
+            ps.setInt(21, this.playerStats.get("wave_20_boss_damage")); // Wave 20 Boss Damage
+            ps.setInt(22, this.playerStats.get("wave_30_boss_damage")); // Wave 30 Boss Damage
+            ps.setInt(23, this.playerStats.get("wave_40_boss_damage")); // Wave 40 Boss Damage
+            ps.setInt(24, this.playerStats.get("wave_50_boss_damage")); // Wave 50 Boss Damage
+            ps.setString(25, this.uuid.toString());
 
             connection.update(ps);
 
