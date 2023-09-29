@@ -113,30 +113,35 @@ public class MobListener implements Listener {
                         splitRewards(sortedTopDamage,
                                 config.getInt("boss-types.zombie.xp"),
                                 config.getDouble("boss-types.zombie.coins"));
+                        playerWrapper.addWave10BossKills(1);
                         topDamage.clear();
                     }
                     case PIGLIN_BRUTE -> {
                         splitRewards(sortedTopDamage,
                                 config.getInt("boss-types.piglin_brute.xp"),
                                 config.getDouble("boss-types.piglin_brute.coins"));
+                        playerWrapper.addWave20BossKills(1);
                         topDamage.clear();
                     }
                     case BLAZE -> {
                         splitRewards(sortedTopDamage,
                                 config.getInt("boss-types.blaze.xp"),
                                 config.getDouble("boss-types.blaze.coins"));
+                        playerWrapper.addWave30BossKills(1);
                         topDamage.clear();
                     }
                     case WITHER_SKELETON -> {
                         splitRewards(sortedTopDamage,
                                 config.getInt("boss-types.wither_skeleton.xp"),
                                 config.getDouble("boss-types.wither_skeleton.coins"));
+                        playerWrapper.addWave40BossKills(1);
                         topDamage.clear();
                     }
                     case WARDEN -> {
                         splitRewards(sortedTopDamage,
                                 config.getInt("boss-types.warden.xp"),
                                 config.getDouble("boss-types.warden.coins"));
+                        playerWrapper.addWave50BossKills(1);
                         topDamage.clear();
                     }
                 }
