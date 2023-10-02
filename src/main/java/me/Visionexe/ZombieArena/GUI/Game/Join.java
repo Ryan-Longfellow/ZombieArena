@@ -4,7 +4,6 @@ import me.Visionexe.ZombieArena.GUI.ChestGUI;
 import me.Visionexe.ZombieArena.GUI.Clickable;
 import me.Visionexe.ZombieArena.GUI.GUIItem;
 import me.Visionexe.ZombieArena.GUI.Row;
-import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,8 +14,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JoinGUI extends ChestGUI implements Clickable {
-    public JoinGUI(String title, Row size) { super(title, size); }
+public class Join extends ChestGUI implements Clickable {
+    public Join(String title, Row size) { super(title, size); }
 
     @Override
     public void beforeOpen(Player player) {
