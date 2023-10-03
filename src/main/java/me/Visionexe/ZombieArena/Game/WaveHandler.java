@@ -81,23 +81,18 @@ public class WaveHandler implements Runnable, Listener {
 
         // Perform all boss checks first
         if (wave == 10) {
-            mobsToSpawn = 1;
             return createMob("ZombieBoss");
         }
         if (wave == 20) {
-            mobsToSpawn = 1;
             return createMob("PiglinBoss");
         }
         if (wave == 30) {
-            mobsToSpawn = 1;
             return createMob("BlazeBoss");
         }
         if (wave == 40) {
-            mobsToSpawn = 1;
             return createMob("WitherSkeletonBoss");
         }
         if (wave == 50) {
-            mobsToSpawn = 1;
             return createMob("WardenBoss");
         }
 
@@ -263,13 +258,6 @@ public class WaveHandler implements Runnable, Listener {
                         setWave(wave + 1);
                     }
                 }
-                /*
-                Can be used in the future to perform an action every 5sec
-                 */
-                if(seconds % 5 == 0) {
-                    // Can add the same update here as from GameHandler to generate a single heart every 5 seconds
-                    // Will have to loop through all players in the game from GameHandler.getPlayers()
-                }
             }
 
             // End the game if no one is alive
@@ -329,6 +317,7 @@ public class WaveHandler implements Runnable, Listener {
         Bukkit.getPluginManager().callEvent(event);
         timeUntilNextWave = event.getSecondsUntilStart();
         this.wave = event.getNewWave();
+        
     }
 
     public void start() {
