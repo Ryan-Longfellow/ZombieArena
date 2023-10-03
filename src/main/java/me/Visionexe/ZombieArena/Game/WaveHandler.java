@@ -12,6 +12,7 @@ import me.Visionexe.ZombieArena.Event.WaveStartEvent;
 import me.Visionexe.ZombieArena.Log;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -254,7 +255,7 @@ public class WaveHandler implements Runnable, Listener {
                     if(entities.size() <= 5 && wave != 50) {
                         secondsWithFewEntities++;
                     }
-                    if(secondsWithFewEntities > 60 && wave != 50) {
+                    if(secondsWithFewEntities > 60) {
                         setWave(wave + 1);
                     }
                 }
@@ -317,7 +318,10 @@ public class WaveHandler implements Runnable, Listener {
         Bukkit.getPluginManager().callEvent(event);
         timeUntilNextWave = event.getSecondsUntilStart();
         this.wave = event.getNewWave();
-        
+
+        for (Player player : gameHandler.getPlayers()) {
+            player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&a&lWave #" + this.wave), "", 10, 60, 20);
+        }
     }
 
     public void start() {
