@@ -9,16 +9,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Stats extends ChestGUI implements Clickable {
-    String playerName;
-    public Stats(String title, Row size, String playerName) {
+    Player player;
+    public Stats(String title, Row size, Player player) {
         super(title, size);
-        this.playerName = playerName;
+        this.player = player;
     }
 
     @Override
@@ -29,7 +30,7 @@ public class Stats extends ChestGUI implements Clickable {
         Mob Stats - display each individual mob kill
         Boss Stats - displays each boss kill and boss damage
          */
-        PlayerWrapper playerWrapper = PlayerWrapper.get(Objects.requireNonNull(Bukkit.getPlayer(playerName)));
+        PlayerWrapper playerWrapper = PlayerWrapper.get(player);
         List<String> playerStatsLore = new ArrayList<>();
         List<String> mobStatsLore = new ArrayList<>();
         List<String> bossStatsLore = new ArrayList<>();
@@ -67,17 +68,21 @@ public class Stats extends ChestGUI implements Clickable {
 
         // Create ItemStack for each section
         ItemStack playerStatsItemStack = createItemStack(
-                Material.RED_WOOL,
+                Material.PLAYER_HEAD,
                 "&bPlayer Stats",
                 playerStatsLore
         );
+        SkullMeta playerHead = (SkullMeta) playerStatsItemStack.getItemMeta();
+        Objects.requireNonNull(playerHead).setOwningPlayer(player);
+        playerStatsItemStack.setItemMeta(playerHead);
+
         ItemStack mobStatsItemStack = createItemStack(
-                Material.RED_WOOL,
+                Material.ZOMBIE_HEAD,
                 "&bMob Stats",
                 mobStatsLore
         );
         ItemStack bossStatsItemStack = createItemStack(
-                Material.RED_WOOL,
+                Material.WITHER_SKELETON_SKULL,
                 "&bBoss Stats",
                 bossStatsLore
         );
@@ -88,8 +93,8 @@ public class Stats extends ChestGUI implements Clickable {
         GUIItem bossStatsItem = new GUIItem(bossStatsItemStack);
 
         set(Column.THREE, Row.TWO, playerStatsItem);
-        set(Column.FIVE, Row.TWO, playerStatsItem);
-        set(Column.SEVEN, Row.TWO, playerStatsItem);
+        set(Column.FIVE, Row.TWO, mobStatsItem);
+        set(Column.SEVEN, Row.TWO, bossStatsItem);
     }
 
     /**
