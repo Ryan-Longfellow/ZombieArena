@@ -30,7 +30,7 @@ public class Stats extends ChestGUI implements Clickable {
         Mob Stats - display each individual mob kill
         Boss Stats - displays each boss kill and boss damage
          */
-        PlayerWrapper playerWrapper = PlayerWrapper.get(player);
+        PlayerWrapper playerWrapper = PlayerWrapper.get(this.player);
         List<String> playerStatsLore = new ArrayList<>();
         List<String> mobStatsLore = new ArrayList<>();
         List<String> bossStatsLore = new ArrayList<>();
@@ -45,13 +45,13 @@ public class Stats extends ChestGUI implements Clickable {
         playerStatsLore.add("&3Total Boss Damage&f: " + playerWrapper.getTotalBossDamage());
 
         // Add all mob stats information to lore
-        mobStatsLore.add("Zombie Kills&f: " + playerWrapper.getZombieKills());
-        mobStatsLore.add("Skeleton Kills&f: " + playerWrapper.getSkeletonKills());
-        mobStatsLore.add("Spider Kills&f: " + playerWrapper.getSpiderKills());
-        mobStatsLore.add("Piglin Brute Kills&f: " + playerWrapper.getPiglinBruteKills());
-        mobStatsLore.add("Zoglin Kills&f: " + playerWrapper.getZoglinKills());
-        mobStatsLore.add("Blaze Kills&f: " + playerWrapper.getBlazeKills());
-        mobStatsLore.add("Wither Skeleton Kills&f: " + playerWrapper.getWitherSkeletonKills());
+        mobStatsLore.add("&4Zombie Kills&f: " + playerWrapper.getZombieKills());
+        mobStatsLore.add("&6Skeleton Kills&f: " + playerWrapper.getSkeletonKills());
+        mobStatsLore.add("&eSpider Kills&f: " + playerWrapper.getSpiderKills());
+        mobStatsLore.add("&2Piglin Brute Kills&f: " + playerWrapper.getPiglinBruteKills());
+        mobStatsLore.add("&1Zoglin Kills&f: " + playerWrapper.getZoglinKills());
+        mobStatsLore.add("&bBlaze Kills&f: " + playerWrapper.getBlazeKills());
+        mobStatsLore.add("&5Wither Skeleton Kills&f: " + playerWrapper.getWitherSkeletonKills());
 
         // Add all boss stats information to lore
         bossStatsLore.add("Wave 10 Boss Kills&f: " + playerWrapper.getWave10BossKills());
@@ -73,7 +73,7 @@ public class Stats extends ChestGUI implements Clickable {
                 playerStatsLore
         );
         SkullMeta playerHead = (SkullMeta) playerStatsItemStack.getItemMeta();
-        Objects.requireNonNull(playerHead).setOwningPlayer(player);
+        Objects.requireNonNull(playerHead).setOwningPlayer(this.player);
         playerStatsItemStack.setItemMeta(playerHead);
 
         ItemStack mobStatsItemStack = createItemStack(
