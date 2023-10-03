@@ -102,7 +102,7 @@ public class MobListener implements Listener {
                      */
                     Bukkit.broadcastMessage(ChatColor.YELLOW + "" + count + ". " +
                             ChatColor.WHITE + damager.getKey().getName() + " dealt " +
-                            ChatColor.AQUA + damager.getValue() +
+                            ChatColor.AQUA + damager.getValue().intValue() +
                             ChatColor.WHITE + " damage");
                 }
                 Bukkit.broadcastMessage(ChatColor.WHITE + "All other players received 10% of rewards.");
@@ -255,12 +255,6 @@ public class MobListener implements Listener {
                                     (money * 0.10) + "&a."));
                 }
             }
-        }
-    }
-    private void saveTotalDamage(LinkedHashMap<Player, Double> damagers) {
-        for (Map.Entry<Player, Double> player : damagers.entrySet()) {
-            PlayerWrapper playerWrapper = PlayerWrapper.get(player.getKey());
-            playerWrapper.addTotalBossDamage((player.getValue()).intValue());
         }
     }
     private void saveBossDamage(LinkedHashMap<Player, Double> damagers, int wave) {
