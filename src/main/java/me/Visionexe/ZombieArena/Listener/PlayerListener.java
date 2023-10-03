@@ -20,7 +20,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        // Get PlayerWrapper to either initialize if player is new or get existing data
         PlayerWrapper.get(event.getPlayer());
+        // Force a load after PlayerWrapper is obtained; this is required as the scoreboard will break without it if a new player joins
+        PlayerWrapper.get(event.getPlayer()).load();
 
         FastBoard board = new FastBoard(event.getPlayer());
         ZombieArena.getInstance().boards.put(event.getPlayer().getUniqueId(), board);
