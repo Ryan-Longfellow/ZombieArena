@@ -54,17 +54,17 @@ public class Stats extends ChestGUI implements Clickable {
         mobStatsLore.add("&5Wither Skeleton Kills&f: " + playerWrapper.getWitherSkeletonKills());
 
         // Add all boss stats information to lore
-        bossStatsLore.add("Wave 10 Boss Kills&f: " + playerWrapper.getWave10BossKills());
-        bossStatsLore.add("Wave 20 Boss Kills&f: " + playerWrapper.getWave20BossKills());
-        bossStatsLore.add("Wave 30 Boss Kills&f: " + playerWrapper.getWave30BossKills());
-        bossStatsLore.add("Wave 40 Boss Kills&f: " + playerWrapper.getWave40BossKills());
-        bossStatsLore.add("Wave 50 Boss Kills&f: " + playerWrapper.getWave50BossKills());
+        bossStatsLore.add("&6Wave 10 Boss Kills&f: " + playerWrapper.getWave10BossKills());
+        bossStatsLore.add("&6Wave 20 Boss Kills&f: " + playerWrapper.getWave20BossKills());
+        bossStatsLore.add("&6Wave 30 Boss Kills&f: " + playerWrapper.getWave30BossKills());
+        bossStatsLore.add("&6Wave 40 Boss Kills&f: " + playerWrapper.getWave40BossKills());
+        bossStatsLore.add("&6Wave 50 Boss Kills&f: " + playerWrapper.getWave50BossKills());
         bossStatsLore.add("");
-        bossStatsLore.add("Wave 10 Boss Damage&f: " + playerWrapper.getWave10BossDamage());
-        bossStatsLore.add("Wave 20 Boss Damage&f: " + playerWrapper.getWave20BossDamage());
-        bossStatsLore.add("Wave 30 Boss Damage&f: " + playerWrapper.getWave30BossDamage());
-        bossStatsLore.add("Wave 40 Boss Damage&f: " + playerWrapper.getWave40BossDamage());
-        bossStatsLore.add("Wave 50 Boss Damage&f: " + playerWrapper.getWave50BossDamage());
+        bossStatsLore.add("&4Wave 10 Boss Damage&f: " + playerWrapper.getWave10BossDamage());
+        bossStatsLore.add("&4Wave 20 Boss Damage&f: " + playerWrapper.getWave20BossDamage());
+        bossStatsLore.add("&4Wave 30 Boss Damage&f: " + playerWrapper.getWave30BossDamage());
+        bossStatsLore.add("&4Wave 40 Boss Damage&f: " + playerWrapper.getWave40BossDamage());
+        bossStatsLore.add("&4Wave 50 Boss Damage&f: " + playerWrapper.getWave50BossDamage());
 
         // Create ItemStack for each section
         ItemStack playerStatsItemStack = createItemStack(
