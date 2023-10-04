@@ -120,7 +120,7 @@ public class Stats extends ChestGUI implements Clickable {
 
     @Override
     public void onClick(InventoryClickEvent event) {
-
+        event.setCancelled(true);
     }
 
     @Override
