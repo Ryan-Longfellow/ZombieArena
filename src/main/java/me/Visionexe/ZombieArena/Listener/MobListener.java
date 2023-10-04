@@ -236,9 +236,7 @@ public class MobListener implements Listener {
     private void splitRewards(LinkedHashMap<Player, Double> damagers, int experience, double money) {
         int totalDamagers = damagers.size();
         random = new Random();
-        MythicItem crateKeyMythic = MythicBukkit.inst().getItemManager().getItem("BossCrateKey").orElse(null);
-        BukkitItemStack crateKeyBukkit = (BukkitItemStack) Objects.requireNonNull(crateKeyMythic).generateItemStack(1);
-        ItemStack crateKey = crateKeyBukkit.build();
+        
         if (totalDamagers <= 5) {
             for (Map.Entry<Player, Double> damager : damagers.entrySet()) {
                 PlayerWrapper.get(damager.getKey()).addExperience(experience / totalDamagers);
@@ -247,7 +245,7 @@ public class MobListener implements Listener {
                         "&aYou received &e" + (experience / totalDamagers) + " &aexperience and &e$" +
                         (money / totalDamagers) + "&a."));
                 if ((random.nextInt(1000) + 1) < 30) { // TODO: Change into configurable value; currently 3% chance
-                    damager.getKey().getInventory().addItem(crateKey);
+                    giveCrateKey(damager.getKey());
                 }
             }
         } else {
@@ -261,19 +259,19 @@ public class MobListener implements Listener {
                             "&aYou received &e" + (experience / 5) + " &aexperience and &e$" +
                                     (money / 5) + "&a."));
                     if ((random.nextInt(1000) + 1) < 50 && count == 1) { // TODO: Change into configurable value; currently 5% chance
-                        damager.getKey().getInventory().addItem(crateKey);
+                        giveCrateKey(damager.getKey());
                     }
                     if ((random.nextInt(1000) + 1) < 40 && count == 2) { // TODO: Change into configurable value; currently 4% chance
-                        damager.getKey().getInventory().addItem(crateKey);
+                        giveCrateKey(damager.getKey());
                     }
                     if ((random.nextInt(1000) + 1) < 30 && count == 3) { // TODO: Change into configurable value; currently 3% chance
-                        damager.getKey().getInventory().addItem(crateKey);
+                        giveCrateKey(damager.getKey());
                     }
                     if ((random.nextInt(1000) + 1) < 20 && count == 4) { // TODO: Change into configurable value; currently 2% chance
-                        damager.getKey().getInventory().addItem(crateKey);
+                        giveCrateKey(damager.getKey());
                     }
                     if ((random.nextInt(1000) + 1) < 20 && count == 5) { // TODO: Change into configurable value; currently 2% chance
-                        damager.getKey().getInventory().addItem(crateKey);
+                        giveCrateKey(damager.getKey());
                     }
                 } else {
                     PlayerWrapper.get(damager.getKey()).addExperience((int) (experience * 0.10));
@@ -282,7 +280,7 @@ public class MobListener implements Listener {
                             "&aYou received &e" + (experience * 0.10) + " &aexperience and " +
                                     (money * 0.10) + "&a."));
                     if ((random.nextInt(1000) + 1) < 10) { // TODO: Change into configurable value; currently 1% chance
-                        damager.getKey().getInventory().addItem(crateKey);
+                        giveCrateKey(damager.getKey());
                     }
                 }
             }
@@ -294,5 +292,16 @@ public class MobListener implements Listener {
             playerWrapper.addGenericBossDamage((player.getValue()).intValue(), wave);
             playerWrapper.addTotalBossDamage((player.getValue()).intValue());
         }
+    }
+    private void giveCrateKey(Player player) {
+        MythicItem crateKeyMythic = MythicBukkit.inst().getItemManager().getItem("BossCrateKey").orElse(null);
+        BukkitItemStack crateKeyBukkit = (BukkitItemStack) Objects.requireNonNull(crateKeyMythic).generateItemStack(1);
+        ItemStack crateKey = crateKeyBukkit.build();
+        
+        player.getInventory().addItem(crateKey);
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', 
+                "&c&lBOSS >> &e" + player.getName() + "&f received a &c&lBoss Crate Key&f from killing a boss!"
+                )
+        );
     }
 }
