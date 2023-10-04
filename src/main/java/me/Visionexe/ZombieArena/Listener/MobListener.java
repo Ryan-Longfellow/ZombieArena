@@ -1,5 +1,9 @@
 package me.Visionexe.ZombieArena.Listener;
 
+import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.bukkit.adapters.BukkitItemStack;
+import io.lumine.mythic.core.items.MythicItem;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
 import me.Visionexe.ZombieArena.ZombieArena;
 import net.milkbowl.vault.economy.Economy;
@@ -12,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,6 +67,7 @@ public class MobListener implements Listener {
     private Configuration config = ZombieArena.getInstance().getFileManager().get("config").get().getConfiguration();
     Economy economy = ZombieArena.getInstance().getEconomy();
     private Map<Player, Double> topDamage = new HashMap<>();
+    private Random random;
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
@@ -164,12 +170,12 @@ public class MobListener implements Listener {
             // Check if mob type is valid, if not return nothing
             try {
                 for (String entity : mobTypes.getKeys(false)) {
-                        if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
-                            playerWrapper.addExperience(config.getInt("mob-types." + entity.toLowerCase() + ".xp"));
-                            economy.depositPlayer(player, config.getInt("mob-types." + entity.toLowerCase() + ".coins"));
-                            playerWrapper.addGenericMobKills(event.getEntityType().toString().toLowerCase(), 1);
-                            playerWrapper.addTotalKills(1);
-                        }
+                    if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
+                        playerWrapper.addExperience(config.getInt("mob-types." + entity.toLowerCase() + ".xp"));
+                        economy.depositPlayer(player, config.getInt("mob-types." + entity.toLowerCase() + ".coins"));
+                        playerWrapper.addGenericMobKills(event.getEntityType().toString().toLowerCase(), 1);
+                        playerWrapper.addTotalKills(1);
+                    }
                 }
             } catch (Exception exception) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + exception.getMessage());
@@ -229,6 +235,10 @@ public class MobListener implements Listener {
 
     private void splitRewards(LinkedHashMap<Player, Double> damagers, int experience, double money) {
         int totalDamagers = damagers.size();
+        random = new Random();
+        MythicItem crateKeyMythic = MythicBukkit.inst().getItemManager().getItem("BossCrateKey").orElse(null);
+        BukkitItemStack crateKeyBukkit = (BukkitItemStack) Objects.requireNonNull(crateKeyMythic).generateItemStack(1);
+        ItemStack crateKey = crateKeyBukkit.build();
         if (totalDamagers <= 5) {
             for (Map.Entry<Player, Double> damager : damagers.entrySet()) {
                 PlayerWrapper.get(damager.getKey()).addExperience(experience / totalDamagers);
@@ -236,6 +246,9 @@ public class MobListener implements Listener {
                 damager.getKey().sendMessage(ChatColor.translateAlternateColorCodes('&',
                         "&aYou received &e" + (experience / totalDamagers) + " &aexperience and &e$" +
                         (money / totalDamagers) + "&a."));
+                if ((random.nextInt(1000) + 1) < 30) { // TODO: Change into configurable value; currently 3% chance
+                    damager.getKey().getInventory().addItem(crateKey);
+                }
             }
         } else {
             int count = 0;
@@ -247,12 +260,30 @@ public class MobListener implements Listener {
                     damager.getKey().sendMessage(ChatColor.translateAlternateColorCodes('&',
                             "&aYou received &e" + (experience / 5) + " &aexperience and &e$" +
                                     (money / 5) + "&a."));
+                    if ((random.nextInt(1000) + 1) < 50 && count == 1) { // TODO: Change into configurable value; currently 5% chance
+                        damager.getKey().getInventory().addItem(crateKey);
+                    }
+                    if ((random.nextInt(1000) + 1) < 40 && count == 2) { // TODO: Change into configurable value; currently 4% chance
+                        damager.getKey().getInventory().addItem(crateKey);
+                    }
+                    if ((random.nextInt(1000) + 1) < 30 && count == 3) { // TODO: Change into configurable value; currently 3% chance
+                        damager.getKey().getInventory().addItem(crateKey);
+                    }
+                    if ((random.nextInt(1000) + 1) < 20 && count == 4) { // TODO: Change into configurable value; currently 2% chance
+                        damager.getKey().getInventory().addItem(crateKey);
+                    }
+                    if ((random.nextInt(1000) + 1) < 20 && count == 5) { // TODO: Change into configurable value; currently 2% chance
+                        damager.getKey().getInventory().addItem(crateKey);
+                    }
                 } else {
                     PlayerWrapper.get(damager.getKey()).addExperience((int) (experience * 0.10));
                     economy.depositPlayer(damager.getKey(), money * 0.10);
                     damager.getKey().sendMessage(ChatColor.translateAlternateColorCodes('&',
                             "&aYou received &e" + (experience * 0.10) + " &aexperience and " +
                                     (money * 0.10) + "&a."));
+                    if ((random.nextInt(1000) + 1) < 10) { // TODO: Change into configurable value; currently 1% chance
+                        damager.getKey().getInventory().addItem(crateKey);
+                    }
                 }
             }
         }
