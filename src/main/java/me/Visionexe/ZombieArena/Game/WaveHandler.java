@@ -82,18 +82,23 @@ public class WaveHandler implements Runnable, Listener {
 
         // Perform all boss checks first
         if (wave == 10) {
+            mobsToSpawn = 1;
             return createMob("ZombieBoss");
         }
         if (wave == 20) {
+            mobsToSpawn = 1;
             return createMob("PiglinBoss");
         }
         if (wave == 30) {
+            mobsToSpawn = 1;
             return createMob("BlazeBoss");
         }
         if (wave == 40) {
+            mobsToSpawn = 1;
             return createMob("WitherSkeletonBoss");
         }
         if (wave == 50) {
+            mobsToSpawn = 1;
             return createMob("WardenBoss");
         }
 
@@ -251,7 +256,7 @@ public class WaveHandler implements Runnable, Listener {
                 /*
                 Will automatically progress to the next wave is no damage is done within 60 seconds with 5 or less mobs alive
                  */
-                if(true) { // There is supposed to be a check here to see if an option is enabled for automatically progressing to next way
+                if(false) { // There is supposed to be a check here to see if an option is enabled for automatically progressing to next way
                     if(entities.size() <= 5 && wave != 50) {
                         secondsWithFewEntities++;
                     }
@@ -320,7 +325,7 @@ public class WaveHandler implements Runnable, Listener {
         this.wave = event.getNewWave();
 
         for (Player player : gameHandler.getPlayers()) {
-            player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&a&lWave #" + this.wave), "", 10, 60, 20);
+            player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&aWave #" + this.wave), "", 10, 60, 20);
         }
     }
 
