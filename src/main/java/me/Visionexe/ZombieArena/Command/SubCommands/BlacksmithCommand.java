@@ -20,7 +20,7 @@ public class BlacksmithCommand extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/zombiearena blacksmith";
+        return "/blacksmith";
     }
 
     @Override
