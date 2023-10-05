@@ -3,7 +3,6 @@ package me.Visionexe.ZombieArena.Command.SubCommands;
 import me.Visionexe.ZombieArena.Command.SubCommand;
 import me.Visionexe.ZombieArena.Storage.Flatfile.FileManager;
 import me.Visionexe.ZombieArena.ZombieArena;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -34,21 +33,23 @@ public class ArenaSetPlayerSpawnCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender commandSender, String[] args) {
-        if (commandSender instanceof Player) {
-            Player player = (Player) commandSender;
-            /*
-        Confirm player is inside the region of the Arena from the Arena class, if so add the player spawn into the yml file of the arena
-         */
-            // Get position of player
-            Location playerLocation = player.getLocation();
-
-            FileManager fileManager = ZombieArena.getInstance().getFileManager();
-            FileConfiguration arenas = fileManager.get("arenas").get().getConfiguration();
-
-            // Get pos1 and pos2 of Arena from the Arena File
-            Location pos1 = new Location(player.getWorld(), arenas.getDouble(args[1] + ".Position1.x"), arenas.getDouble(args[1] + ".Position1.y"), arenas.getDouble(args[1] + ".Position1.z"));
-            Location pos2 = new Location(player.getWorld(), arenas.getDouble(args[1] + ".Position2.x"), arenas.getDouble(args[1] + ".Position2.y"), arenas.getDouble(args[1] + ".Position2.z"));
+        if (commandSender instanceof Player player) {
             if (args.length == 2) {
+                // Get arena name and confirm the arena is valid
+                String arenaName = args[1];
+                if (!(ZombieArena.getInstance().getGameHandler().getArenaHandler().isArenaValid(arenaName))) {
+                    player.sendMessage("Please enter a valid arena name");
+                }
+                // Get position of player
+                Location playerLocation = player.getLocation();
+
+                FileManager fileManager = ZombieArena.getInstance().getFileManager();
+                FileConfiguration arenas = ZombieArena.getInstance().getArenasFile();
+
+                // Get pos1 and pos2 of Arena from the Arena File
+                Location pos1 = new Location(player.getWorld(), arenas.getDouble(arenaName + ".Position1.x"), arenas.getDouble(arenaName + ".Position1.y"), arenas.getDouble(arenaName + ".Position1.z"));
+                Location pos2 = new Location(player.getWorld(), arenas.getDouble(arenaName + ".Position2.x"), arenas.getDouble(arenaName + ".Position2.y"), arenas.getDouble(arenaName + ".Position2.z"));
+
                 // Perform a check to see if position of player is inside pos1 and pos2
                 // If so, set spawn; If not, prompt player to stand inside Arena
                 double pos1X = pos1.getX();
@@ -57,25 +58,27 @@ public class ArenaSetPlayerSpawnCommand extends SubCommand {
                 double pos2Z = pos2.getZ();
                 double pX = playerLocation.getX();
                 if ((pos1X < pX && pX < pos2X || pos1X > pX && pX > pos2X && (pos1Z < pX && pX < pos2Z) || pos1Z > pX && pX > pos2Z)) {
-                    arenas.set(args[1] + ".PlayerSpawn.x", playerLocation.getX());
-                    arenas.set(args[1] + ".PlayerSpawn.y", playerLocation.getY());
-                    arenas.set(args[1] + ".PlayerSpawn.z", playerLocation.getZ());
+                    arenas.set(arenaName + ".PlayerSpawn.x", playerLocation.getX());
+                    arenas.set(arenaName + ".PlayerSpawn.y", playerLocation.getY());
+                    arenas.set(arenaName + ".PlayerSpawn.z", playerLocation.getZ());
                     try {
                         fileManager.save("arenas");
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    player.sendMessage(ChatColor.GREEN + "Player Spawn Successfully Set," +
-                            " X: " + playerLocation.getX() +
-                            " Y: " + playerLocation.getY() +
-                            " Z: " + playerLocation.getZ());
+                    player.sendMessage("Player spawn for " + arenaName + " has been set " +
+                            "[X " + playerLocation.getX() +
+                            ",Y " + playerLocation.getY() +
+                            ",Z " + playerLocation.getZ() + "]");
                 } else {
-                    player.sendMessage(ChatColor.DARK_RED + "Please stand inside the Arena zone");
-                    player.sendMessage(ChatColor.DARK_RED + "Current arena coords: " + pos1 + pos2);
-                    player.sendMessage(ChatColor.DARK_RED + "Current location: " + playerLocation);
+                    player.sendMessage("Please stand inside arena " + arenaName);
+                    player.sendMessage("Current arena coords: " +
+                            "[" + pos1.getX() + ", " + pos1.getY() + ", " + pos1.getZ() + "] and " +
+                            "[" + pos2.getX() + ", " + pos2.getY() + ", " + pos2.getZ() + "]");
+                    player.sendMessage("Current location: " + "[" + playerLocation.getX() + ", " + playerLocation.getY() + ", " + playerLocation.getZ() + "]");
                 }
             } else {
-                player.sendMessage(ChatColor.DARK_RED + "Please provide an arena name.");
+                player.sendMessage("Please follow the following syntax: " + getSyntax());
             }
         } else {
             commandSender.sendMessage("Only players are allowed to use this command!");

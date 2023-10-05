@@ -19,7 +19,7 @@ public class LeaveCommand extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/zombiearena leave";
+        return "/leave";
     }
 
     @Override
@@ -29,13 +29,13 @@ public class LeaveCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender commandSender, String[] args) {
-        if (commandSender instanceof Player) {
-            Player player = (Player) commandSender;
+        if (commandSender instanceof Player player) {
             GameHandler gameHandler = ZombieArena.getInstance().getGameHandler();
+            // Ensure player is in the game
             if (gameHandler.getPlayers().contains(player)) {
                 gameHandler.removePlayer(player);
             } else {
-                player.sendMessage("You are not in a game.");
+                player.sendMessage("You are not in a game");
             }
         } else {
             commandSender.sendMessage("Only players are allowed to use this command!");

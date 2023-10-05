@@ -30,8 +30,7 @@ public class BlacksmithCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender commandSender, String[] args) {
-        if (commandSender instanceof Player) {
-            Player player = (Player) commandSender;
+        if (commandSender instanceof Player player) {
             Blacksmith gui = new Blacksmith(ChatColor.translateAlternateColorCodes('&', "&aBlacksmith"), Row.THREE);
             gui.open(player);
         } else {

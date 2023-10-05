@@ -4,13 +4,12 @@ import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.SessionManager;
-import com.sk89q.worldedit.session.SessionOwner;
 import com.sk89q.worldedit.world.World;
 import me.Visionexe.ZombieArena.Command.SubCommand;
 import me.Visionexe.ZombieArena.Game.Arena;
+import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -38,13 +37,13 @@ public class CreateArenaCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender commandSender, String[] args) {
-        if (commandSender instanceof Player) {
-            Player player = (Player) commandSender;
+        if (commandSender instanceof Player player) {
             /*
             Using Arena class, create a new arena based off the selection given a name
              */
 
             if (args.length == 2) {
+                // Gather WorldEdit selection
                 SessionManager manager = WorldEdit.getInstance().getSessionManager();
                 LocalSession localSession = manager.get(BukkitAdapter.adapt(player));
                 CuboidRegion region;
@@ -53,16 +52,18 @@ public class CreateArenaCommand extends SubCommand {
                     if (selectionWorld == null) throw new IncompleteRegionException();
                     region = (CuboidRegion) localSession.getSelection(selectionWorld);
                 } catch (IncompleteRegionException exception) {
-                    player.sendMessage(ChatColor.DARK_RED + "Please make a region selection first.");
+                    player.sendMessage("Please make a region selection first");
                     return;
                 }
-                // TODO: Get all file names in arenas/ folder and compare to args[1], if matches, deny arena creation and prompt to specify different name
+                // Confirm arena does not already exist with the same name
+                if (ZombieArena.getInstance().getGameHandler().getArenaHandler().isArenaValid(args[1])) {
+                    player.sendMessage("An arena with this name already exists");
+                    return;
+                }
                 new Arena(args[1].toLowerCase(), player.getLocation(), region.getPos1(), region.getPos2());
-                player.sendMessage(ChatColor.GREEN + "Arena " + ChatColor.YELLOW + args[1] + " " + ChatColor.GREEN + "successfully created.");
-
-                // TODO: Possibly get the center of the square and set the default player spawn to the center
+                player.sendMessage("Arena " + args[1] + " successfully created.");
             } else {
-                player.sendMessage(ChatColor.DARK_RED + "Please provide an arena name.");
+                player.sendMessage("Please follow the following syntax: " + getSyntax());
             }
         } else {
             commandSender.sendMessage("Only players are allowed to use this command!");
