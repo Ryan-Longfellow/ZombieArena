@@ -79,9 +79,9 @@ public class MobListener implements Listener {
             Player player = event.getEntity().getKiller();
             PlayerWrapper playerWrapper = PlayerWrapper.get(player);
 
-            if (!(ZombieArena.getInstance().getGameHandler().getPlayers().contains(player))) return;
+            if (!(ZombieArena.getInstance().getPlayersInGame().contains(player))) return;
 
-            int wave = ZombieArena.getInstance().getGameHandler().getWaveHandler().getWave();
+            int wave = ZombieArena.getInstance().getGamePlayerIn(player).getWaveHandler().getWave();
 
             if (event.getEntity().getName().contains("BOSS")) {
                 LinkedHashMap<Player, Double> sortedTopDamage = (LinkedHashMap<Player, Double>) sortDamagers(topDamage);
@@ -202,7 +202,7 @@ public class MobListener implements Listener {
             return;
         }
 
-        if (!(ZombieArena.getInstance().getGameHandler().getPlayers().contains((((Player) damager).getPlayer())))) return;
+        if (!(ZombieArena.getInstance().getPlayersInGame().contains((((Player) damager).getPlayer())))) return;
 
         // Detects if the entity has a name containing BOSS, all bosses will be labeled this way
         if (entity.getName().contains("BOSS")) {

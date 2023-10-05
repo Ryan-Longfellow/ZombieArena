@@ -13,9 +13,9 @@ import java.util.Objects;
 import java.util.Set;
 
 public class ArenaHandler {
-    private List<String> arenas = new ArrayList<>();
-    private FileManager fileManager = ZombieArena.getInstance().getFileManager();
-    private FileConfiguration arenasFile = fileManager.get("arenas").get().getConfiguration();
+    private static List<String> arenas = new ArrayList<>();
+    private static FileManager fileManager = ZombieArena.getInstance().getFileManager();
+    private static FileConfiguration arenasFile = fileManager.get("arenas").get().getConfiguration();
 
     public ArenaHandler() {
 
@@ -29,12 +29,12 @@ public class ArenaHandler {
         return "UNKNOWN";
     }
 
-    public boolean isArenaValid(String arenaName) {
+    public static boolean isArenaValid(String arenaName) {
         loadArenas();
         return arenas.contains(arenaName);
     }
 
-    public void loadArenas() {
+    public static void loadArenas() {
         Set<String> setOfArenas = arenasFile.getKeys(false);
         arenas.addAll(setOfArenas);
     }

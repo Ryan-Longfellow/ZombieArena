@@ -43,10 +43,10 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        GameHandler gameHandler = ZombieArena.getInstance().getGameHandler();
         Player player = ((Player) event.getEntity()).getPlayer();
+        GameHandler gameHandler = ZombieArena.getInstance().getGamePlayerIn(player);
         // Verify player exists, is in game and is going to die
-        if (player != null && gameHandler.getPlayers().contains(player) && event.getFinalDamage() >= player.getHealth()) {
+        if (player != null && ZombieArena.getInstance().getPlayersInGame().contains(player) && event.getFinalDamage() >= player.getHealth()) {
             // Cancel the damage
             event.setCancelled(true);
             // Set the player to not be alive

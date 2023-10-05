@@ -31,7 +31,7 @@ public class SetWaveCommand extends SubCommand {
     @Override
     public void perform(CommandSender commandSender, String[] args) {
         if (commandSender instanceof Player player) {
-            GameHandler gameHandler = ZombieArena.getInstance().getGameHandler();
+            GameHandler gameHandler = ZombieArena.getInstance().getGamePlayerIn(player);
             if (args.length == 3) {
                 if (gameHandler.getPlayerStats(player).getArenaName().equals(args[1])) {
                     if (!(Check.isInteger(args[2]))) {

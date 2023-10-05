@@ -26,12 +26,13 @@ public class GameHandler {
     private Map<String, PlayerStats> playerStats;
     private Location lobbySpawn;
 
-    public GameHandler() {
+    public GameHandler(GameDifficulty gameDifficulty) {
         plugin = ZombieArena.getInstance();
-        lobbySpawn = Objects.requireNonNull(Bukkit.getWorld(plugin.getConfigFile().getString("LobbyWorld"))).getSpawnLocation();
+        lobbySpawn = Objects.requireNonNull(Bukkit.getWorld(Objects.requireNonNull(plugin.getConfigFile().getString("LobbyWorld")))).getSpawnLocation();
         waveHandler = new WaveHandler(this);
         arenaHandler = new ArenaHandler();
         arenaHandler.loadArenas();
+        difficulty = gameDifficulty;
         isRunning = false;
         isWaiting = true;
         maxPlayers = plugin.getConfigFile().getInt("max-players");
@@ -122,6 +123,7 @@ public class GameHandler {
 
     public WaveHandler getWaveHandler() { return this.waveHandler; }
     public ArenaHandler getArenaHandler() { return this.arenaHandler; }
+    public GameDifficulty getGameDifficulty() { return this.difficulty; }
 
     public boolean isRunning() { return isRunning; }
     public boolean isWaiting() { return isWaiting; }

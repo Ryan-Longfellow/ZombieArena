@@ -1,6 +1,7 @@
 package me.Visionexe.ZombieArena.Command.SubCommands;
 
 import me.Visionexe.ZombieArena.Command.SubCommand;
+import me.Visionexe.ZombieArena.Game.ArenaHandler;
 import me.Visionexe.ZombieArena.Storage.Flatfile.FileManager;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.Location;
@@ -37,7 +38,7 @@ public class ArenaSetPlayerSpawnCommand extends SubCommand {
             if (args.length == 2) {
                 // Get arena name and confirm the arena is valid
                 String arenaName = args[1];
-                if (!(ZombieArena.getInstance().getGameHandler().getArenaHandler().isArenaValid(arenaName))) {
+                if (!(ArenaHandler.isArenaValid(arenaName))) {
                     player.sendMessage("Please enter a valid arena name");
                 }
                 // Get position of player

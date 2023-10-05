@@ -27,10 +27,12 @@ import java.util.*;
 public class ZombieArena extends JavaPlugin {
     private static ZombieArena instance;
     private FileManager fileManager;
-    private GameHandler gameHandler;
+//    private GameHandler gameHandler;
     private Economy economy;
     public Map<UUID, FastBoard> boards = new HashMap<>();
-    public Map<GameHandler, GameDifficulty> games = new HashMap<>();
+
+    // Strings stored as "ArenaName_Difficulty"
+    public Map<String, GameHandler> games = new HashMap<>();
     /*
     TODO: Add multi game functionality
     Do this by using the list of games above
@@ -67,7 +69,7 @@ public class ZombieArena extends JavaPlugin {
     @Override
     public void onDisable() {
         PlayerWrapper.saveAll();
-        gameHandler.stop();
+//        gameHandler.stop();
         try {
             fileManager.save("config");
             fileManager.save("arenas");
@@ -205,32 +207,32 @@ public class ZombieArena extends JavaPlugin {
         PlayerWrapper playerWrapper = PlayerWrapper.get(board.getPlayer());
 
         board.updateTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "ZombieArena");
-        if (gameHandler != null) {
-            for (Player player : gameHandler.getPlayers()) {
-                if (gameHandler.getPlayers().contains(player)) {
-                    board.updateLines(
-                            ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
-                            ChatColor.GRAY + "  Name" + ChatColor.WHITE + ": " + board.getPlayer().getName(),
-                            ChatColor.GOLD + "  Level" + ChatColor.WHITE + ": " + playerWrapper.getLevel(),
-                            ChatColor.DARK_GREEN + "  Exp" + ChatColor.WHITE + ": " + playerWrapper.getExperience() + " / " + playerWrapper.getExperienceForNextLevel(),
-
-                            " ", // White space to separate Info and Stats
-
-                            ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
-                            ChatColor.GREEN + "  Money" + ChatColor.WHITE + ": " + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer())),
-                            ChatColor.RED + "  Total Kills" + ": " + ChatColor.WHITE + playerWrapper.getTotalKills(),
-
-                            " ", // White space
-                            ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Game",
-                            ChatColor.LIGHT_PURPLE + "  Time In Game" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getGameLength(),
-                            ChatColor.LIGHT_PURPLE + "  Wave" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getWave() + " / " + gameHandler.getWaveHandler().getMaxWave(), // Wave number
-                            ChatColor.LIGHT_PURPLE + "  Mobs Remaining" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getRemainingZombies(), // Mobs Remaining
-                            ChatColor.LIGHT_PURPLE + "  Players" + ChatColor.WHITE + ": " + gameHandler.getPlayers().size() + " / " + gameHandler.getMaxPlayers()
-                    );
-                    return;
-                }
-            }
-        }
+//        if (gameHandler != null) {
+//            for (Player player : gameHandler.getPlayers()) {
+//                if (gameHandler.getPlayers().contains(player)) {
+//                    board.updateLines(
+//                            ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
+//                            ChatColor.GRAY + "  Name" + ChatColor.WHITE + ": " + board.getPlayer().getName(),
+//                            ChatColor.GOLD + "  Level" + ChatColor.WHITE + ": " + playerWrapper.getLevel(),
+//                            ChatColor.DARK_GREEN + "  Exp" + ChatColor.WHITE + ": " + playerWrapper.getExperience() + " / " + playerWrapper.getExperienceForNextLevel(),
+//
+//                            " ", // White space to separate Info and Stats
+//
+//                            ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
+//                            ChatColor.GREEN + "  Money" + ChatColor.WHITE + ": " + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer())),
+//                            ChatColor.RED + "  Total Kills" + ": " + ChatColor.WHITE + playerWrapper.getTotalKills(),
+//
+//                            " ", // White space
+//                            ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Game",
+//                            ChatColor.LIGHT_PURPLE + "  Time In Game" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getGameLength(),
+//                            ChatColor.LIGHT_PURPLE + "  Wave" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getWave() + " / " + gameHandler.getWaveHandler().getMaxWave(), // Wave number
+//                            ChatColor.LIGHT_PURPLE + "  Mobs Remaining" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getRemainingZombies(), // Mobs Remaining
+//                            ChatColor.LIGHT_PURPLE + "  Players" + ChatColor.WHITE + ": " + gameHandler.getPlayers().size() + " / " + gameHandler.getMaxPlayers()
+//                    );
+//                    return;
+//                }
+//            }
+//        }
 
         board.updateLines(
                 ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
@@ -272,7 +274,7 @@ public class ZombieArena extends JavaPlugin {
     public YamlConfiguration getArenasFile() {
         return getFileManager().get("arenas").get().getConfiguration();
     }
-    public GameHandler getGameHandler() { return gameHandler; }
+//    public GameHandler getGameHandler() { return gameHandler; }
 
     public static ZombieArena getInstance() {
         return instance;
@@ -284,15 +286,40 @@ public class ZombieArena extends JavaPlugin {
     /*
     Multi game functionality functions
      */
-    public Map<GameHandler, GameDifficulty> getGames() { return this.games; }
-    public void addGame(GameHandler gameHandler, GameDifficulty gameDifficulty) {
-        getGames().put(gameHandler, gameDifficulty);
+    public Map<String, GameHandler> getGames() { return this.games; }
+    public void addGame(String arenaName, GameDifficulty gameDifficulty) {
+        GameHandler gameHandler = new GameHandler(gameDifficulty);
+        getGames().put(arenaName + "_" + gameDifficulty.toString(), gameHandler);
     }
     public List<Player> getPlayersInGame() {
         List<Player> players = new ArrayList<>();
-        for (Map.Entry<GameHandler, GameDifficulty> game : getGames().entrySet()) {
-            players.addAll(game.getKey().getPlayers());
+        for (Map.Entry<String, GameHandler> game : getGames().entrySet()) {
+            players.addAll(game.getValue().getPlayers());
         }
         return players;
+    }
+    public GameHandler getGamePlayerIn(Player player) {
+
+        for (Map.Entry<String, GameHandler> game : getGames().entrySet()) {
+            if (game.getValue().getPlayers().contains(player)) {
+                return game.getValue();
+            }
+        }
+        /*
+        Games are stored by "ArenaName_Difficulty, GameHandler"
+
+         */
+
+//        Collection<GameHandler> games = getGames().values();
+//        Iterator<GameHandler> gameHandlerIterator = games.iterator();
+//        GameHandler gameHandler;
+//        while(gameHandlerIterator.hasNext()) {
+//            gameHandler = gameHandlerIterator.next();
+//            Log.debug("Checking " + player.getName() + " in " + getGames().);
+//            if (gameHandler.getPlayers().contains(player)) {
+//                return gameHandler;
+//            }
+//        }
+        return null;
     }
 }

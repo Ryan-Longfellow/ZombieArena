@@ -1,7 +1,11 @@
 package me.Visionexe.ZombieArena.Command.SubCommands;
 
 import me.Visionexe.ZombieArena.Command.SubCommand;
+import me.Visionexe.ZombieArena.Game.ArenaHandler;
+import me.Visionexe.ZombieArena.Game.GameDifficulty;
 import me.Visionexe.ZombieArena.Game.GameHandler;
+import me.Visionexe.ZombieArena.Log;
+import me.Visionexe.ZombieArena.Utils.Check;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,19 +34,28 @@ public class JoinArenaCommand extends SubCommand {
     @Override
     public void perform(CommandSender commandSender, String[] args) {
         if (commandSender instanceof Player player) {
-            GameHandler gameHandler = ZombieArena.getInstance().getGameHandler();
-
-            if (args.length == 2) {
+            if (args.length == 3) {
                 // Make sure player is not in a game
-                if (gameHandler.getPlayers().contains(player)) {
+                if (ZombieArena.getInstance().getPlayersInGame().contains(player)) {
                     player.sendMessage("You are already in a game");
                     return;
                 }
 
                 String arenaName = args[1].toLowerCase();
+                String difficulty = args[2].toUpperCase();
+                GameDifficulty gameDifficulty;
+                gameDifficulty = Check.getDifficulty(difficulty);
                 // Check if arena is valid
-                if (gameHandler.getArenaHandler().isArenaValid(arenaName)) {
-                    gameHandler.addPlayer(player, arenaName);
+                if (ArenaHandler.isArenaValid(arenaName)) {
+                    if (ZombieArena.getInstance().getGames().containsKey(arenaName + "_" + gameDifficulty.toString())) {
+                        ZombieArena.getInstance().getGames().get(arenaName + "_" + gameDifficulty).addPlayer(player, arenaName);
+                    } else {
+                        Log.debug("Creating new GameHandler with Arena Name: " + arenaName + "; storing with " + arenaName + "_" + gameDifficulty);
+                        GameHandler gameHandler = new GameHandler(gameDifficulty);
+                        ZombieArena.getInstance().addGame(arenaName + "_" + gameDifficulty, gameDifficulty);
+                        gameHandler.addPlayer(player, arenaName);
+                    }
+
                 } else {
                     player.sendMessage("Arena name does not exist");
                 }

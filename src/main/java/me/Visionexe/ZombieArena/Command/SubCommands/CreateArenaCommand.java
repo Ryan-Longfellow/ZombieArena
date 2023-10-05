@@ -9,6 +9,7 @@ import com.sk89q.worldedit.session.SessionManager;
 import com.sk89q.worldedit.world.World;
 import me.Visionexe.ZombieArena.Command.SubCommand;
 import me.Visionexe.ZombieArena.Game.Arena;
+import me.Visionexe.ZombieArena.Game.ArenaHandler;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -56,7 +57,7 @@ public class CreateArenaCommand extends SubCommand {
                     return;
                 }
                 // Confirm arena does not already exist with the same name
-                if (ZombieArena.getInstance().getGameHandler().getArenaHandler().isArenaValid(args[1])) {
+                if (ArenaHandler.isArenaValid(args[1])) {
                     player.sendMessage("An arena with this name already exists");
                     return;
                 }
