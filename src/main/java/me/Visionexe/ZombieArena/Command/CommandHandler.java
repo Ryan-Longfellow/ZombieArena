@@ -19,9 +19,6 @@ public class CommandHandler implements CommandExecutor {
         subcommands.add(new SetLevelCommand());
         subcommands.add(new SetExperienceCommand());
         subcommands.add(new SetPrestigeCommand());
-        subcommands.add(new SetGamesPlayedCommand());
-        subcommands.add(new SetGamesWonCommand());
-        subcommands.add(new SetTotalKillsCommand());
         subcommands.add(new CreateArenaCommand());
         subcommands.add(new ArenaSetPlayerSpawnCommand());
         subcommands.add(new ArenaAddMobSpawnPointCommand());
