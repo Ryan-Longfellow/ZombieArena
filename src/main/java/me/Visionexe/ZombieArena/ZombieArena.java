@@ -300,6 +300,7 @@ public class ZombieArena extends JavaPlugin {
     }
     public GameHandler getGamePlayerIn(Player player) {
 
+        // TODO: Figure out why this does not work
         for (Map.Entry<String, GameHandler> game : getGames().entrySet()) {
             if (game.getValue().getPlayers().contains(player)) {
                 return game.getValue();
