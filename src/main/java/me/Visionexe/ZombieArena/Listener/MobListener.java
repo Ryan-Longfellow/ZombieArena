@@ -198,6 +198,7 @@ public class MobListener implements Listener {
         Entity damager = event.getDamager();
         // Cancels action if player is not the damager
         if (!(damager instanceof Player)) {
+            event.setCancelled(true);
             return;
         }
 
