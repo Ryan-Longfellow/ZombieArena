@@ -3,6 +3,7 @@ package me.Visionexe.ZombieArena;
 import fr.mrmicky.fastboard.FastBoard;
 import me.Visionexe.ZombieArena.Command.CommandHandler;
 import me.Visionexe.ZombieArena.Entity.PlayerWrapper;
+import me.Visionexe.ZombieArena.Game.GameDifficulty;
 import me.Visionexe.ZombieArena.Game.GameHandler;
 import me.Visionexe.ZombieArena.Listener.MobListener;
 import me.Visionexe.ZombieArena.Listener.PlayerListener;
@@ -21,10 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class ZombieArena extends JavaPlugin {
     private static ZombieArena instance;
@@ -32,6 +30,17 @@ public class ZombieArena extends JavaPlugin {
     private GameHandler gameHandler;
     private Economy economy;
     public Map<UUID, FastBoard> boards = new HashMap<>();
+    public Map<GameHandler, GameDifficulty> games = new HashMap<>();
+    /*
+    TODO: Add multi game functionality
+    Do this by using the list of games above
+    - Add difficulty to /za join so it is /za join <arena name> <difficulty>
+    - When player runs command, have it create a new game and add to list
+    - More functions will be needed to access specific games or all games
+    - - Example: with scoreboard, will need to access all current games that are running and display the information for that game
+    - Difficulty also needs to be passed into GameHandler to use in WaveHandler for increased mob stats
+    - Information may need to be accessed differently as some things used ZombieArena.getInstance().getGameHandler...
+     */
     @Override
     public void onEnable() {
         instance = this;
@@ -42,7 +51,7 @@ public class ZombieArena extends JavaPlugin {
         registerEvents();
         registerCommands();
 
-        gameHandler = new GameHandler();
+//        gameHandler = new GameHandler();
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             @Override
@@ -196,31 +205,33 @@ public class ZombieArena extends JavaPlugin {
         PlayerWrapper playerWrapper = PlayerWrapper.get(board.getPlayer());
 
         board.updateTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "ZombieArena");
+        if (gameHandler != null) {
+            for (Player player : gameHandler.getPlayers()) {
+                if (gameHandler.getPlayers().contains(player)) {
+                    board.updateLines(
+                            ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
+                            ChatColor.GRAY + "  Name" + ChatColor.WHITE + ": " + board.getPlayer().getName(),
+                            ChatColor.GOLD + "  Level" + ChatColor.WHITE + ": " + playerWrapper.getLevel(),
+                            ChatColor.DARK_GREEN + "  Exp" + ChatColor.WHITE + ": " + playerWrapper.getExperience() + " / " + playerWrapper.getExperienceForNextLevel(),
 
-        for (Player player : gameHandler.getPlayers()) {
-            if (gameHandler.getPlayers().contains(player)) {
-                board.updateLines(
-                        ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
-                        ChatColor.GRAY + "  Name" + ChatColor.WHITE + ": " + board.getPlayer().getName(),
-                        ChatColor.GOLD + "  Level" + ChatColor.WHITE + ": " + playerWrapper.getLevel(),
-                        ChatColor.DARK_GREEN + "  Exp" + ChatColor.WHITE + ": " + playerWrapper.getExperience() + " / " + playerWrapper.getExperienceForNextLevel(),
+                            " ", // White space to separate Info and Stats
 
-                        " ", // White space to separate Info and Stats
+                            ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
+                            ChatColor.GREEN + "  Money" + ChatColor.WHITE + ": " + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer())),
+                            ChatColor.RED + "  Total Kills" + ": " + ChatColor.WHITE + playerWrapper.getTotalKills(),
 
-                        ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats",
-                        ChatColor.GREEN + "  Money" + ChatColor.WHITE + ": " + ValueFormat.format((long) this.getEconomy().getBalance(board.getPlayer())),
-                        ChatColor.RED + "  Total Kills" + ": " + ChatColor.WHITE + playerWrapper.getTotalKills(),
-
-                        " ", // White space
-                        ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Game",
-                        ChatColor.LIGHT_PURPLE + "  Time In Game" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getGameLength(),
-                        ChatColor.LIGHT_PURPLE + "  Wave" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getWave() + " / " + gameHandler.getWaveHandler().getMaxWave(), // Wave number
-                        ChatColor.LIGHT_PURPLE + "  Mobs Remaining" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getRemainingZombies(), // Mobs Remaining
-                        ChatColor.LIGHT_PURPLE + "  Players" + ChatColor.WHITE + ": " + gameHandler.getPlayers().size() + " / " + gameHandler.getMaxPlayers()
-                );
-                return;
+                            " ", // White space
+                            ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Game",
+                            ChatColor.LIGHT_PURPLE + "  Time In Game" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getGameLength(),
+                            ChatColor.LIGHT_PURPLE + "  Wave" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getWave() + " / " + gameHandler.getWaveHandler().getMaxWave(), // Wave number
+                            ChatColor.LIGHT_PURPLE + "  Mobs Remaining" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getRemainingZombies(), // Mobs Remaining
+                            ChatColor.LIGHT_PURPLE + "  Players" + ChatColor.WHITE + ": " + gameHandler.getPlayers().size() + " / " + gameHandler.getMaxPlayers()
+                    );
+                    return;
+                }
             }
         }
+
         board.updateLines(
                 ChatColor.AQUA + "" + ChatColor.BOLD + "Info",
                 ChatColor.GRAY + "  Name" + ChatColor.WHITE + ": " + board.getPlayer().getName(),
@@ -269,4 +280,19 @@ public class ZombieArena extends JavaPlugin {
 
     private int tick;
     private void onTick() { tick++; }
+
+    /*
+    Multi game functionality functions
+     */
+    public Map<GameHandler, GameDifficulty> getGames() { return this.games; }
+    public void addGame(GameHandler gameHandler, GameDifficulty gameDifficulty) {
+        getGames().put(gameHandler, gameDifficulty);
+    }
+    public List<Player> getPlayersInGame() {
+        List<Player> players = new ArrayList<>();
+        for (Map.Entry<GameHandler, GameDifficulty> game : getGames().entrySet()) {
+            players.addAll(game.getKey().getPlayers());
+        }
+        return players;
+    }
 }
