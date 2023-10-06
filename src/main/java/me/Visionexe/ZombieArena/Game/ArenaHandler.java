@@ -29,6 +29,11 @@ public class ArenaHandler {
         return "UNKNOWN";
     }
 
+    public static List<String> getArenas() {
+        loadArenas();
+        return arenas;
+    }
+
     public static boolean isArenaValid(String arenaName) {
         loadArenas();
         return arenas.contains(arenaName);
