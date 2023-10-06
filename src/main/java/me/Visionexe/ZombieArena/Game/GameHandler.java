@@ -31,7 +31,7 @@ public class GameHandler {
         lobbySpawn = Objects.requireNonNull(Bukkit.getWorld(Objects.requireNonNull(plugin.getConfigFile().getString("LobbyWorld")))).getSpawnLocation();
         waveHandler = new WaveHandler(this);
         arenaHandler = new ArenaHandler();
-        arenaHandler.loadArenas();
+        ArenaHandler.loadArenas();
         difficulty = gameDifficulty;
         isRunning = false;
         isWaiting = true;

@@ -50,9 +50,8 @@ public class JoinArenaCommand extends SubCommand {
                     if (ZombieArena.getInstance().getGames().containsKey(arenaName + "_" + gameDifficulty.toString())) {
                         ZombieArena.getInstance().getGames().get(arenaName + "_" + gameDifficulty).addPlayer(player, arenaName);
                     } else {
-                        Log.debug("Creating new GameHandler with Arena Name: " + arenaName + "; storing with " + arenaName + "_" + gameDifficulty);
                         GameHandler gameHandler = new GameHandler(gameDifficulty);
-                        ZombieArena.getInstance().addGame(arenaName + "_" + gameDifficulty, gameDifficulty);
+                        ZombieArena.getInstance().addGame(arenaName + "_" + gameDifficulty, gameHandler);
                         gameHandler.addPlayer(player, arenaName);
                     }
 

@@ -287,9 +287,9 @@ public class ZombieArena extends JavaPlugin {
     Multi game functionality functions
      */
     public Map<String, GameHandler> getGames() { return this.games; }
-    public void addGame(String arenaName, GameDifficulty gameDifficulty) {
-        GameHandler gameHandler = new GameHandler(gameDifficulty);
-        getGames().put(arenaName + "_" + gameDifficulty.toString(), gameHandler);
+    public void addGame(String arenaName, GameHandler gameHandler) {
+//        GameHandler gameHandler = new GameHandler(gameDifficulty);
+        getGames().put(arenaName, gameHandler);
     }
     public List<Player> getPlayersInGame() {
         List<Player> players = new ArrayList<>();
@@ -302,7 +302,12 @@ public class ZombieArena extends JavaPlugin {
 
         // TODO: Figure out why this does not work
         for (Map.Entry<String, GameHandler> game : getGames().entrySet()) {
+            Log.debug("Game: " + game.getKey());
+            for (Player player1 : game.getValue().getPlayers()) {
+                Log.debug("Found " + player1.getName() + " in game " + game.getKey());
+            }
             if (game.getValue().getPlayers().contains(player)) {
+                Log.debug("Players in game: " + game.getValue().getPlayers().size());
                 return game.getValue();
             }
         }
