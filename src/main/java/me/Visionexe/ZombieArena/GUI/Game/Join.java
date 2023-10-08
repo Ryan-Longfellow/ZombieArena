@@ -2,6 +2,7 @@ package me.Visionexe.ZombieArena.GUI.Game;
 
 import me.Visionexe.ZombieArena.GUI.*;
 import me.Visionexe.ZombieArena.Game.ArenaHandler;
+import me.Visionexe.ZombieArena.Game.GameDifficulty;
 import me.Visionexe.ZombieArena.Game.GameHandler;
 import me.Visionexe.ZombieArena.Log;
 import me.Visionexe.ZombieArena.ZombieArena;
@@ -109,6 +110,7 @@ public class Join extends ChestGUI implements Clickable {
             rowCount++;
             columnCount = 0;
         }
+        rowCount = 0;
     }
 
     private ItemStack createItemStack(Material material, String displayName, List<String> loreLines) {
@@ -142,25 +144,41 @@ public class Join extends ChestGUI implements Clickable {
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null) return;
         String itemName = Objects.requireNonNull(clickedItem.getItemMeta()).getDisplayName();
-        String arenaName = itemName.split("&a")[0];
-        Log.debug(arenaName);
+        String arenaName;
 
-        // Check the item name (using the color for the difficulty)
         // Easy
-        if (itemName.startsWith("&a")) { // Easy
-//            ZombieArena.getInstance().getGames().get(itemName);
-
-        } else if (itemName.startsWith("&e")) { // Normal
-
-        } else if (itemName.startsWith("&6")) { // Hard
-
-        } else if (itemName.startsWith("&4")) { // Insane
-
-        } else {
-            return;
+        if (itemName.startsWith("§a")) { // Easy
+            arenaName = itemName.split("§a")[1].toLowerCase();
+            if (ZombieArena.getInstance().getGames().containsKey(arenaName + "_easy")) {
+                ZombieArena.getInstance().getGames().get(arenaName + "_easy").addPlayer(player, arenaName);
+            } else {
+                ZombieArena.getInstance().addGame(arenaName + "_easy", new GameHandler(GameDifficulty.EASY));
+                ZombieArena.getInstance().getGames().get(arenaName + "_easy").addPlayer(player, arenaName);
+            }
+        } else if (itemName.startsWith("§e")) { // Normal
+            arenaName = itemName.split("§e")[1].toLowerCase();
+            if (ZombieArena.getInstance().getGames().containsKey(arenaName + "_normal")) {
+                ZombieArena.getInstance().getGames().get(arenaName + "_normal").addPlayer(player, arenaName);
+            } else {
+                ZombieArena.getInstance().addGame(arenaName + "_normal", new GameHandler(GameDifficulty.NORMAL));
+                ZombieArena.getInstance().getGames().get(arenaName + "_normal").addPlayer(player, arenaName);
+            }
+        } else if (itemName.startsWith("§6")) { // Hard
+            arenaName = itemName.split("§6")[1].toLowerCase();
+            if (ZombieArena.getInstance().getGames().containsKey(arenaName + "_hard")) {
+                ZombieArena.getInstance().getGames().get(arenaName + "_hard").addPlayer(player, arenaName);
+            } else {
+                ZombieArena.getInstance().addGame(arenaName + "_hard", new GameHandler(GameDifficulty.HARD));
+                ZombieArena.getInstance().getGames().get(arenaName + "_hard").addPlayer(player, arenaName);
+            }
+        } else if (itemName.startsWith("§4")) { // Insane
+            arenaName = itemName.split("§4")[1].toLowerCase();
+            if (ZombieArena.getInstance().getGames().containsKey(arenaName + "_insane")) {
+                ZombieArena.getInstance().getGames().get(arenaName + "_insane").addPlayer(player, arenaName);
+            } else {
+                ZombieArena.getInstance().addGame(arenaName + "_insane", new GameHandler(GameDifficulty.INSANE));
+                ZombieArena.getInstance().getGames().get(arenaName + "_insane").addPlayer(player, arenaName);
+            }
         }
-        // Check if game is in ZombieArena games map
-        // If in map, add player to existing game
-        // If not, create new GameHandler and add to games map
     }
 }

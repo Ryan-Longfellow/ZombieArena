@@ -21,8 +21,8 @@ public class Check {
 
     public static GameDifficulty getDifficulty(String difficulty) {
         switch (difficulty) {
-            case "MEDIUM" -> {
-                return GameDifficulty.MEDIUM;
+            case "NORMAL" -> {
+                return GameDifficulty.NORMAL;
             }
             case "HARD" -> {
                 return GameDifficulty.HARD;
