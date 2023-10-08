@@ -22,13 +22,6 @@ public class Join extends ChestGUI implements Clickable {
 
     @Override
     public void beforeOpen(Player player) {
-        // Check into clearing inventory of all items on open
-        /*
-        Green Wool for Easy
-        Yellow Wool for Normal
-        Orange Wool for Hard
-        Red Wool for Insane
-         */
         int rowCount = 0;
         int columnCount = 0;
 
@@ -37,6 +30,13 @@ public class Join extends ChestGUI implements Clickable {
         List<String> normalLore = new ArrayList<>();
         List<String> hardLore = new ArrayList<>();
         List<String> insaneLore = new ArrayList<>();
+
+        /*
+         TODO: Figure out why whenever doing /join, joining and arena and leaving, doing /join again duplicates the arenas
+
+         Main assumption currently is that when a player joins the arena, it does not close the GUI properly
+         Possibly forcing a close of the GUI after clicking will resolve
+         */
 
         /*
         Loop through each arena
@@ -55,32 +55,32 @@ public class Join extends ChestGUI implements Clickable {
             GameHandler hardArena = ZombieArena.getInstance().getGames().get(arena + "_hard");
             GameHandler insaneArena = ZombieArena.getInstance().getGames().get(arena + "_insane");
             if (easyArena != null) {
-                easyLore.add("Players: " + easyArena.getPlayers().size() + " / " + easyArena.getMaxPlayers());
-                easyLore.add("Difficulty: Easy");
+                easyLore.add("&7Players: &b" + easyArena.getPlayers().size() + "&7 / &b" + easyArena.getMaxPlayers());
+                easyLore.add("&7Difficulty: &aEasy");
             } else {
-                easyLore.add("Players: 0 / 10");
-                easyLore.add("Difficulty: Easy");
+                easyLore.add("&7Players: &b0&7 / &b20");
+                easyLore.add("&7Difficulty: &aEasy");
             }
             if (normalArena != null) {
-                normalLore.add("Players: " + normalArena.getPlayers().size() + " / " + normalArena.getMaxPlayers());
-                normalLore.add("Difficulty: Normal");
+                normalLore.add("&7Players: &b" + normalArena.getPlayers().size() + "&7 / &b" + normalArena.getMaxPlayers());
+                normalLore.add("&7Difficulty: &eNormal");
             } else {
-                normalLore.add("Players: 0 / 10");
-                normalLore.add("Difficulty: Normal");
+                normalLore.add("&7Players: &b0&7 / &b20");
+                normalLore.add("&7Difficulty: &eNormal");
             }
             if (hardArena != null) {
-                hardLore.add("Players: " + hardArena.getPlayers().size() + " / " + hardArena.getMaxPlayers());
-                hardLore.add("Difficulty: Hard");
+                hardLore.add("&7Players: &b" + hardArena.getPlayers().size() + "&7 / &b" + hardArena.getMaxPlayers());
+                hardLore.add("&7Difficulty: &6Hard");
             } else {
-                hardLore.add("Players: 0 / 10");
-                hardLore.add("Difficulty: Hard");
+                hardLore.add("&7Players: &b0&7 / &b20");
+                hardLore.add("&7Difficulty: &6Hard");
             }
             if (insaneArena != null) {
-                insaneLore.add("Players: " + insaneArena.getPlayers().size() + " / " + insaneArena.getMaxPlayers());
-                insaneLore.add("Difficulty: Insane");
+                insaneLore.add("&7Players: &b" + insaneArena.getPlayers().size() + "&7 / &b" + insaneArena.getMaxPlayers());
+                insaneLore.add("&7Difficulty: &4Insane");
             } else {
-                insaneLore.add("Players: 0 / 10");
-                insaneLore.add("Difficulty: Insane");
+                insaneLore.add("&7Players: &b0&7 / &b20");
+                insaneLore.add("&7Difficulty: &4Insane");
             }
 
             // Easy Item
@@ -109,8 +109,12 @@ public class Join extends ChestGUI implements Clickable {
             )));
             rowCount++;
             columnCount = 0;
+            easyLore.clear();
+            normalLore.clear();
+            hardLore.clear();
+            insaneLore.clear();
         }
-        rowCount = 0;
+        arenaNames.clear();
     }
 
     private ItemStack createItemStack(Material material, String displayName, List<String> loreLines) {
@@ -140,6 +144,7 @@ public class Join extends ChestGUI implements Clickable {
     public void onClick(InventoryClickEvent event) {
         event.setCancelled(true);
         Player player = (Player) event.getWhoClicked();
+        beforeOpen(player);
 
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null) return;
