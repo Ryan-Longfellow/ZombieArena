@@ -223,7 +223,7 @@ public class ZombieArena extends JavaPlugin {
 
                     " ", // White space
                     ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Game",
-                    ChatColor.LIGHT_PURPLE + "  Arena" + ChatColor.WHITE + ": " + gameHandler.getPlayerStats(player).getArenaName(),
+                    ChatColor.LIGHT_PURPLE + "  Arena" + ChatColor.WHITE + ": " + gameHandler.getPlayerStats(player).getArenaName() + " | " + gameHandler.getGameDifficulty().toString(),
                     ChatColor.LIGHT_PURPLE + "  Wave" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getWave() + " / " + gameHandler.getWaveHandler().getMaxWave(), // Wave number
                     ChatColor.LIGHT_PURPLE + "  Mobs Remaining" + ChatColor.WHITE + ": " + gameHandler.getWaveHandler().getRemainingZombies(), // Mobs Remaining
                     ChatColor.LIGHT_PURPLE + "  Players" + ChatColor.WHITE + ": " + gameHandler.getPlayers().size() + " / " + gameHandler.getMaxPlayers()
