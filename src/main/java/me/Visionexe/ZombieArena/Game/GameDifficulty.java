@@ -10,7 +10,7 @@ public enum GameDifficulty {
     public String toString() {
         return switch (this) {
             case EASY -> "easy";
-            case NORMAL -> "medium";
+            case NORMAL -> "normal";
             case HARD -> "hard";
             case INSANE -> "insane";
         };
