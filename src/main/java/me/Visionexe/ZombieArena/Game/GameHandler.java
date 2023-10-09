@@ -213,11 +213,13 @@ public class GameHandler {
         isWaiting = true;
 
         waveHandler.removeEntities();
+        String arenaName = null;
 
         for (PlayerStats stats : playerStats.values()) {
             if (!(stats.isAlive())) respawnPlayer(stats.getPlayer());
             stats.resetStats();
             stats.setAlive(false);
+            arenaName = stats.getArenaName();
 
             Player player = stats.getPlayer();
             if (player != null) {
@@ -227,5 +229,6 @@ public class GameHandler {
                 removePlayer(player);
             }
         }
+        ZombieArena.getInstance().getGames().remove(arenaName + "_" + getGameDifficulty().toString().toLowerCase());
     }
 }
