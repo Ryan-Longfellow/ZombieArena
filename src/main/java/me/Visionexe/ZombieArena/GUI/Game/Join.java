@@ -4,7 +4,6 @@ import me.Visionexe.ZombieArena.GUI.*;
 import me.Visionexe.ZombieArena.Game.ArenaHandler;
 import me.Visionexe.ZombieArena.Game.GameDifficulty;
 import me.Visionexe.ZombieArena.Game.GameHandler;
-import me.Visionexe.ZombieArena.Log;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -149,7 +148,6 @@ public class Join extends ChestGUI implements Clickable {
         String itemName = Objects.requireNonNull(clickedItem.getItemMeta()).getDisplayName();
         String arenaName;
         Map<String, GameHandler> games = ZombieArena.getInstance().getGames();
-        Log.debug("Games active: " + games.size());
 
         // Easy
         if (itemName.startsWith("§a")) { // Easy

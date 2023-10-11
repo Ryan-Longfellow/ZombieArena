@@ -25,6 +25,7 @@ public class GameHandler {
     private List<String> players;
     private Map<String, PlayerStats> playerStats;
     private Location lobbySpawn;
+    private String arenaName;
 
     public GameHandler(GameDifficulty gameDifficulty) {
         plugin = ZombieArena.getInstance();
@@ -52,6 +53,7 @@ public class GameHandler {
         players.add(player.getName());
         Log.debug("Added player to game list");
         PlayerStats stats = new PlayerStats(player);
+        this.arenaName = arenaName;
         stats.setArenaName(arenaName);
         playerStats.put(player.getName(), stats);
         Log.debug("Added player stats to game list");
@@ -214,13 +216,12 @@ public class GameHandler {
 
         waveHandler.removeEntities();
         waveHandler.stop();
-        String arenaName = null;
+        String arenaName = this.arenaName;
 
         for (PlayerStats stats : playerStats.values()) {
             if (!(stats.isAlive())) respawnPlayer(stats.getPlayer());
             stats.resetStats();
             stats.setAlive(false);
-            arenaName = stats.getArenaName();
 
             Player player = stats.getPlayer();
             if (player != null) {
