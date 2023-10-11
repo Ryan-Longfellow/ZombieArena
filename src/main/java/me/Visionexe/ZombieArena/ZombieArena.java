@@ -285,7 +285,6 @@ public class ZombieArena extends JavaPlugin {
      */
     public Map<String, GameHandler> getGames() { return this.games; }
     public void addGame(String arenaName, GameHandler gameHandler) {
-//        GameHandler gameHandler = new GameHandler(gameDifficulty);
         getGames().put(arenaName, gameHandler);
     }
     public List<Player> getPlayersInGame() {

@@ -13,9 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Join extends ChestGUI implements Clickable {
     public Join(String title, Row size) { super(title, size); }
@@ -150,39 +148,52 @@ public class Join extends ChestGUI implements Clickable {
         if (clickedItem == null) return;
         String itemName = Objects.requireNonNull(clickedItem.getItemMeta()).getDisplayName();
         String arenaName;
+        Map<String, GameHandler> games = ZombieArena.getInstance().getGames();
 
         // Easy
         if (itemName.startsWith("§a")) { // Easy
             arenaName = itemName.split("§a")[1].toLowerCase();
-            if (ZombieArena.getInstance().getGames().containsKey(arenaName + "_easy")) {
-                ZombieArena.getInstance().getGames().get(arenaName + "_easy").addPlayer(player, arenaName);
+            if (games.containsKey(arenaName + "_easy")) {
+                games.get(arenaName + "_easy").addPlayer(player, arenaName);
+            } else if (games.containsKey(arenaName + "_normal") || games.containsKey(arenaName + "_hard") || games.containsKey(arenaName + "_insane")) {
+                player.sendMessage("This arena has already begun on a different difficulty. Please join the arena that is already started or wait for current arena to end.");
+                close();
             } else {
                 ZombieArena.getInstance().addGame(arenaName + "_easy", new GameHandler(GameDifficulty.EASY));
-                ZombieArena.getInstance().getGames().get(arenaName + "_easy").addPlayer(player, arenaName);
+                games.get(arenaName + "_easy").addPlayer(player, arenaName);
             }
         } else if (itemName.startsWith("§e")) { // Normal
             arenaName = itemName.split("§e")[1].toLowerCase();
-            if (ZombieArena.getInstance().getGames().containsKey(arenaName + "_normal")) {
-                ZombieArena.getInstance().getGames().get(arenaName + "_normal").addPlayer(player, arenaName);
+            if (games.containsKey(arenaName + "_normal")) {
+                games.get(arenaName + "_normal").addPlayer(player, arenaName);
+            } else if (games.containsKey(arenaName + "_easy") || games.containsKey(arenaName + "_hard") || games.containsKey(arenaName + "_insane")) {
+                player.sendMessage("This arena has already begun on a different difficulty. Please join the arena that is already started or wait for current arena to end.");
+                close();
             } else {
                 ZombieArena.getInstance().addGame(arenaName + "_normal", new GameHandler(GameDifficulty.NORMAL));
-                ZombieArena.getInstance().getGames().get(arenaName + "_normal").addPlayer(player, arenaName);
+                games.get(arenaName + "_normal").addPlayer(player, arenaName);
             }
         } else if (itemName.startsWith("§6")) { // Hard
             arenaName = itemName.split("§6")[1].toLowerCase();
-            if (ZombieArena.getInstance().getGames().containsKey(arenaName + "_hard")) {
-                ZombieArena.getInstance().getGames().get(arenaName + "_hard").addPlayer(player, arenaName);
+            if (games.containsKey(arenaName + "_hard")) {
+                games.get(arenaName + "_hard").addPlayer(player, arenaName);
+            } else if (games.containsKey(arenaName + "_easy") || games.containsKey(arenaName + "_normal") || games.containsKey(arenaName + "_insane")) {
+                player.sendMessage("This arena has already begun on a different difficulty. Please join the arena that is already started or wait for current arena to end.");
+                close();
             } else {
                 ZombieArena.getInstance().addGame(arenaName + "_hard", new GameHandler(GameDifficulty.HARD));
-                ZombieArena.getInstance().getGames().get(arenaName + "_hard").addPlayer(player, arenaName);
+                games.get(arenaName + "_hard").addPlayer(player, arenaName);
             }
         } else if (itemName.startsWith("§4")) { // Insane
             arenaName = itemName.split("§4")[1].toLowerCase();
-            if (ZombieArena.getInstance().getGames().containsKey(arenaName + "_insane")) {
-                ZombieArena.getInstance().getGames().get(arenaName + "_insane").addPlayer(player, arenaName);
+            if (games.containsKey(arenaName + "_insane")) {
+                games.get(arenaName + "_insane").addPlayer(player, arenaName);
+            } else if (games.containsKey(arenaName + "_easy") || games.containsKey(arenaName + "_normal") || games.containsKey(arenaName + "_hard")) {
+                player.sendMessage("This arena has already begun on a different difficulty. Please join the arena that is already started or wait for current arena to end.");
+                close();
             } else {
                 ZombieArena.getInstance().addGame(arenaName + "_insane", new GameHandler(GameDifficulty.INSANE));
-                ZombieArena.getInstance().getGames().get(arenaName + "_insane").addPlayer(player, arenaName);
+                games.get(arenaName + "_insane").addPlayer(player, arenaName);
             }
         }
     }

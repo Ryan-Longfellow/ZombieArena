@@ -213,6 +213,7 @@ public class GameHandler {
         isWaiting = true;
 
         waveHandler.removeEntities();
+        waveHandler.stop();
         String arenaName = null;
 
         for (PlayerStats stats : playerStats.values()) {
