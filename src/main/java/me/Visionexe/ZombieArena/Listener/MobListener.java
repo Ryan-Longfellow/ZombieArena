@@ -78,6 +78,7 @@ public class MobListener implements Listener {
 
             Player player = event.getEntity().getKiller();
             PlayerWrapper playerWrapper = PlayerWrapper.get(player);
+            int difficultyMulti = ZombieArena.getInstance().getGamePlayerIn(player).getGameDifficulty().getMultiplier();
 
             if (!(ZombieArena.getInstance().getPlayersInGame().contains(player))) return;
 
@@ -171,8 +172,8 @@ public class MobListener implements Listener {
             try {
                 for (String entity : mobTypes.getKeys(false)) {
                     if (event.getEntityType() == EntityType.valueOf(entity.toUpperCase())) {
-                        playerWrapper.addExperience(config.getInt("mob-types." + entity.toLowerCase() + ".xp"));
-                        economy.depositPlayer(player, config.getInt("mob-types." + entity.toLowerCase() + ".coins"));
+                        playerWrapper.addExperience((config.getInt("mob-types." + entity.toLowerCase() + ".xp")) * difficultyMulti);
+                        economy.depositPlayer(player, (config.getInt("mob-types." + entity.toLowerCase() + ".coins") * difficultyMulti));
                         playerWrapper.addGenericMobKills(event.getEntityType().toString().toLowerCase(), 1);
                         playerWrapper.addTotalKills(1);
                     }

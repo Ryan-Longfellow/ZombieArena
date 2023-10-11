@@ -78,6 +78,7 @@ public class WaveHandler implements Runnable, Listener {
         int wave = getWave();
         int chance = (random.nextInt(100) + 1); // Chance to spawn a mob that isn't a zombie
         int mobChance; // Which mob type to choose to spawn
+        String difficulty = gameHandler.getGameDifficulty().toString().toUpperCase();
 
         // Perform all boss checks first
         if (wave == 10) {
@@ -108,74 +109,74 @@ public class WaveHandler implements Runnable, Listener {
                     if (wave < 30) {
                         if (wave < 20) {
                             if (wave > 5 && wave < 10) {
-                                return createMob("BaseSkeleton");
+                                return createMob(difficulty + "Skeleton");
                             }
                             if (wave < 5) {
-                                return createMob("BaseZombie");
+                                return createMob(difficulty + "Zombie");
                             }
                             mobChance = (random.nextInt(2) + 1);
                             switch (mobChance) {
                                 case 1 -> {
-                                    return createMob("BaseSkeleton");
+                                    return createMob(difficulty + "Skeleton");
                                 }
                                 case 2 -> {
-                                    return createMob("BaseSpider");
+                                    return createMob(difficulty + "Spider");
                                 }
                             }
                         }
                         mobChance = (random.nextInt(3) + 1);
                         switch (mobChance) {
                             case 1 -> {
-                                return createMob("BaseSkeleton");
+                                return createMob(difficulty + "Skeleton");
                             }
                             case 2 -> {
-                                return createMob("BaseSpider");
+                                return createMob(difficulty + "Spider");
                             }
                             case 3 -> {
-                                return createMob("BasePiglinBrute");
+                                return createMob(difficulty + "PiglinBrute");
                             }
                         }
                     }
                     mobChance = (random.nextInt(4) + 1);
                     switch (mobChance) {
                         case 1 -> {
-                            return createMob("BaseSkeleton");
+                            return createMob(difficulty + "Skeleton");
                         }
                         case 2 -> {
-                            return createMob("BaseSpider");
+                            return createMob(difficulty + "Spider");
                         }
                         case 3 -> {
-                            return createMob("BasePiglinBrute");
+                            return createMob(difficulty + "PiglinBrute");
                         }
                         case 4 -> {
-                            return createMob("BaseZoglin");
+                            return createMob(difficulty + "Zoglin");
                         }
                     }
                 }
                 mobChance = (random.nextInt(6) + 1);
                 switch (mobChance) {
                     case 1 -> {
-                        return createMob("BaseSkeleton");
+                        return createMob(difficulty + "Skeleton");
                     }
                     case 2 -> {
-                        return createMob("BaseSpider");
+                        return createMob(difficulty + "Spider");
                     }
                     case 3 -> {
-                        return createMob("BasePiglinBrute");
+                        return createMob(difficulty + "PiglinBrute");
                     }
                     case 4 -> {
-                        return createMob("BaseZoglin");
+                        return createMob(difficulty + "Zoglin");
                     }
                     case 5 -> {
-                        return createMob("BaseBlaze");
+                        return createMob(difficulty + "Blaze");
                     }
                     case 6 -> {
-                        return createMob("BaseWitherSkeleton");
+                        return createMob(difficulty + "WitherSkeleton");
                     }
                 }
             }
         }
-        return createMob("BaseZombie");
+        return createMob(difficulty + "Zombie");
     }
     
     private MythicMob createMob(String type) {
