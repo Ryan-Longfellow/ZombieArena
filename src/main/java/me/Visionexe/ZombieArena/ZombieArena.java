@@ -296,12 +296,7 @@ public class ZombieArena extends JavaPlugin {
     }
     public GameHandler getGamePlayerIn(Player player) {
         for (Map.Entry<String, GameHandler> game : getGames().entrySet()) {
-            Log.debug("Game: " + game.getKey());
-            for (Player player1 : game.getValue().getPlayers()) {
-                Log.debug("Found " + player1.getName() + " in game " + game.getKey());
-            }
             if (game.getValue().getPlayers().contains(player)) {
-                Log.debug("Players in game: " + game.getValue().getPlayers().size());
                 return game.getValue();
             }
         }

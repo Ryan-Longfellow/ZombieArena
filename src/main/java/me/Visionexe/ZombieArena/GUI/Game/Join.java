@@ -149,6 +149,7 @@ public class Join extends ChestGUI implements Clickable {
         String itemName = Objects.requireNonNull(clickedItem.getItemMeta()).getDisplayName();
         String arenaName;
         Map<String, GameHandler> games = ZombieArena.getInstance().getGames();
+        Log.debug("Games active: " + games.size());
 
         // Easy
         if (itemName.startsWith("§a")) { // Easy
