@@ -69,7 +69,7 @@ boss-types:
 # To disable set all values to one
 # This is a multiplier, meaning all values above for xp and coins will be MULTIPLIED; setting to 0 means players get nothing
 EASY: 1
-MEDIUM: 2
+NORMAL: 2
 HARD: 3
 INSANE: 4
 
