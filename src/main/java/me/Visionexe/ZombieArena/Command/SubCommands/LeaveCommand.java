@@ -30,10 +30,9 @@ public class LeaveCommand extends SubCommand {
     @Override
     public void perform(CommandSender commandSender, String[] args) {
         if (commandSender instanceof Player player) {
-            GameHandler gameHandler = ZombieArena.getInstance().getGameHandler();
             // Ensure player is in the game
-            if (gameHandler.getPlayers().contains(player)) {
-                gameHandler.removePlayer(player);
+            if (ZombieArena.getInstance().getPlayersInGame().contains(player)) {
+                ZombieArena.getInstance().getGamePlayerIn(player).removePlayer(player);
             } else {
                 player.sendMessage("You are not in a game");
             }

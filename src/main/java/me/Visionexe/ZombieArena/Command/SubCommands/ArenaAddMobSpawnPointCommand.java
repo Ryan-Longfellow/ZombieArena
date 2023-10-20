@@ -1,6 +1,7 @@
 package me.Visionexe.ZombieArena.Command.SubCommands;
 
 import me.Visionexe.ZombieArena.Command.SubCommand;
+import me.Visionexe.ZombieArena.Game.ArenaHandler;
 import me.Visionexe.ZombieArena.ZombieArena;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -42,7 +43,7 @@ public class ArenaAddMobSpawnPointCommand extends SubCommand {
                 // Get arena name from argument
                 String arenaName = args[1];
                 // Check if the arena exists
-                if (!(ZombieArena.getInstance().getGameHandler().getArenaHandler().isArenaValid(arenaName))) {
+                if (!(ArenaHandler.isArenaValid(arenaName))) {
                     player.sendMessage("Please enter a valid arena name");
                 }
                 // Get the arenas file

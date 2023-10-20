@@ -25,13 +25,15 @@ public class GameHandler {
     private List<String> players;
     private Map<String, PlayerStats> playerStats;
     private Location lobbySpawn;
+    private String arenaName;
 
-    public GameHandler() {
+    public GameHandler(GameDifficulty gameDifficulty) {
         plugin = ZombieArena.getInstance();
-        lobbySpawn = Objects.requireNonNull(Bukkit.getWorld(plugin.getConfigFile().getString("LobbyWorld"))).getSpawnLocation();
+        lobbySpawn = Objects.requireNonNull(Bukkit.getWorld(Objects.requireNonNull(plugin.getConfigFile().getString("LobbyWorld")))).getSpawnLocation();
         waveHandler = new WaveHandler(this);
         arenaHandler = new ArenaHandler();
-        arenaHandler.loadArenas();
+        ArenaHandler.loadArenas();
+        difficulty = gameDifficulty;
         isRunning = false;
         isWaiting = true;
         maxPlayers = plugin.getConfigFile().getInt("max-players");
@@ -51,6 +53,7 @@ public class GameHandler {
         players.add(player.getName());
         Log.debug("Added player to game list");
         PlayerStats stats = new PlayerStats(player);
+        this.arenaName = arenaName;
         stats.setArenaName(arenaName);
         playerStats.put(player.getName(), stats);
         Log.debug("Added player stats to game list");
@@ -122,6 +125,7 @@ public class GameHandler {
 
     public WaveHandler getWaveHandler() { return this.waveHandler; }
     public ArenaHandler getArenaHandler() { return this.arenaHandler; }
+    public GameDifficulty getGameDifficulty() { return this.difficulty; }
 
     public boolean isRunning() { return isRunning; }
     public boolean isWaiting() { return isWaiting; }
@@ -211,6 +215,8 @@ public class GameHandler {
         isWaiting = true;
 
         waveHandler.removeEntities();
+        waveHandler.stop();
+        String arenaName = this.arenaName;
 
         for (PlayerStats stats : playerStats.values()) {
             if (!(stats.isAlive())) respawnPlayer(stats.getPlayer());
@@ -225,5 +231,6 @@ public class GameHandler {
                 removePlayer(player);
             }
         }
+        ZombieArena.getInstance().getGames().remove(arenaName + "_" + getGameDifficulty().toString().toLowerCase());
     }
 }

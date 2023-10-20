@@ -69,7 +69,6 @@ public class WaveHandler implements Runnable, Listener {
                 }
             }
         }
-        // mobSpawns.get(random.nextInt(mobSpawns.size()))
         ActiveMob activeMob = getRandomMobToSpawn().spawn(BukkitAdapter.adapt(spawnsCloseToPlayers.get(random.nextInt(spawnsCloseToPlayers.size()))), 1);
         mobsToSpawn--;
         entities.put(activeMob, activeMob.getEntity().getBukkitEntity().getEntityId());
@@ -79,6 +78,7 @@ public class WaveHandler implements Runnable, Listener {
         int wave = getWave();
         int chance = (random.nextInt(100) + 1); // Chance to spawn a mob that isn't a zombie
         int mobChance; // Which mob type to choose to spawn
+        String difficulty = gameHandler.getGameDifficulty().toString().toUpperCase();
 
         // Perform all boss checks first
         if (wave == 10) {
@@ -109,74 +109,74 @@ public class WaveHandler implements Runnable, Listener {
                     if (wave < 30) {
                         if (wave < 20) {
                             if (wave > 5 && wave < 10) {
-                                return createMob("BaseSkeleton");
+                                return createMob(difficulty + "Skeleton");
                             }
                             if (wave < 5) {
-                                return createMob("BaseZombie");
+                                return createMob(difficulty + "Zombie");
                             }
                             mobChance = (random.nextInt(2) + 1);
                             switch (mobChance) {
                                 case 1 -> {
-                                    return createMob("BaseSkeleton");
+                                    return createMob(difficulty + "Skeleton");
                                 }
                                 case 2 -> {
-                                    return createMob("BaseSpider");
+                                    return createMob(difficulty + "Spider");
                                 }
                             }
                         }
                         mobChance = (random.nextInt(3) + 1);
                         switch (mobChance) {
                             case 1 -> {
-                                return createMob("BaseSkeleton");
+                                return createMob(difficulty + "Skeleton");
                             }
                             case 2 -> {
-                                return createMob("BaseSpider");
+                                return createMob(difficulty + "Spider");
                             }
                             case 3 -> {
-                                return createMob("BasePiglinBrute");
+                                return createMob(difficulty + "PiglinBrute");
                             }
                         }
                     }
                     mobChance = (random.nextInt(4) + 1);
                     switch (mobChance) {
                         case 1 -> {
-                            return createMob("BaseSkeleton");
+                            return createMob(difficulty + "Skeleton");
                         }
                         case 2 -> {
-                            return createMob("BaseSpider");
+                            return createMob(difficulty + "Spider");
                         }
                         case 3 -> {
-                            return createMob("BasePiglinBrute");
+                            return createMob(difficulty + "PiglinBrute");
                         }
                         case 4 -> {
-                            return createMob("BaseZoglin");
+                            return createMob(difficulty + "Zoglin");
                         }
                     }
                 }
                 mobChance = (random.nextInt(6) + 1);
                 switch (mobChance) {
                     case 1 -> {
-                        return createMob("BaseSkeleton");
+                        return createMob(difficulty + "Skeleton");
                     }
                     case 2 -> {
-                        return createMob("BaseSpider");
+                        return createMob(difficulty + "Spider");
                     }
                     case 3 -> {
-                        return createMob("BasePiglinBrute");
+                        return createMob(difficulty + "PiglinBrute");
                     }
                     case 4 -> {
-                        return createMob("BaseZoglin");
+                        return createMob(difficulty + "Zoglin");
                     }
                     case 5 -> {
-                        return createMob("BaseBlaze");
+                        return createMob(difficulty + "Blaze");
                     }
                     case 6 -> {
-                        return createMob("BaseWitherSkeleton");
+                        return createMob(difficulty + "WitherSkeleton");
                     }
                 }
             }
         }
-        return createMob("BaseZombie");
+        return createMob(difficulty + "Zombie");
     }
     
     private MythicMob createMob(String type) {
@@ -208,15 +208,17 @@ public class WaveHandler implements Runnable, Listener {
     }
 
     public int calcQuantity(int wave) {
+        // TODO: Implement difficulty into this value; unless changing mob health and damage
         return wave * 3; // Currently just returning the wave * 5 to spawn that many entities; will create something more complex later maybe
     }
 
     private void prepareNextWave() {
+        Log.debug("Preparing next wave...");
         timeUntilNextWave = 5;
         secondsWithFewEntities = 0;
-        Log.debug("Time Until Next Wave Set To: " + timeUntilNextWave + ". Seconds With Few Entities reset");
         mobsToSpawn = calcQuantity(wave);
-        Log.debug("Mobs To Spawn Set To: " + mobsToSpawn);
+        Log.debug("Mobs for next wave: " + mobsToSpawn);
+        Log.debug("Next wave prepared.");
     }
 
     @Override
@@ -231,10 +233,18 @@ public class WaveHandler implements Runnable, Listener {
                 // To prevent players who do not set off any listeners from staying added into the game
                 for(String pName : gameHandler.getPlayerNames()) {
                     Player p = Bukkit.getPlayer(pName);
-                    if(p == null || !p.isOnline()) {
+                    if(p == null || !(p.isOnline())) {
                         gameHandler.removePlayer(pName);
                     }
                 }
+
+                // End the game if no one is alive
+                if(gameHandler.getAliveCount() <= 0 || gameHandler.getPlayers().isEmpty()) {
+                    gameHandler.stop();
+                    GameStopEvent event = new GameStopEvent(GameStopCause.ALL_DEAD);
+                    Bukkit.getServer().getPluginManager().callEvent(event);
+                }
+
                 /*
                 Runs 5 times every second to spawn mob and check if next wave is available
                 Will start the next wave is all criteria is met
@@ -248,7 +258,7 @@ public class WaveHandler implements Runnable, Listener {
                     updateEntityList();
                 }
 
-                if(checkNextWave()) {
+                if (checkNextWave()) {
                     Log.debug("Progressing to next wave...");
                     setWave(wave + 1);
                 }
@@ -256,37 +266,30 @@ public class WaveHandler implements Runnable, Listener {
                 /*
                 Will automatically progress to the next wave is no damage is done within 60 seconds with 5 or less mobs alive
                  */
-                if(false) { // There is supposed to be a check here to see if an option is enabled for automatically progressing to next way
-                    if(entities.size() <= 5 && wave != 50) {
+                if (false) { // There is supposed to be a check here to see if an option is enabled for automatically progressing to next way
+                    if (entities.size() <= 5 && wave != 50) {
                         secondsWithFewEntities++;
                     }
-                    if(secondsWithFewEntities > 60) {
+                    if (secondsWithFewEntities > 60) {
                         setWave(wave + 1);
                     }
                 }
             }
 
-            // End the game if no one is alive
-            if(gameHandler.getAliveCount() <= 0) {
-                gameHandler.stop();
-                GameStopEvent event = new GameStopEvent(GameStopCause.ALL_DEAD);
-                Bukkit.getServer().getPluginManager().callEvent(event);
-            }
-
             // Respawn player after 10 seconds if dead
-            if(true) { // Will need to configure player respawn time, current will be 10sec
-                for(PlayerStats stats : gameHandler.getPlayerStats().values()) {
-                    if(!(stats.isAlive())) {
-                        if(stats.getTimeSinceDeath() >= 10) {
+            if (true) { // Will need to configure player respawn time, current will be 10sec
+                for (PlayerStats stats : gameHandler.getPlayerStats().values()) {
+                    if (!(stats.isAlive())) {
+                        if( stats.getTimeSinceDeath() >= 10) {
                             gameHandler.respawnPlayer(stats.getPlayer());
-                        } else if(stats.getTimeSinceDeath() % 10 == 0) {
+                        } else if (stats.getTimeSinceDeath() % 10 == 0) {
                             int secondsUntilSpawn = 10 - stats.getTimeSinceDeath();
                             int minutesUntilSpawn = (int) TimeUnit.SECONDS.toMinutes(secondsUntilSpawn);
                             secondsUntilSpawn = secondsUntilSpawn % 60;
                             String message = "";
-                            if(minutesUntilSpawn != 0) message += minutesUntilSpawn + "min ";
-                            if(secondsUntilSpawn != 0) message += secondsUntilSpawn + "sec ";
-                            if(!message.isEmpty()) {
+                            if (minutesUntilSpawn != 0) message += minutesUntilSpawn + "min ";
+                            if (secondsUntilSpawn != 0) message += secondsUntilSpawn + "sec ";
+                            if (!message.isEmpty()) {
                                 stats.getPlayer().sendMessage(message);
                             }
                         }
@@ -339,12 +342,9 @@ public class WaveHandler implements Runnable, Listener {
     }
 
     private void startWave() {
-//        for(Player p : gameHandler.getPlayers()) {
-//            // Utilize this if I want to update the players health to max on next wave
-//            // Most likely don't see myself using this
-//        }
-        // Clear entities that were stuck or not killed last wave; can find a way to teleport them
-//        entities.clear();
+        // TODO: Use entities list to teleport all alive entities back to a valid spawn point
+
+        // TODO: Can also use player list to perform a function on all players when a new wave starts (heal players or something)
 
         WaveStartEvent event = new WaveStartEvent(wave);
         Bukkit.getPluginManager().callEvent(event);
@@ -358,9 +358,7 @@ public class WaveHandler implements Runnable, Listener {
     
     private void updateEntityList() {
         for (Map.Entry<ActiveMob, Integer> entity : entities.entrySet()) {
-//            Log.debug("Checking " + entity.getKey() + " and " + entity.getValue());
             if (!entity.getKey().getEntity().getBukkitEntity().isValid()) {
-//                Log.debug("Deleting " + entity.getKey() + " : " + entity.getValue());
                 entities.remove(entity.getKey(), entity.getValue());
                 break;
                 /*

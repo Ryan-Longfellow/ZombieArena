@@ -207,7 +207,6 @@ public class PlayerWrapper {
             ps.setString(1, this.uuid.toString());
             Log.debug("Loading UUID: " + this.uuid.toString());
 
-            Log.debug("Query Before Result Set: " + ps);
             ResultSet rs = connection.query(ps);
 
             if (rs.next()) {
@@ -236,12 +235,6 @@ public class PlayerWrapper {
                 this.playerStats.replace("wave_30_boss_damage", rs.getInt("wave_30_boss_damage"));
                 this.playerStats.replace("wave_40_boss_damage", rs.getInt("wave_40_boss_damage"));
                 this.playerStats.replace("wave_50_boss_damage", rs.getInt("wave_50_boss_damage"));
-                Log.debug("Level: " + rs.getInt("level"));
-                Log.debug("Experience: " + rs.getInt("experience"));
-                Log.debug("Prestige: " + rs.getInt("prestige"));
-                Log.debug("Games Played: " + rs.getInt("games_played"));
-                Log.debug("Games Won: " + rs.getInt("games_won"));
-                Log.debug("Total Kills: " + rs.getInt("total_kills"));
                 Log.debug("RS FIRST = true");
             } else {
                 Log.debug("RS FIRST = false");
